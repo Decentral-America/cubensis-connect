@@ -6,7 +6,7 @@ import { CONFIG } from '../../../appConfig';
 import cn from 'classnames';
 
 export class ApproveBtn extends React.PureComponent {
-  readonly props;
+  declare readonly props;
   readonly state = {} as any;
   updateInterval = () => this._updateInterval(Date.now());
   _timeout;
@@ -34,10 +34,7 @@ export class ApproveBtn extends React.PureComponent {
       lineCap: 'round',
     };
     return (
-      <Button
-        {...myProps}
-        className={cn(myProps.className, styles.hideText, styles.svgWrapper)}
-      >
+      <Button {...myProps} className={cn(myProps.className, styles.hideText, styles.svgWrapper)}>
         {this.props.children}
         {disabled ? <CircularProgressbar {...progressProps} /> : null}
       </Button>
@@ -48,8 +45,7 @@ export class ApproveBtn extends React.PureComponent {
     if (!this.props.autoClickProtection) {
       return null;
     }
-    const timerEnd =
-      this.state.timerEnd || currentTime + CONFIG.MESSAGES_CONFIRM_TIMEOUT;
+    const timerEnd = this.state.timerEnd || currentTime + CONFIG.MESSAGES_CONFIRM_TIMEOUT;
     this.setState({ timerEnd, currentTime });
     if (timerEnd >= currentTime) {
       clearTimeout(this._timeout);
@@ -60,14 +56,10 @@ export class ApproveBtn extends React.PureComponent {
   static getDerivedStateFromProps(props, state) {
     const { timerEnd, currentTime } = state;
     const autoClickProtection = props.autoClickProtection;
-    const disabled =
-      (!timerEnd || timerEnd > currentTime) && autoClickProtection;
+    const disabled = (!timerEnd || timerEnd > currentTime) && autoClickProtection;
     const percentage = !timerEnd
       ? 0
-      : 100 -
-        Math.floor(
-          ((timerEnd - currentTime) / CONFIG.MESSAGES_CONFIRM_TIMEOUT) * 100
-        );
+      : 100 - Math.floor(((timerEnd - currentTime) / CONFIG.MESSAGES_CONFIRM_TIMEOUT) * 100);
     return { ...props, disabled, timerEnd, percentage };
   }
 }

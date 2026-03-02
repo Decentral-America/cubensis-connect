@@ -1,11 +1,7 @@
 import { expect } from 'chai';
 import { App, CreateNewAccount, Network, Settings } from './utils/actions';
-import {
-  CUSTOMLIST,
-  DEFAULT_PAGE_LOAD_DELAY,
-  WHITELIST,
-} from './utils/constants';
-import { By, until, WebElement } from 'selenium-webdriver';
+import { CUSTOMLIST, DEFAULT_PAGE_LOAD_DELAY, WHITELIST } from './utils/constants';
+import { By, until, type WebElement } from 'selenium-webdriver';
 import {
   ALIAS,
   BURN,
@@ -36,7 +32,7 @@ describe('Signature', function () {
     await CreateNewAccount.importAccount.call(
       this,
       'rich',
-      'decentralchain private node seed with dcc tokens'
+      'decentralchain private node seed with dcc tokens',
     );
     await Settings.setMaxSessionTimeout.call(this);
 
@@ -54,116 +50,78 @@ describe('Signature', function () {
 
   function checkAnyTransaction(txFormLocator: By, wait?: number) {
     it('Is shown', async function () {
-      expect(
-        await this.driver.wait(
-          until.elementLocated(txFormLocator),
-          wait || this.wait
-        )
-      ).not.to.be.throw;
+      expect(await this.driver.wait(until.elementLocated(txFormLocator), wait || this.wait)).not.to
+        .be.throw;
       await this.driver.wait(
-        until.elementIsEnabled(
-          this.driver.findElement(By.css('button#approve'))
-        ),
-        this.wait
+        until.elementIsEnabled(this.driver.findElement(By.css('button#approve'))),
+        this.wait,
       );
       await this.driver.findElement(By.css('button#reject')).click();
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-final-transaction')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-final-transaction')]")),
+          this.wait,
         )
         .findElement(By.css('button#close'))
         .click();
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-assets-assets')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-assets-assets')]")),
+        this.wait,
       );
     });
 
     it('Rejected', async function () {
+      await this.driver.wait(until.elementLocated(txFormLocator), wait || this.wait);
       await this.driver.wait(
-        until.elementLocated(txFormLocator),
-        wait || this.wait
-      );
-      await this.driver.wait(
-        until.elementIsEnabled(
-          this.driver.findElement(By.css('button#approve'))
-        ),
-        this.wait
+        until.elementIsEnabled(this.driver.findElement(By.css('button#approve'))),
+        this.wait,
       );
       await this.driver.findElement(By.css('button#reject')).click();
       const txFinalEl: WebElement = this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-final-transaction')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-final-transaction')]")),
+        this.wait,
       );
       expect(await txFinalEl.findElements(By.css('.tx-reject-icon'))).length(1);
       await txFinalEl.findElement(By.css('button#close')).click();
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-assets-assets')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-assets-assets')]")),
+        this.wait,
       );
     });
 
     it('Approved', async function () {
-      await this.driver.wait(
-        until.elementLocated(txFormLocator),
-        wait || this.wait
-      );
+      await this.driver.wait(until.elementLocated(txFormLocator), wait || this.wait);
       await this.driver
-        .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('button#approve'))
-          ),
-          this.wait
-        )
+        .wait(until.elementIsEnabled(this.driver.findElement(By.css('button#approve'))), this.wait)
         .click();
       const txFinalEl: WebElement = await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-final-transaction')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-final-transaction')]")),
+        this.wait,
       );
-      expect(await txFinalEl.findElements(By.css('.tx-approve-icon'))).length(
-        1
-      );
+      expect(await txFinalEl.findElements(By.css('.tx-approve-icon'))).length(1);
       await txFinalEl.findElement(By.css('button#close')).click();
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-assets-assets')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-assets-assets')]")),
+        this.wait,
       );
     });
   }
 
   describe('Permission request from origin', function () {
-    let authFormLocator = By.xpath(
-      "//div[contains(@class, '-originAuth-transaction')]"
-    );
+    const authFormLocator = By.xpath("//div[contains(@class, '-originAuth-transaction')]");
     const REJECT_FOREVER = 'Reject forever';
     let lastOrigin;
 
     beforeEach(async function () {
       await this.driver.switchTo().window(tabOrigin);
 
-      const origin =
-        this.currentTest.title != REJECT_FOREVER
-          ? CUSTOMLIST[0]
-          : CUSTOMLIST[1];
+      const origin = this.currentTest.title != REJECT_FOREVER ? CUSTOMLIST[0] : CUSTOMLIST[1];
       if (origin !== lastOrigin) {
         await this.driver.get(`http://${origin}`);
       }
       await this.driver.executeScript(() => {
         // @ts-ignore
-        CubensisConnect.initialPromise.then(api => {
+        CubensisConnect.initialPromise.then((api) => {
           api.publicState();
         });
       });
@@ -176,28 +134,20 @@ describe('Signature', function () {
     it(REJECT_FOREVER, async function () {
       await this.driver.wait(until.elementLocated(authFormLocator), this.wait);
       await this.driver
-        .findElement(
-          By.xpath(
-            "//button[contains(@class, '-dropdownButton-dropdownButton')]"
-          )
-        )
+        .findElement(By.xpath("//button[contains(@class, '-dropdownButton-dropdownButton')]"))
         .click();
       await this.driver
         .wait(until.elementLocated(By.css('button#rejectForever')), this.wait)
         .click();
       const txFinalEl: WebElement = await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-final-transaction')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-final-transaction')]")),
+        this.wait,
       );
       expect(await txFinalEl.findElements(By.css('.tx-reject-icon'))).length(1);
       await txFinalEl.findElement(By.css('button#close')).click();
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-assets-assets')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-assets-assets')]")),
+        this.wait,
       );
     });
   });
@@ -214,7 +164,7 @@ describe('Signature', function () {
 
       await this.driver.executeScript(() => {
         // @ts-ignore
-        CubensisConnect.initialPromise.then(api => {
+        CubensisConnect.initialPromise.then((api) => {
           api.auth({ data: 'generated auth data' });
         });
       });
@@ -222,18 +172,16 @@ describe('Signature', function () {
       await this.driver.switchTo().window(tabKeeper);
     });
 
-    checkAnyTransaction(
-      By.xpath("//div[contains(@class, '-auth-transaction')]")
-    );
+    checkAnyTransaction(By.xpath("//div[contains(@class, '-auth-transaction')]"));
   });
 
   describe('Transactions', function () {
     async function performSignTransaction(tx: any) {
       await this.driver.switchTo().window(tabOrigin);
 
-      await this.driver.executeScript(tx => {
+      await this.driver.executeScript((tx) => {
         // @ts-ignore
-        CubensisConnect.initialPromise.then(api => {
+        CubensisConnect.initialPromise.then((api) => {
           api.signTransaction(tx);
         });
       }, tx);
@@ -252,9 +200,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, ISSUE);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-issue-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-issue-transaction')]"));
 
       it('Copying script to the clipboard');
     });
@@ -264,9 +210,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, TRANSFER);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-transfer-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-transfer-transaction')]"));
       // TODO this checks should be into unittests
       it('Address');
       it('Alias');
@@ -280,9 +224,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, REISSUE);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-reissue-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-reissue-transaction')]"));
     });
 
     describe('Burn', function () {
@@ -290,9 +232,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, BURN);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-burn-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-burn-transaction')]"));
     });
 
     describe('Exchange', function () {
@@ -304,9 +244,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, LEASE);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-lease-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-lease-transaction')]"));
     });
 
     describe('Cancel lease', function () {
@@ -314,9 +252,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, CANCEL_LEASE);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-cancelLease-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-cancelLease-transaction')]"));
     });
 
     describe('Alias', function () {
@@ -324,9 +260,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, ALIAS);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-alias-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-alias-transaction')]"));
       // TODO this checks should be into unittests
       it('Minimum alias length');
       it('Maximum alias length');
@@ -337,9 +271,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, MASS_TRANSFER);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-massTransfer-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-massTransfer-transaction')]"));
     });
 
     describe('Data', function () {
@@ -347,9 +279,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, DATA);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-data-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-data-transaction')]"));
     });
 
     describe('SetScript', function () {
@@ -357,9 +287,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, SET_SCRIPT);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-setScript-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-setScript-transaction')]"));
 
       it('Copying script to the clipboard');
       it('Set');
@@ -371,9 +299,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, SPONSORSHIP);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-sponsorship-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-sponsorship-transaction')]"));
 
       it('Set');
       it('Cancel');
@@ -384,9 +310,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, SET_ASSET_SCRIPT);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-assetScript-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-assetScript-transaction')]"));
 
       it('Copying script to the clipboard');
     });
@@ -396,9 +320,7 @@ describe('Signature', function () {
         await performSignTransaction.call(this, INVOKE_SCRIPT);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-scriptInvocation-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-scriptInvocation-transaction')]"));
 
       // TODO this checks should be into unittests
       it('dApp: address / alias');
@@ -419,15 +341,15 @@ describe('Signature', function () {
   });
 
   describe('Order', function () {
-    const createOrder = tx => {
+    const createOrder = (tx) => {
       // @ts-ignore
-      CubensisConnect.initialPromise.then(api => {
+      CubensisConnect.initialPromise.then((api) => {
         api.signOrder(tx);
       });
     };
-    const cancelOrder = tx => {
+    const cancelOrder = (tx) => {
       // @ts-ignore
-      CubensisConnect.initialPromise.then(api => {
+      CubensisConnect.initialPromise.then((api) => {
         api.signCancelOrder(tx);
       });
     };
@@ -453,7 +375,7 @@ describe('Signature', function () {
 
       checkAnyTransaction(
         By.xpath("//div[contains(@class, '-createOrder-transaction')]"),
-        60 * 1000
+        60 * 1000,
       );
     });
 
@@ -462,9 +384,7 @@ describe('Signature', function () {
         await performSignOrder.call(this, cancelOrder, CANCEL_ORDER);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-cancelOrder-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-cancelOrder-transaction')]"));
     });
   });
 
@@ -475,12 +395,12 @@ describe('Signature', function () {
       await this.driver.executeScript(
         (tx, name) => {
           // @ts-ignore
-          CubensisConnect.initialPromise.then(api => {
+          CubensisConnect.initialPromise.then((api) => {
             api.signTransactionPackage(tx, name);
           });
         },
         tx,
-        name
+        name,
       );
 
       await this.driver.switchTo().window(tabKeeper);
@@ -496,18 +416,16 @@ describe('Signature', function () {
       await performSignTransactionPackage.call(this, PACKAGE, 'Test package');
     });
 
-    checkAnyTransaction(
-      By.xpath("//div[contains(@class, '-package-transaction')]")
-    );
+    checkAnyTransaction(By.xpath("//div[contains(@class, '-package-transaction')]"));
   });
 
   describe('Custom data', function () {
     async function performSignCustomData(data: any) {
       await this.driver.switchTo().window(tabOrigin);
 
-      await this.driver.executeScript(data => {
+      await this.driver.executeScript((data) => {
         // @ts-ignore
-        CubensisConnect.initialPromise.then(api => {
+        CubensisConnect.initialPromise.then((api) => {
           api.signCustomData(data);
         });
       }, data);
@@ -526,9 +444,7 @@ describe('Signature', function () {
         await performSignCustomData.call(this, CUSTOM_DATA_V1);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-customData-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-customData-transaction')]"));
     });
 
     describe('Version 2', function () {
@@ -536,9 +452,7 @@ describe('Signature', function () {
         await performSignCustomData.call(this, CUSTOM_DATA_V2);
       });
 
-      checkAnyTransaction(
-        By.xpath("//div[contains(@class, '-customData-transaction')]")
-      );
+      checkAnyTransaction(By.xpath("//div[contains(@class, '-customData-transaction')]"));
     });
   });
 });

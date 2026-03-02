@@ -29,7 +29,7 @@ interface Props {
 
 class NewWalletComponent extends React.Component<Props> {
   static list = [];
-  state;
+  declare state;
 
   constructor(props: Props) {
     super(props);
@@ -38,8 +38,7 @@ class NewWalletComponent extends React.Component<Props> {
 
     const networkCode =
       this.props.customCodes[this.props.currentNetwork] ||
-      this.props.networks.find(({ name }) => this.props.currentNetwork === name)
-        .code ||
+      this.props.networks.find(({ name }) => this.props.currentNetwork === name).code ||
       '';
     if (isGenerateNew) {
       NewWalletComponent.list = NewWalletComponent.getNewWallets(networkCode);
@@ -51,9 +50,7 @@ class NewWalletComponent extends React.Component<Props> {
       this._onSelect(notSaveAccount);
       this.props.setTab(PAGES.SAVE_BACKUP);
     } else {
-      const selected =
-        list.find(item => account && item.address === account.address) ||
-        list[0];
+      const selected = list.find((item) => account && item.address === account.address) || list[0];
       this._onSelect(selected);
     }
 
@@ -71,9 +68,9 @@ class NewWalletComponent extends React.Component<Props> {
     return list;
   }
 
-  onSelect = account => this._onSelect(account);
+  onSelect = (account) => this._onSelect(account);
 
-  onSubmit = e => this._onSubmit(e);
+  onSubmit = (e) => this._onSubmit(e);
 
   render() {
     return (
@@ -108,9 +105,7 @@ class NewWalletComponent extends React.Component<Props> {
           <Trans i18nKey="newWallet.address">Account address</Trans>
         </div>
 
-        <div className={`${styles.greyLine} grey-line`}>
-          {this.props.account.address}
-        </div>
+        <div className={`${styles.greyLine} grey-line`}>{this.props.account.address}</div>
 
         <form onSubmit={this.onSubmit}>
           <Button type="submit" id="continue">

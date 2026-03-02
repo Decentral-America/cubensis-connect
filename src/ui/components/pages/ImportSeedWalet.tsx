@@ -1,7 +1,7 @@
 import * as styles from './styles/importSeed.styl';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Trans, WithTranslation, withTranslation } from 'react-i18next';
+import { Trans, type WithTranslation, withTranslation } from 'react-i18next';
 import { seedUtils } from '@decentralchain/waves-transactions';
 import { clearSeedErrors, newAccountSelect } from '../../actions';
 import { Button, Error, Input } from '../ui';
@@ -10,8 +10,8 @@ import { PAGES } from '../../pageConfig';
 const { Seed } = seedUtils;
 
 class ImportSeedComponent extends React.Component {
-  props;
-  state;
+  declare props;
+  declare state;
   inputEl: Input;
 
   constructor(props) {
@@ -20,8 +20,7 @@ class ImportSeedComponent extends React.Component {
     const value = isNew ? '' : this.props.account && this.props.account.phrase;
     const networkCode =
       this.props.customCodes[this.props.currentNetwork] ||
-      this.props.networks.find(({ name }) => this.props.currentNetwork === name)
-        .code ||
+      this.props.networks.find(({ name }) => this.props.currentNetwork === name).code ||
       '';
     let seed = { address: '', phrase: '' };
 
@@ -29,10 +28,7 @@ class ImportSeedComponent extends React.Component {
       seed = new Seed(value.trim(), networkCode);
     }
 
-    const error = this._validate(
-      { phrase: value, address: seed.address },
-      true
-    );
+    const error = this._validate({ phrase: value, address: seed.address }, true);
     this.state = {
       value,
       error,
@@ -42,11 +38,11 @@ class ImportSeedComponent extends React.Component {
     };
   }
 
-  getRef = input => (this.inputEl = input);
+  getRef = (input) => (this.inputEl = input);
 
-  onSubmit = e => this._onSubmit(e);
+  onSubmit = (e) => this._onSubmit(e);
 
-  onChange = e => this._changeHandler(e);
+  onChange = (e) => this._changeHandler(e);
 
   inputBlurHandler = () => this._showError(true);
 
@@ -71,10 +67,7 @@ class ImportSeedComponent extends React.Component {
           </div>
 
           <Input
-            error={
-              (this.state.error || this.state.existError) &&
-              this.state.showError
-            }
+            error={(this.state.error || this.state.existError) && this.state.showError}
             ref={this.getRef}
             autoFocus={true}
             onChange={this.onChange}
@@ -120,9 +113,7 @@ class ImportSeedComponent extends React.Component {
 
   _validate({ phrase = '', address }, noSetState?) {
     const error = phrase.length < 25;
-    const existError = !!(this.props.accounts || []).find(
-      ({ address: addr }) => address === addr
-    );
+    const existError = !!(this.props.accounts || []).find(({ address: addr }) => address === addr);
     if (!noSetState) {
       this.setState({ error, existError });
     }
@@ -133,8 +124,7 @@ class ImportSeedComponent extends React.Component {
     const phrase = e.target.value || '';
     const networkCode =
       this.props.customCodes[this.props.currentNetwork] ||
-      this.props.networks.find(({ name }) => this.props.currentNetwork === name)
-        .code ||
+      this.props.networks.find(({ name }) => this.props.currentNetwork === name).code ||
       '';
     let seed = { address: '', phrase: '' };
 
@@ -183,7 +173,4 @@ const mapStateToProps = function (store: any) {
   };
 };
 
-export const ImportSeed = connect(
-  mapStateToProps,
-  actions
-)(withTranslation()(ImportSeedComponent));
+export const ImportSeed = connect(mapStateToProps, actions)(withTranslation()(ImportSeedComponent));

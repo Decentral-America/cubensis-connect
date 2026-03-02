@@ -4,10 +4,10 @@ const clearDist = require('./scripts/clearDist');
 const conf = require('./scripts/webpack.config');
 const getVersion = require('./scripts/getVersion');
 
-const devConf = conf => ({
+const devConf = (conf) => ({
   ...conf,
   mode: 'development',
-  devtool: 'cheap-module-inline-source-map',
+  devtool: 'cheap-module-source-map',
   module: {
     ...conf.module,
     rules: [
@@ -16,14 +16,9 @@ const devConf = conf => ({
         test: /\.js$/,
         exclude: [
           'long',
-          '@waves/data-entities',
-          '@waves/money-like-to-node',
-          '@waves/node-api-js',
-          '@waves/ts-lib-crypto',
-        ].map(
-          moduleName =>
-            new RegExp(path.join(__dirname, 'node_modules', moduleName))
-        ),
+          '@decentralchain/data-entities',
+          '@decentralchain/waves-transactions',
+        ].map((moduleName) => new RegExp(path.join(__dirname, 'node_modules', moduleName))),
         loader: 'source-map-loader',
       },
       ...conf.module.rules,
@@ -31,14 +26,11 @@ const devConf = conf => ({
   },
 });
 
-const prodConf = conf => ({
+const prodConf = (conf) => ({
   ...conf,
   mode: 'production',
   devtool: 'source-map',
-  plugins: [
-    ...conf.plugins,
-    new WebpackCustomActions({ onBuildStart: [clearDist] }),
-  ],
+  plugins: [...conf.plugins, new WebpackCustomActions({ onBuildStart: [clearDist] })],
 });
 
 module.exports = () => {

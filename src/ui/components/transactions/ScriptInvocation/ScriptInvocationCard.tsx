@@ -7,7 +7,7 @@ import { Asset, Balance, PlateCollapsable, ShowScript } from '../../ui';
 import { getAmounts, messageType } from './parseTx';
 import { getMoney } from '../../../utils/converters';
 
-const AmountTable = props => {
+const AmountTable = (props) => {
   return (
     <div className={props.className}>
       <table className={cn(styles.data, styles.dataTable)}>
@@ -37,19 +37,15 @@ interface IProps {
 
 export class ScriptInvocationCard extends React.PureComponent<IProps> {
   render() {
-    const className = cn(
-      styles.scriptInvocationTransactionCard,
-      this.props.className,
-      {
-        [styles.scriptInvocationCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.scriptInvocationTransactionCard, this.props.className, {
+      [styles.scriptInvocationCard_collapsed]: this.props.collapsed,
+    });
 
     const { message, assets, collapsed } = this.props;
     const { data = {} } = message;
     const tx = { type: data.type, ...data.data };
     const functionName = (tx.call && tx.call.function) || 'Default';
-    const amounts = getAmounts(tx).map(item => getMoney(item, assets));
+    const amounts = getAmounts(tx).map((item) => getMoney(item, assets));
     const hasPayment = !!(tx.payment && tx.payment.length);
 
     return (
@@ -64,11 +60,7 @@ export class ScriptInvocationCard extends React.PureComponent<IProps> {
             </div>
             <h1 className="headline1">
               <Trans
-                i18nKey={
-                  hasPayment
-                    ? 'transactions.paymentsCount'
-                    : 'transactions.paymentsNone'
-                }
+                i18nKey={hasPayment ? 'transactions.paymentsCount' : 'transactions.paymentsNone'}
                 values={{ count: tx.payment.length || 0 }}
               />
             </h1>
@@ -113,10 +105,7 @@ export class ScriptInvocationCard extends React.PureComponent<IProps> {
                 <Trans i18nKey="transactions.payments" />
               </div>
               <div className={styles.txValue}>
-                <PlateCollapsable
-                  className={styles.expandableList}
-                  showExpand={!collapsed}
-                >
+                <PlateCollapsable className={styles.expandableList} showExpand={!collapsed}>
                   <AmountTable amounts={amounts} />
                 </PlateCollapsable>
               </div>

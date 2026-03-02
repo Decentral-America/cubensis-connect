@@ -33,9 +33,7 @@ export class NetworkController {
 
   getNetworks() {
     const networks = this.configApi.getNetworkConfig();
-    return this.configApi
-      .getNetworks()
-      .map(name => ({ ...networks[name], name }));
+    return this.configApi.getNetworks().map((name) => ({ ...networks[name], name }));
   }
 
   setNetwork(network) {
@@ -56,19 +54,19 @@ export class NetworkController {
   }
 
   setCustomNode(url, network = 'mainnet') {
-    let { customNodes } = this.store.getState();
+    const { customNodes } = this.store.getState();
     customNodes[network] = url;
     this.store.updateState({ customNodes });
   }
 
   setCustomMatcher(url, network = 'mainnet') {
-    let { customMatchers } = this.store.getState();
+    const { customMatchers } = this.store.getState();
     customMatchers[network] = url;
     this.store.updateState({ customMatchers });
   }
 
   setCustomCode(code, network = 'mainnet') {
-    let { customCodes } = this.store.getState();
+    const { customCodes } = this.store.getState();
     customCodes[network] = code;
     this.store.updateState({ customCodes });
   }
@@ -99,10 +97,7 @@ export class NetworkController {
 
   getMather(network) {
     network = network || this.getNetwork();
-    return (
-      this.getCustomMatchers()[network] ||
-      this.configApi.getNetworkConfig()[network].matcher
-    );
+    return this.getCustomMatchers()[network] || this.configApi.getNetworkConfig()[network].matcher;
   }
 
   async getMatcherPublicKey() {
@@ -138,10 +133,7 @@ export class NetworkController {
         if (!API_BASE) {
           throw new Error('Matcher not set. Cannot send order');
         }
-        url = new URL(
-          `matcher/orderbook/${amountAsset}/${priceAsset}/cancel`,
-          API_BASE
-        ).toString();
+        url = new URL(`matcher/orderbook/${amountAsset}/${priceAsset}/cancel`, API_BASE).toString();
         break;
       default:
         throw new Error(`Unknown message type: ${type}`);

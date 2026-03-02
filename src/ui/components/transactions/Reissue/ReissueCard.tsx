@@ -54,11 +54,7 @@ export class ReissueCard extends React.PureComponent<IProps> {
             </div>
             <div className={styles.txValue}>
               <Trans
-                i18nKey={
-                  tx.reissuable
-                    ? 'transactions.reissuable'
-                    : 'transactions.noReissuable'
-                }
+                i18nKey={tx.reissuable ? 'transactions.reissuable' : 'transactions.noReissuable'}
               />
             </div>
           </div>

@@ -8,10 +8,8 @@ export const SPONSOR_MODE = {
 };
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
-  const sponsoredAssetId =
-    (tx.minSponsoredAssetFee && tx.minSponsoredAssetFee.assetId) || 'DCC';
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const sponsoredAssetId = (tx.minSponsoredAssetFee && tx.minSponsoredAssetFee.assetId) || 'DCC';
   return [feeAssetId, sponsoredAssetId];
 }
 
@@ -19,9 +17,7 @@ export { getFee } from '../BaseTransaction/parseTx';
 
 export function getAssetFee(tx) {
   const amount = tx.minSponsoredAssetFee;
-  return typeof amount === 'object'
-    ? amount
-    : { coins: amount, assetId: tx.assetId };
+  return typeof amount === 'object' ? amount : { coins: amount, assetId: tx.assetId };
 }
 
 export function getAmount() {

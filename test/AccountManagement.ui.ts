@@ -1,6 +1,6 @@
-import * as mocha from 'mocha';
+import type * as mocha from 'mocha';
 import { App, Assets, CreateNewAccount, Network } from './utils/actions';
-import { By, until, WebElement } from 'selenium-webdriver';
+import { By, until, type WebElement } from 'selenium-webdriver';
 import { clear } from './utils';
 import { expect } from 'chai';
 import {
@@ -17,14 +17,14 @@ describe('Account management', function () {
     await CreateNewAccount.importAccount.call(
       this,
       'rich',
-      'DCC private node seed with DCC tokens'
+      'DCC private node seed with DCC tokens',
     );
 
     await Assets.addAccount.call(this);
     await CreateNewAccount.importAccount.call(
       this,
       'poor',
-      'DCC private node seed without DCC tokens'
+      'DCC private node seed without DCC tokens',
     );
   });
 
@@ -33,17 +33,11 @@ describe('Account management', function () {
   describe('Accounts list', function () {
     it('Change active account', async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="otherAccountsButton"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="otherAccountsButton"]')), this.wait)
         .click();
 
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="accountCard"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="accountCard"]')), this.wait)
         .click();
 
       expect(await Assets.getActiveAccountName.call(this)).to.equal('poor');
@@ -63,20 +57,16 @@ describe('Account management', function () {
       it('Opening the screen with the QR code of the address by clicking the "Show QR" button', async function () {
         await this.driver
           .wait(
-            until.elementLocated(
-              By.css('[data-testid="activeAccountCard"] .showQrIcon')
-            ),
-            this.wait
+            until.elementLocated(By.css('[data-testid="activeAccountCard"] .showQrIcon')),
+            this.wait,
           )
           .click();
 
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-selectedAccountQr')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-selectedAccountQr')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
 
@@ -93,10 +83,10 @@ describe('Account management', function () {
           await this.driver
             .findElement(
               By.xpath(
-                "//div[@id='accountInfoAddress']//div[contains(@class, '-copy-copyTextOverflow')]"
-              )
+                "//div[@id='accountInfoAddress']//div[contains(@class, '-copy-copyTextOverflow')]",
+              ),
             )
-            .getText()
+            .getText(),
         ).matches(/\w+/i);
       });
 
@@ -109,10 +99,10 @@ describe('Account management', function () {
           await this.driver
             .findElement(
               By.xpath(
-                "//div[@id='accountInfoPublicKey']//div[contains(@class, '-copy-copyTextOverflow')]"
-              )
+                "//div[@id='accountInfoPublicKey']//div[contains(@class, '-copy-copyTextOverflow')]",
+              ),
             )
-            .getText()
+            .getText(),
         ).matches(/\w+/i);
       });
 
@@ -125,10 +115,10 @@ describe('Account management', function () {
           await this.driver
             .findElement(
               By.xpath(
-                "//div[@id='accountInfoPrivateKey']//div[contains(@class, '-copy-copyTextOverflow')]"
-              )
+                "//div[@id='accountInfoPrivateKey']//div[contains(@class, '-copy-copyTextOverflow')]",
+              ),
             )
-            .getText()
+            .getText(),
         ).not.matches(/\w+/i);
       });
 
@@ -137,22 +127,17 @@ describe('Account management', function () {
           await this.driver
             .findElement(
               By.xpath(
-                "//div[@id='accountInfoPrivateKey']//div[contains(@class, '-copy-lastIcon')]"
-              )
+                "//div[@id='accountInfoPrivateKey']//div[contains(@class, '-copy-lastIcon')]",
+              ),
             )
             .click();
         });
 
         it('Clicking "Copy" displays the password entry form', async function () {
           expect(
-            await this.driver.wait(
-              until.elementLocated(By.css('form#enterPassword')),
-              this.wait
-            )
+            await this.driver.wait(until.elementLocated(By.css('form#enterPassword')), this.wait),
           ).not.to.be.throw;
-          await this.driver
-            .findElement(By.css('button#passwordCancel'))
-            .click();
+          await this.driver.findElement(By.css('button#passwordCancel')).click();
         });
 
         it('Clicking "Cancel" does not copy');
@@ -167,10 +152,10 @@ describe('Account management', function () {
           await this.driver
             .findElement(
               By.xpath(
-                "//div[@id='accountInfoBackupPhrase']//div[contains(@class, '-copy-copyTextOverflow')]"
-              )
+                "//div[@id='accountInfoBackupPhrase']//div[contains(@class, '-copy-copyTextOverflow')]",
+              ),
             )
-            .getText()
+            .getText(),
         ).not.matches(/\w+/i);
       });
 
@@ -179,20 +164,15 @@ describe('Account management', function () {
           await this.driver
             .findElement(
               By.xpath(
-                "//div[@id='accountInfoBackupPhrase']//div[contains(@class, '-copy-lastIcon')]"
-              )
+                "//div[@id='accountInfoBackupPhrase']//div[contains(@class, '-copy-lastIcon')]",
+              ),
             )
             .click();
-          await this.driver.wait(
-            until.elementLocated(By.css('form#enterPassword')),
-            this.wait
-          );
+          await this.driver.wait(until.elementLocated(By.css('form#enterPassword')), this.wait);
         });
 
         after(async function () {
-          await this.driver
-            .findElement(By.css('button#passwordCancel'))
-            .click();
+          await this.driver.findElement(By.css('button#passwordCancel')).click();
         });
 
         it('Clicking "Cancel" does not copy');
@@ -212,19 +192,19 @@ describe('Account management', function () {
         await this.driver
           .wait(
             until.elementLocated(
-              By.xpath("//button[contains(@class, '-accountInfo-accountName')]")
+              By.xpath("//button[contains(@class, '-accountInfo-accountName')]"),
             ),
-            this.wait
+            this.wait,
           )
           .click();
         newAccountNameInput = this.driver.wait(
           until.elementLocated(By.css('input#newAccountName')),
-          this.wait
+          this.wait,
         );
         newAccountNameErr = this.driver.findElement(
           By.xpath(
-            "//input[@id='newAccountName']//following-sibling::div[contains(@class, '-error-error')]"
-          )
+            "//input[@id='newAccountName']//following-sibling::div[contains(@class, '-error-error')]",
+          ),
         );
         saveBtn = this.driver.findElement(By.css('button#save'));
         currentAccountName = await this.driver
@@ -235,9 +215,7 @@ describe('Account management', function () {
       it('A name that is already in use cannot be specified', async function () {
         await newAccountNameInput.sendKeys(currentAccountName);
         await newAccountNameInput.sendKeys('\t');
-        expect(await newAccountNameErr.getText()).matches(
-          /Name already exist/i
-        );
+        expect(await newAccountNameErr.getText()).matches(/Name already exist/i);
         expect(await saveBtn.isEnabled()).to.be.false;
         await clear(newAccountNameInput);
       });
@@ -256,12 +234,10 @@ describe('Account management', function () {
         expect(
           await this.driver
             .wait(
-              until.elementIsVisible(
-                this.driver.findElement(By.css('.modal.notification'))
-              ),
-              this.wait
+              until.elementIsVisible(this.driver.findElement(By.css('.modal.notification'))),
+              this.wait,
             )
-            .getText()
+            .getText(),
         ).matches(/Account name changed/i);
 
         await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
@@ -270,13 +246,11 @@ describe('Account management', function () {
           await this.driver
             .wait(
               until.elementLocated(
-                By.xpath(
-                  "//button[contains(@class, '-accountInfo-accountName')]//span"
-                )
+                By.xpath("//button[contains(@class, '-accountInfo-accountName')]//span"),
               ),
-              this.wait
+              this.wait,
             )
-            .getText()
+            .getText(),
         ).to.be.equal(newAccountName);
       });
     });
@@ -285,17 +259,13 @@ describe('Account management', function () {
       beforeEach(async function () {
         await this.driver
           .wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-accountInfo-deleteButton')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-accountInfo-deleteButton')]")),
+            this.wait,
           )
           .click();
         await this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-deleteAccount-content')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-deleteAccount-content')]")),
+          this.wait,
         );
       });
 
@@ -303,11 +273,9 @@ describe('Account management', function () {
         await this.driver.findElement(By.css('div.arrow-back-icon')).click();
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-accountInfo-content')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-accountInfo-content')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
 
@@ -318,11 +286,11 @@ describe('Account management', function () {
           await this.driver.wait(
             until.elementLocated(
               By.xpath(
-                "//div[(contains(@class, '-assets-assets') or contains(@class, '-import-import'))]"
-              )
+                "//div[(contains(@class, '-assets-assets') or contains(@class, '-import-import'))]",
+              ),
             ),
-            this.wait
-          )
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
     });
@@ -331,28 +299,20 @@ describe('Account management', function () {
   describe('Inactive account', async function () {
     before(async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="otherAccountsButton"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="otherAccountsButton"]')), this.wait)
         .click();
     });
 
     it('By clicking on account - go to the account properties screen', async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="accountInfoButton"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="accountInfoButton"]')), this.wait)
         .click();
 
       expect(
         await this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-accountInfo-content')]")
-          ),
-          this.wait
-        )
+          until.elementLocated(By.xpath("//div[contains(@class, '-accountInfo-content')]")),
+          this.wait,
+        ),
       ).not.to.be.throw;
     });
 
@@ -362,19 +322,14 @@ describe('Account management', function () {
   describe('Active account', async function () {
     it('By clicking on account - go to the account properties screen', async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="activeAccountCard"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="activeAccountCard"]')), this.wait)
         .click();
 
       expect(
         await this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-accountInfo-content')]")
-          ),
-          this.wait
-        )
+          until.elementLocated(By.xpath("//div[contains(@class, '-accountInfo-content')]")),
+          this.wait,
+        ),
       ).not.to.be.throw;
     });
 
@@ -386,14 +341,14 @@ describe('Account management', function () {
       await CreateNewAccount.importAccount.call(
         this,
         'first',
-        'first account for testing selected account preservation'
+        'first account for testing selected account preservation',
       );
 
       await Assets.addAccount.call(this);
       await CreateNewAccount.importAccount.call(
         this,
         'second',
-        'second account for testing selected account preservation'
+        'second account for testing selected account preservation',
       );
 
       await Network.switchTo.call(this, 'Testnet');
@@ -401,14 +356,14 @@ describe('Account management', function () {
       await CreateNewAccount.importAccount.call(
         this,
         'third',
-        'third account for testing selected account preservation'
+        'third account for testing selected account preservation',
       );
 
       await Assets.addAccount.call(this);
       await CreateNewAccount.importAccount.call(
         this,
         'fourth',
-        'fourth account for testing selected account preservation'
+        'fourth account for testing selected account preservation',
       );
 
       await Network.switchTo.call(this, 'Mainnet');
@@ -420,17 +375,11 @@ describe('Account management', function () {
 
     it('should preserve previously selected account for the network', async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="otherAccountsButton"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="otherAccountsButton"]')), this.wait)
         .click();
 
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="accountCard"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="accountCard"]')), this.wait)
         .click();
 
       expect(await Assets.getActiveAccountName.call(this)).to.equal('second');
@@ -438,17 +387,11 @@ describe('Account management', function () {
       await Network.switchTo.call(this, 'Testnet');
 
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="otherAccountsButton"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="otherAccountsButton"]')), this.wait)
         .click();
 
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="accountCard"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="accountCard"]')), this.wait)
         .click();
 
       expect(await Assets.getActiveAccountName.call(this)).to.equal('fourth');

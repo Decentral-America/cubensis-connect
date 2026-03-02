@@ -3,13 +3,10 @@ import * as React from 'react';
 import cn from 'classnames';
 import { Trans } from 'react-i18next';
 
-const Icon = props => (
+const Icon = (props) => (
   <div className={props.small ? styles.authTxIconSmall : styles.authTxIcon}>
     {props.canUseIcon ? (
-      <img
-        className={props.small ? styles.authTxIconSmall : styles.authTxIcon}
-        src={props.icon}
-      />
+      <img className={props.small ? styles.authTxIconSmall : styles.authTxIcon} src={props.icon} />
     ) : (
       <div
         className={cn('signin-icon', {
@@ -68,9 +65,7 @@ export class AuthCard extends React.PureComponent<IProps> {
                   <Icon icon={icon} canUseIcon={canUseIcon} small={true} />
                 </div>
                 <div>
-                  <div className="basic500 body3 margin-min origin-ellipsis">
-                    {name || origin}
-                  </div>
+                  <div className="basic500 body3 margin-min origin-ellipsis">{name || origin}</div>
                   <h1 className="headline1">
                     <Trans i18nKey="transactions.allowAccessTitle" />
                   </h1>

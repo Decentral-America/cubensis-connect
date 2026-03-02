@@ -12,8 +12,7 @@ export class IdleController {
   constructor({ options, backgroundService }) {
     extension.idle.setDetectionInterval(IDLE_INTERVAL);
     this.backgroundService = backgroundService;
-    this.options =
-      backgroundService.preferencesController.store.getState().idleOptions;
+    this.options = backgroundService.preferencesController.store.getState().idleOptions;
     this.setOptions(options);
     this.start();
   }
@@ -71,7 +70,7 @@ export class IdleController {
     }
   }
 
-  _lock = state => {
+  _lock = (state) => {
     if (['idle', 'locked'].indexOf(state) > -1) {
       this.backgroundService.walletController.lock();
     }

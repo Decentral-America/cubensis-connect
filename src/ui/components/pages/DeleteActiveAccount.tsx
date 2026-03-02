@@ -7,7 +7,7 @@ import { deleteActiveAccount } from '../../actions';
 
 class DeleteActiveAccountComponent extends React.Component {
   state = { disable: false };
-  props;
+  declare props;
   onClickHandler = () => {
     this.props.deleteActiveAccount(null);
     this.setState({ disable: false });
@@ -47,7 +47,4 @@ const mapStateToProps = function () {
   return {};
 };
 
-export const DeleteActiveAccount = connect(
-  mapStateToProps,
-  actions
-)(DeleteActiveAccountComponent);
+export const DeleteActiveAccount = connect(mapStateToProps, actions)(DeleteActiveAccountComponent);

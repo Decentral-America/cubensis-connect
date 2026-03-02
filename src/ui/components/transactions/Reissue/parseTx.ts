@@ -4,10 +4,8 @@ export const messageType = 'reissue';
 export const txType = 'transaction';
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
-  const amountAssetId =
-    tx.quantity && tx.quantity.assetId ? tx.quantity.assetId : tx.assetId;
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const amountAssetId = tx.quantity && tx.quantity.assetId ? tx.quantity.assetId : tx.assetId;
 
   if (feeAssetId === amountAssetId) {
     return [amountAssetId];

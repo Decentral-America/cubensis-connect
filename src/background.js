@@ -34,15 +34,12 @@ import {
   WalletController,
 } from './controllers';
 import { SwapController } from './controllers/SwapController';
-import {
-  getExtraFee,
-  getMinimumFee,
-} from './controllers/CalculateFeeController';
+import { getExtraFee, getMinimumFee } from './controllers/CalculateFeeController';
 import { setupDnode } from './lib/dnode-util';
 import { WindowManager } from './lib/WindowManger';
 import '@decentralchain/waves-transactions';
 import { getAdapterByType } from '@decentralchain/signature-adapter';
-import { waves } from './controllers/wavesTransactionsController';
+import { waves } from './controllers/transactionsController';
 
 const version = extension.runtime.getManifest().version;
 
@@ -74,11 +71,10 @@ Sentry.init({
 
     const backgroundService = await bgPromise;
 
-    const shouldIgnore =
-      backgroundService.remoteConfigController.shouldIgnoreError(
-        'beforeSendBackground',
-        message
-      );
+    const shouldIgnore = backgroundService.remoteConfigController.shouldIgnoreError(
+      'beforeSendBackground',
+      message,
+    );
 
     if (shouldIgnore) {
       return null;
@@ -88,7 +84,7 @@ Sentry.init({
   },
 });
 
-extension.runtime.onInstalled.addListener(async details => {
+extension.runtime.onInstalled.addListener(async (details) => {
   const bgService = await bgPromise;
   const prevUiState = bgService.uiStateController.getUiState();
 
@@ -103,18 +99,16 @@ extension.runtime.onInstalled.addListener(async details => {
     bgService.messageController.clearUnusedMessages();
     bgService.assetInfoController.addTickersForExistingAssets();
 
-    const storageContents = await new Promise(resolve =>
-      extension.storage.local.get(resolve)
-    );
+    const storageContents = await new Promise((resolve) => extension.storage.local.get(resolve));
 
     const keysToRemove = new Set(Object.keys(storageContents));
 
-    bgService.store.getKeys().forEach(storeKey => {
+    bgService.store.getKeys().forEach((storeKey) => {
       keysToRemove.delete(storeKey);
     });
 
-    await new Promise(resolve =>
-      extension.storage.local.remove(Array.from(keysToRemove), resolve)
+    await new Promise((resolve) =>
+      extension.storage.local.remove(Array.from(keysToRemove), resolve),
     );
   }
 });
@@ -142,9 +136,9 @@ async function setupBackgroundService() {
     asStream(backgroundService.store),
     debounceStream(1000),
     createStreamSink(persistData),
-    error => {
+    (error) => {
       log.error('Persistence pipeline failed', error);
-    }
+    },
   );
 
   async function persistData(state) {
@@ -173,9 +167,7 @@ async function setupBackgroundService() {
     const { selectedAccount } = state;
     const messages = backgroundService.messageController.getUnapproved();
     const notifications =
-      backgroundService.notificationsController.getGroupNotificationsByAccount(
-        selectedAccount
-      );
+      backgroundService.notificationsController.getGroupNotificationsByAccount(selectedAccount);
     const msg = notifications.length + messages.length;
     const text = msg ? String(msg) : '';
     extension.browserAction.setBadgeText({ text });
@@ -187,16 +179,13 @@ async function setupBackgroundService() {
   backgroundService.notificationsController.on('Update badge', updateBadge);
   updateBadge();
   // open new tab
-  backgroundService.messageController.on('Open new tab', url => {
+  backgroundService.messageController.on('Open new tab', (url) => {
     extension.tabs.create({ url });
   });
 
   // Notification window management
   const windowManager = new WindowManager();
-  backgroundService.on(
-    'Show notification',
-    windowManager.showWindow.bind(windowManager)
-  );
+  backgroundService.on('Show notification', windowManager.showWindow.bind(windowManager));
   backgroundService.on('Close notification', () => {
     if (isEdge) {
       // Microsoft Edge doesn't support browser.windows.close api. We emit notification, so window will close itself
@@ -264,15 +253,13 @@ class BackgroundService extends EventEmitter {
     this.preferencesController = new PreferencesController({
       initState: initState.PreferencesController,
       initLangCode: options.langCode,
-      getNetwork: this.networkController.getNetwork.bind(
-        this.networkController
-      ),
+      getNetwork: this.networkController.getNetwork.bind(this.networkController),
       getNetworkConfig: () => this.remoteConfigController.getNetworkConfig(),
     });
 
     // On network change select accounts of this network
     this.networkController.store.subscribe(() =>
-      this.preferencesController.syncCurrentNetworkAccounts()
+      this.preferencesController.syncCurrentNetworkAccounts(),
     );
 
     // Ui State. Provides storage for ui application
@@ -283,39 +270,27 @@ class BackgroundService extends EventEmitter {
     // Wallet. Wallet creation, app locking, signing method
     this.walletController = new WalletController({
       initState: initState.WalletController,
-      getNetwork: this.networkController.getNetwork.bind(
-        this.networkController
-      ),
-      getNetworkCode: this.networkController.getNetworkCode.bind(
-        this.networkController
-      ),
-      getNetworks: this.networkController.getNetworks.bind(
-        this.networkController
-      ),
+      getNetwork: this.networkController.getNetwork.bind(this.networkController),
+      getNetworkCode: this.networkController.getNetworkCode.bind(this.networkController),
+      getNetworks: this.networkController.getNetworks.bind(this.networkController),
       trash: this.trash,
     });
 
-    this.walletController.store.subscribe(state => {
+    this.walletController.store.subscribe((state) => {
       if (!state.locked || !state.initialized) {
         const accounts = this.walletController.getAccounts();
         this.preferencesController.syncAccounts(accounts);
       }
     });
 
-    this.networkController.store.subscribe(() =>
-      this.currentAccountController.updateBalances()
-    );
+    this.networkController.store.subscribe(() => this.currentAccountController.updateBalances());
 
-    this.walletController.store.subscribe(() =>
-      this.currentAccountController.updateBalances()
-    );
+    this.walletController.store.subscribe(() => this.currentAccountController.updateBalances());
 
     // AssetInfo. Provides information about assets
     this.assetInfoController = new AssetInfoController({
       initState: initState.AssetInfoController,
-      getNetwork: this.networkController.getNetwork.bind(
-        this.networkController
-      ),
+      getNetwork: this.networkController.getNetwork.bind(this.networkController),
       getNode: this.networkController.getNode.bind(this.networkController),
     });
 
@@ -323,27 +298,19 @@ class BackgroundService extends EventEmitter {
     this.currentAccountController = new CurrentAccountController({
       initState: initState.CurrentAccountController,
       getNetworkConfig: () => this.remoteConfigController.getNetworkConfig(),
-      getNetwork: this.networkController.getNetwork.bind(
-        this.networkController
-      ),
+      getNetwork: this.networkController.getNetwork.bind(this.networkController),
       getNode: this.networkController.getNode.bind(this.networkController),
-      getAccounts: this.walletController.getAccounts.bind(
-        this.walletController
-      ),
-      getCode: this.networkController.getNetworkCode.bind(
-        this.networkController
-      ),
+      getAccounts: this.walletController.getAccounts.bind(this.walletController),
+      getCode: this.networkController.getNetworkCode.bind(this.networkController),
       getSelectedAccount: this.preferencesController.getSelectedAccount.bind(
-        this.preferencesController
+        this.preferencesController,
       ),
       isLocked: this.walletController.isLocked.bind(this.walletController),
       assetInfoController: this.assetInfoController,
     });
 
     this.txinfoController = new TxInfoController({
-      getNetwork: this.networkController.getNetwork.bind(
-        this.networkController
-      ),
+      getNetwork: this.networkController.getNetwork.bind(this.networkController),
       getNode: this.networkController.getNode.bind(this.networkController),
     });
 
@@ -355,19 +322,13 @@ class BackgroundService extends EventEmitter {
       signTx: this.walletController.signTx.bind(this.walletController),
       signWaves: this.walletController.signWaves.bind(this.walletController),
       auth: this.walletController.auth.bind(this.walletController),
-      signRequest: this.walletController.signRequest.bind(
-        this.walletController
-      ),
+      signRequest: this.walletController.signRequest.bind(this.walletController),
       signBytes: this.walletController.signBytes.bind(this.walletController),
       networkController: this.networkController,
-      getMatcherPublicKey: this.networkController.getMatcherPublicKey.bind(
-        this.networkController
-      ),
+      getMatcherPublicKey: this.networkController.getMatcherPublicKey.bind(this.networkController),
       assetInfoController: this.assetInfoController,
       txInfo: this.txinfoController.txInfo.bind(this.txinfoController),
-      setPermission: this.permissionsController.setPermission.bind(
-        this.permissionsController
-      ),
+      setPermission: this.permissionsController.setPermission.bind(this.permissionsController),
       getMessagesConfig: () => this.remoteConfigController.getMessagesConfig(),
       getPackConfig: () => this.remoteConfigController.getPackConfig(),
     });
@@ -376,23 +337,15 @@ class BackgroundService extends EventEmitter {
     this.notificationsController = new NotificationsController({
       initState: initState.NotificationsController,
       getMessagesConfig: () => this.remoteConfigController.getMessagesConfig(),
-      canShowNotification: (...args) =>
-        this.permissionsController.canUseNotification(...args),
+      canShowNotification: (...args) => this.permissionsController.canUseNotification(...args),
       setNotificationPermissions: (origin, canUse, time) =>
-        this.permissionsController.setNotificationPermissions(
-          origin,
-          canUse,
-          time
-        ),
+        this.permissionsController.setNotificationPermissions(origin, canUse, time),
     });
 
     //Statistics
-    this.statisticsController = new StatisticsController(
-      initState.StatisticsController,
-      {
-        network: this.networkController,
-      }
-    );
+    this.statisticsController = new StatisticsController(initState.StatisticsController, {
+      network: this.networkController,
+    });
 
     this.swapController = new SwapController({
       assetInfoController: this.assetInfoController,
@@ -426,9 +379,7 @@ class BackgroundService extends EventEmitter {
     const state = this.store.getFlatState();
     const { selectedAccount } = state;
     const myNotifications =
-      this.notificationsController.getGroupNotificationsByAccount(
-        selectedAccount
-      );
+      this.notificationsController.getGroupNotificationsByAccount(selectedAccount);
     return { ...state, myNotifications };
   }
 
@@ -449,23 +400,22 @@ class BackgroundService extends EventEmitter {
       },
 
       // preferences
-      setCurrentLocale: async key =>
-        this.preferencesController.setCurrentLocale(key),
+      setCurrentLocale: async (key) => this.preferencesController.setCurrentLocale(key),
       selectAccount: async (address, network) =>
         this.preferencesController.selectAccount(address, network),
       editWalletName: async (address, name, network) =>
         this.preferencesController.addLabel(address, name, network),
 
       // ui state
-      setUiState: async state => this.uiStateController.setUiState(state),
+      setUiState: async (state) => this.uiStateController.setUiState(state),
 
       // wallets
-      addWallet: async account => this.walletController.addWallet(account),
+      addWallet: async (account) => this.walletController.addWallet(account),
       removeWallet: async (address, network) =>
         this.walletController.removeWallet(address, network),
       lock: async () => this.walletController.lock(),
-      unlock: async password => this.walletController.unlock(password),
-      initVault: async password => {
+      unlock: async (password) => this.walletController.unlock(password),
+      initVault: async (password) => {
         const result = await this.walletController.initVault(password);
         this.statisticsController.addEvent('initVault');
         return result;
@@ -482,37 +432,28 @@ class BackgroundService extends EventEmitter {
         this.walletController.encryptedSeed(address, network),
 
       // messages
-      getMessageById: async id => this.messageController.getMessageById(id),
+      getMessageById: async (id) => this.messageController.getMessageById(id),
       clearMessages: async () => this.messageController.clearMessages(),
-      deleteMessage: async id => this.messageController.deleteMessage(id),
+      deleteMessage: async (id) => this.messageController.deleteMessage(id),
       approve: async (messageId, address) => {
-        const approveData = await this.messageController.approve(
-          messageId,
-          address
-        );
+        const approveData = await this.messageController.approve(messageId, address);
         const message = this.messageController.getMessageById(messageId);
         this.statisticsController.sendTxEvent(message);
         return approveData;
       },
-      reject: async (messageId, forever) =>
-        this.messageController.reject(messageId, forever),
+      reject: async (messageId, forever) => this.messageController.reject(messageId, forever),
       updateTransactionFee: this.messageController.updateTransactionFee.bind(
-        this.messageController
+        this.messageController,
       ),
       // notifications
-      setReadNotification: async id =>
-        this.notificationsController.setMessageStatus(
-          id,
-          MSG_STATUSES.SHOWED_NOTIFICATION
-        ),
-      deleteNotifications: async ids =>
-        this.notificationsController.deleteNotifications(ids),
+      setReadNotification: async (id) =>
+        this.notificationsController.setMessageStatus(id, MSG_STATUSES.SHOWED_NOTIFICATION),
+      deleteNotifications: async (ids) => this.notificationsController.deleteNotifications(ids),
 
       // network
-      setNetwork: async network => this.networkController.setNetwork(network),
+      setNetwork: async (network) => this.networkController.setNetwork(network),
       getNetworks: async () => this.networkController.getNetworks(),
-      setCustomNode: async (url, network) =>
-        this.networkController.setCustomNode(url, network),
+      setCustomNode: async (url, network) => this.networkController.setCustomNode(url, network),
       setCustomCode: async (code, network) => {
         this.walletController.updateNetworkCode(network, code);
         this.networkController.setCustomCode(code, network);
@@ -526,14 +467,10 @@ class BackgroundService extends EventEmitter {
         await ExternalDeviceController.getUserList(type, from, to),
 
       // asset information
-      assetInfo: this.assetInfoController.assetInfo.bind(
-        this.assetInfoController
-      ),
-      updateAssets: this.assetInfoController.updateAssets.bind(
-        this.assetInfoController
-      ),
+      assetInfo: this.assetInfoController.assetInfo.bind(this.assetInfoController),
+      updateAssets: this.assetInfoController.updateAssets.bind(this.assetInfoController),
       toggleAssetFavorite: this.assetInfoController.toggleAssetFavorite.bind(
-        this.assetInfoController
+        this.assetInfoController,
       ),
       // window control
       closeNotificationWindow: async () => this.emit('Close notification'),
@@ -541,26 +478,20 @@ class BackgroundService extends EventEmitter {
         this.emit('Resize notification', width, height),
 
       // origin settings
-      allowOrigin: async origin => {
+      allowOrigin: async (origin) => {
         this.statisticsController.addEvent('allowOrigin', { origin });
         this.messageController.rejectByOrigin(origin);
-        this.permissionsController.deletePermission(
-          origin,
-          PERMISSIONS.REJECTED
-        );
+        this.permissionsController.deletePermission(origin, PERMISSIONS.REJECTED);
         this.permissionsController.setPermission(origin, PERMISSIONS.APPROVED);
       },
 
-      disableOrigin: async origin => {
+      disableOrigin: async (origin) => {
         this.statisticsController.addEvent('disableOrigin', { origin });
-        this.permissionsController.deletePermission(
-          origin,
-          PERMISSIONS.APPROVED
-        );
+        this.permissionsController.deletePermission(origin, PERMISSIONS.APPROVED);
         this.permissionsController.setPermission(origin, PERMISSIONS.REJECTED);
       },
 
-      deleteOrigin: async origin => {
+      deleteOrigin: async (origin) => {
         this.permissionsController.deletePermissions(origin);
       },
       // extended permission autoSign
@@ -568,20 +499,14 @@ class BackgroundService extends EventEmitter {
         this.permissionsController.setAutoApprove(origin, params);
       },
       setNotificationPermissions: async ({ origin, canUse }) => {
-        this.permissionsController.setNotificationPermissions(
-          origin,
-          canUse,
-          0
-        );
+        this.permissionsController.setNotificationPermissions(origin, canUse, 0);
       },
-      sendEvent: async (event, properties) =>
-        this.statisticsController.addEvent(event, properties),
+      sendEvent: async (event, properties) => this.statisticsController.addEvent(event, properties),
       updateBalances: this.currentAccountController.updateBalances.bind(
-        this.currentAccountController
+        this.currentAccountController,
       ),
       swapAssets: this.swapController.swapAssets.bind(this.swapController),
-      signAndPublishTransaction: data =>
-        newMessage(data, 'transaction', undefined, true),
+      signAndPublishTransaction: (data) => newMessage(data, 'transaction', undefined, true),
       getMinimumFee: getMinimumFee,
       getExtraFee: (address, network) =>
         getExtraFee(address, this.networkController.getNode(network)),
@@ -596,10 +521,7 @@ class BackgroundService extends EventEmitter {
 
     if (!selectedAccount) throw ERRORS.EMPTY_KEEPER();
 
-    const canIUse = this.permissionsController.hasPermission(
-      origin,
-      PERMISSIONS.APPROVED
-    );
+    const canIUse = this.permissionsController.hasPermission(origin, PERMISSIONS.APPROVED);
 
     if (!canIUse && canIUse != null) {
       throw ERRORS.API_DENIED();
@@ -642,7 +564,7 @@ class BackgroundService extends EventEmitter {
         .then(() => {
           this.messageController.setPermission(origin, PERMISSIONS.APPROVED);
         })
-        .catch(e => {
+        .catch((e) => {
           switch (e.data) {
           }
           if (e.data === MSG_STATUSES.REJECTED) {
@@ -698,7 +620,7 @@ class BackgroundService extends EventEmitter {
   getInpageApi(origin) {
     const newMessage = this.getNewMessageFn(origin);
 
-    const newNotification = data => {
+    const newNotification = (data) => {
       const { selectedAccount } = this.getState();
       const myData = { ...data };
       try {
@@ -741,13 +663,7 @@ class BackgroundService extends EventEmitter {
         return await newMessage(data, 'transaction', options, false);
       },
       signTransactionPackage: async (data, title, options) => {
-        return await newMessage(
-          data,
-          'transactionPackage',
-          options,
-          false,
-          title
-        );
+        return await newMessage(data, 'transactionPackage', options, false, title);
       },
       signAndPublishTransaction: async (data, options) => {
         return await newMessage(data, 'transaction', options, true);
@@ -758,12 +674,7 @@ class BackgroundService extends EventEmitter {
       wavesAuth: async (data, options) => {
         const publicKey = data && data.publicKey;
         const timestamp = (data && data.timestamp) || Date.now();
-        return await newMessage(
-          { publicKey, timestamp },
-          'wavesAuth',
-          options,
-          false
-        );
+        return await newMessage({ publicKey, timestamp }, 'wavesAuth', options, false);
       },
       signRequest: async (data, options) => {
         return await newMessage(data, 'request', options, false);
@@ -771,10 +682,10 @@ class BackgroundService extends EventEmitter {
       signCustomData: async (data, options) => {
         return await newMessage(data, 'customData', options, false);
       },
-      verifyCustomData: async data => {
+      verifyCustomData: async (data) => {
         return waves.verifyCustomData(data);
       },
-      notification: async data => {
+      notification: async (data) => {
         const state = this.getState();
         const { selectedAccount, initialized } = state;
 
@@ -802,17 +713,11 @@ class BackgroundService extends EventEmitter {
       },
 
       resourceIsApproved: async () => {
-        return this.permissionsController.hasPermission(
-          origin,
-          PERMISSIONS.APPROVED
-        );
+        return this.permissionsController.hasPermission(origin, PERMISSIONS.APPROVED);
       },
 
       resourceIsBlocked: async () => {
-        return this.permissionsController.hasPermission(
-          origin,
-          PERMISSIONS.REJECTED
-        );
+        return this.permissionsController.hasPermission(origin, PERMISSIONS.REJECTED);
       },
 
       getKEK: async (publicKey, prefix) => {
@@ -837,7 +742,7 @@ class BackgroundService extends EventEmitter {
           selectedAccount.address,
           selectedAccount.network,
           publicKey,
-          prefix
+          prefix,
         );
       },
 
@@ -864,7 +769,7 @@ class BackgroundService extends EventEmitter {
           selectedAccount.network,
           message,
           publicKey,
-          prefix
+          prefix,
         );
       },
 
@@ -891,7 +796,7 @@ class BackgroundService extends EventEmitter {
           selectedAccount.network,
           message,
           publicKey,
-          prefix
+          prefix,
         );
       },
     };
@@ -901,22 +806,18 @@ class BackgroundService extends EventEmitter {
     const api = this.getApi();
     const dnode = setupDnode(connectionStream, api, 'api');
 
-    const remoteHandler = remote => {
+    const remoteHandler = (remote) => {
       // push updates to popup
       const sendUpdate = remote.sendUpdate.bind(remote);
       this.on('update', sendUpdate);
 
       //Microsoft Edge doesn't support browser.windows.close api. We emit notification, so window will close itself
-      const closeEdgeNotificationWindow =
-        remote.closeEdgeNotificationWindow.bind(remote);
+      const closeEdgeNotificationWindow = remote.closeEdgeNotificationWindow.bind(remote);
       this.on('closeEdgeNotificationWindow', closeEdgeNotificationWindow);
 
       dnode.on('end', () => {
         this.removeListener('update', sendUpdate);
-        this.removeListener(
-          'closeEdgeNotificationWindow',
-          closeEdgeNotificationWindow
-        );
+        this.removeListener('closeEdgeNotificationWindow', closeEdgeNotificationWindow);
       });
 
       this.statisticsController.sendOpenEvent();
@@ -932,7 +833,7 @@ class BackgroundService extends EventEmitter {
     const dnode = setupDnode(connectionStream, inpageApi, 'inpageApi');
     const self = this;
 
-    const onRemoteHandler = remote => {
+    const onRemoteHandler = (remote) => {
       // push account change event to the page
       const sendUpdate = remote.sendUpdate.bind(remote);
 
@@ -973,10 +874,7 @@ class BackgroundService extends EventEmitter {
   _publicState(state, originReq) {
     let account = null;
     let messages = [];
-    const canIUse = this.permissionsController.hasPermission(
-      originReq,
-      PERMISSIONS.APPROVED
-    );
+    const canIUse = this.permissionsController.hasPermission(originReq, PERMISSIONS.APPROVED);
 
     if (state.selectedAccount && canIUse) {
       const address = state.selectedAccount.address;
@@ -987,10 +885,7 @@ class BackgroundService extends EventEmitter {
       };
 
       messages = state.messages
-        .filter(
-          ({ account, origin }) =>
-            account.address === address && origin === originReq
-        )
+        .filter(({ account, origin }) => account.address === address && origin === originReq)
         .map(({ id, status, ext_uuid }) => ({ id, status, uid: ext_uuid }));
     }
 

@@ -19,24 +19,20 @@ export class Welcome extends React.Component<IWelcomeProps> {
     return (
       <div className={`${styles.content}`}>
         <BigLogo className="margin-main-large" />
-        <Button
-          type={BUTTON_TYPE.GENERAL}
-          onClick={this.clickHandler}
-          className="margin-main-big"
-        >
+        <Button type={BUTTON_TYPE.GENERAL} onClick={this.clickHandler} className="margin-main-big">
           <Trans i18nKey="welcome.getStarted">Get Started</Trans>
         </Button>
         <div className="basic500 body3">
           <div>
             <Trans i18nKey="welcome.info">
-              Cubensis Connect — is the safest way to interact with third-party web
-              resources with Waves-integrated functionality or DApps.
+              Cubensis Connect — is the safest way to interact with third-party web resources with
+              Waves-integrated functionality or DApps.
             </Trans>
           </div>
           <div>
             <Trans i18nKey="welcome.info2">
-              Using Cubensis Connect, you can sign transactions and remain safe from
-              malicious sites.
+              Using Cubensis Connect, you can sign transactions and remain safe from malicious
+              sites.
             </Trans>
           </div>
         </div>

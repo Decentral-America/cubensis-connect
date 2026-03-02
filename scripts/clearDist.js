@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-module.exports = compiler => {
+module.exports = (compiler) => {
   const outputPath = compiler.options.output.path;
   const rootPath = path.resolve(outputPath, '../');
   rimraf(rootPath);

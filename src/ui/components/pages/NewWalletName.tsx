@@ -6,10 +6,10 @@ import { addUser, newAccountName, setUiState } from '../../actions';
 import { Button, Error, Input } from '../ui';
 import { CONFIG } from '../../appConfig';
 import { WalletTypes } from '../../services/Background';
-import { AppState } from 'ui/store';
+import { type AppState } from 'ui/store';
 
 class NewWalletNameComponent extends React.Component {
-  readonly props;
+  declare readonly props;
   readonly state = { disabled: false, errors: [] } as any;
 
   passwordError: boolean;
@@ -60,9 +60,9 @@ class NewWalletNameComponent extends React.Component {
     return { ...state, errors, error };
   }
 
-  onChange = e => this._onChange(e);
+  onChange = (e) => this._onChange(e);
 
-  onSubmit = e => this._onSubmit(e);
+  onSubmit = (e) => this._onSubmit(e);
 
   onBlur = () => this._onBlur();
 
@@ -105,14 +105,8 @@ class NewWalletNameComponent extends React.Component {
                 <Trans i18nKey="newAccountName.continue">Continue</Trans>
               </Button>
             ) : (
-              <Button
-                id="createBackup"
-                type="submit"
-                disabled={this.state.errors.length}
-              >
-                <Trans i18nKey="newAccountName.continueBackup">
-                  Create backup
-                </Trans>
+              <Button id="createBackup" type="submit" disabled={this.state.errors.length}>
+                <Trans i18nKey="newAccountName.continueBackup">Create backup</Trans>
               </Button>
             )}
           </div>
@@ -129,12 +123,12 @@ class NewWalletNameComponent extends React.Component {
   _onBlur() {
     const errors = NewWalletNameComponent.validateName(
       this.props.account.name,
-      this.props.accounts
+      this.props.accounts,
     );
     this.setState({ error: errors.length, errors });
   }
 
-  _onSave = e => {
+  _onSave = (e) => {
     e.preventDefault();
     this.props.addUser(this.props.account, WalletTypes.Seed);
     this.setState({ disabled: true });
@@ -166,7 +160,4 @@ const actions = {
   setUiState,
 };
 
-export const NewWalletName = connect(
-  mapStateToProps,
-  actions
-)(NewWalletNameComponent);
+export const NewWalletName = connect(mapStateToProps, actions)(NewWalletNameComponent);

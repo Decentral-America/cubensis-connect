@@ -8,7 +8,7 @@ import { PAGES } from '../../pageConfig';
 
 class BackUpSeedComponent extends React.Component {
   readonly state = {} as any;
-  readonly props;
+  declare readonly props;
   _t;
   onClick = () => this._onClick();
   copyHandler = () => this._onCopy();
@@ -56,10 +56,7 @@ class BackUpSeedComponent extends React.Component {
           <Trans i18nKey="backupSeed.cancel">Cancel creation</Trans>
         </Button>
 
-        <Modal
-          animation={Modal.ANIMATION.FLASH_SCALE}
-          showModal={this.state.showCopied}
-        >
+        <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={this.state.showCopied}>
           <div className="modal notification">
             <Trans i18nKey="backupSeed.copied">Copied!</Trans>
           </div>
@@ -89,7 +86,7 @@ class BackUpSeedComponent extends React.Component {
       {
         account: null,
       },
-      PAGES.ROOT
+      PAGES.ROOT,
     );
   }
 }
@@ -106,7 +103,4 @@ const actions = {
   setUiStateAndSetTab,
 };
 
-export const BackUpSeed = connect(
-  mapStateToProps,
-  actions
-)(BackUpSeedComponent);
+export const BackUpSeed = connect(mapStateToProps, actions)(BackUpSeedComponent);

@@ -4,16 +4,15 @@ const path = require('path');
 const webpack = require('webpack');
 const metaConf = require('./meta.conf');
 const WebpackCustomActions = require('./WebpackCustomActionsPlugin');
-const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const getLocales = require('./lokalise');
 const updateManifest = require('./updateManifest');
 
 function ncpAsync(from, to) {
   return new Promise((resolve, reject) => {
-    ncp(from, to, err => (err ? reject(err) : resolve()));
+    ncp(from, to, (err) => (err ? reject(err) : resolve()));
   });
 }
 
@@ -21,7 +20,7 @@ function zipFolder(from, to) {
   return new Promise((resolve, reject) => {
     const zip = new FolderZip();
 
-    zip.zipFolder(from, { excludeParentFolder: true }, err => {
+    zip.zipFolder(from, { excludeParentFolder: true }, (err) => {
       if (err) {
         return reject(err);
       }
@@ -36,24 +35,10 @@ function zipFolder(from, to) {
   });
 }
 
-module.exports = ({
-  version,
-  DIST,
-  LANGS,
-  PAGE_TITLE,
-  PLATFORMS,
-  isProduction,
-}) => {
+module.exports = ({ version, DIST, LANGS, PAGE_TITLE, PLATFORMS, isProduction }) => {
   const SOURCE_FOLDER = path.resolve(__dirname, '../', 'src');
   const DIST_FOLDER = path.resolve(__dirname, '../', DIST);
   const BUILD_FOLDER = path.resolve(DIST_FOLDER, 'build');
-  const COPY = [
-    {
-      from: path.join(SOURCE_FOLDER, 'copied'),
-      to: BUILD_FOLDER,
-      ignore: [],
-    },
-  ];
 
   const getPlatforms = () => {
     const platformsConfig = metaConf(version);
@@ -67,7 +52,7 @@ module.exports = ({
       updateManifest(
         path.join(BUILD_FOLDER, 'manifest.json'),
         platformsConfig[platformName].manifest,
-        path.join(platformFolder, 'manifest.json')
+        path.join(platformFolder, 'manifest.json'),
       );
 
       console.log(`Copying to ${platformName} is done`);
@@ -75,7 +60,7 @@ module.exports = ({
       if (isProduction) {
         await zipFolder(
           platformFolder,
-          path.join(DIST_FOLDER, `cubensis-connect-${version}-${platformName}.zip`)
+          path.join(DIST_FOLDER, `cubensis-connect-${version}-${platformName}.zip`),
         );
 
         console.log(`Zipping ${platformName} is done`);
@@ -101,14 +86,21 @@ module.exports = ({
       __SENTRY_DSN__: JSON.stringify(process.env.SENTRY_DSN),
       __SENTRY_ENVIRONMENT__: JSON.stringify(process.env.SENTRY_ENVIRONMENT),
       __SENTRY_RELEASE__: JSON.stringify(process.env.SENTRY_RELEASE),
-    })
+    }),
   );
-
-  plugins.push(new CopyWebpackPlugin(COPY));
 
   plugins.push(
-    new ExtractTextPlugin({ filename: 'index.css', allChunks: true })
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.join(SOURCE_FOLDER, 'copied'),
+          to: BUILD_FOLDER,
+        },
+      ],
+    }),
   );
+
+  plugins.push(new MiniCssExtractPlugin({ filename: 'index.css' }));
 
   plugins.push(
     new HtmlWebpackPlugin({
@@ -117,7 +109,7 @@ module.exports = ({
       template: path.resolve(SOURCE_FOLDER, 'popup.html'),
       hash: true,
       excludeChunks: ['background', 'contentscript', 'inpage'],
-    })
+    }),
   );
 
   plugins.push(
@@ -127,12 +119,12 @@ module.exports = ({
       template: path.resolve(SOURCE_FOLDER, 'notification.html'),
       hash: true,
       excludeChunks: ['background', 'contentscript', 'inpage'],
-    })
+    }),
   );
   plugins.push(
     new WebpackCustomActions({
       onBuildStart: [() => getLocales(LANGS, 'src/copied/_locales')],
-    })
+    }),
   );
 
   plugins.push(new WebpackCustomActions({ onBuildEnd: [getPlatforms] }));
@@ -153,73 +145,96 @@ module.exports = ({
 
     resolve: {
       alias: {
-        long: 'long/index.js', // needed because webpack@^4 does not support package.json#exports yet
+        // Path aliases matching tsconfig baseUrl paths
+        ui: path.resolve(SOURCE_FOLDER, 'ui'),
+        controllers: path.resolve(SOURCE_FOLDER, 'controllers'),
+        lib: path.resolve(SOURCE_FOLDER, 'lib'),
+        wallets: path.resolve(SOURCE_FOLDER, 'wallets'),
+        accounts: path.resolve(SOURCE_FOLDER, 'accounts'),
+        assets: path.resolve(SOURCE_FOLDER, 'assets'),
+        constants: path.resolve(SOURCE_FOLDER, 'constants.ts'),
       },
-      plugins: [
-        new TsConfigPathsPlugin({
-          /*configFile: "./path/to/tsconfig.json" */
-        }),
-      ],
-      extensions: ['.ts', '.tsx', '.js'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
 
     plugins,
 
     module: {
       rules: [
+        // Images — Webpack 5 asset modules (replaces url-loader + file-loader)
         {
           test: /\.(png|jpg|svg|gif)$/,
-          loader: 'url-loader?limit=1000&name=assets/img/[name].[ext]',
+          type: 'asset',
+          parser: { dataUrlCondition: { maxSize: 1000 } },
+          generator: { filename: 'assets/img/[name][ext]' },
         },
 
+        // Fonts — Webpack 5 asset/resource (replaces file-loader)
         {
           test: /\.(woff|woff2|ttf|otf)$/,
-          loader: 'file-loader?name=assets/fonts/[name].[ext]',
+          type: 'asset/resource',
+          generator: { filename: 'assets/fonts/[name][ext]' },
         },
+
+        // TypeScript + TSX — babel-loader with @babel/preset-typescript (replaces awesome-typescript-loader)
         {
           test: /\.tsx?$/,
-          loader: 'babel-loader!awesome-typescript-loader?transpileOnly',
           exclude: /node_modules/,
+          use: 'babel-loader',
         },
+
+        // JavaScript
         {
           test: /\.(jsx?)$/,
           exclude: /node_modules/,
-          loader: 'babel-loader',
+          use: 'babel-loader',
         },
+
+        // obs-store (needs transpiling)
         {
           test: /obs-store/,
-          loader: 'babel-loader',
+          use: 'babel-loader',
         },
+
+        // Stylus — MiniCssExtractPlugin (replaces extract-text-webpack-plugin)
         {
-          test: /\.styl/,
+          test: /\.styl$/,
           exclude: [/node_modules/],
-          loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              'css-loader?modules,localIdentName="[name]-[local]-[hash:base64:6]"',
-              'stylus-loader',
-            ],
-          }),
-        },
-        {
-          test: /\.css/,
-          oneOf: [
+          use: [
+            MiniCssExtractPlugin.loader,
             {
-              test: /\.module\.css$/,
-              loader: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use: [
-                  'css-loader?modules,localIdentName="[name]-[local]-[hash:base64:6]"',
-                ],
-              }),
+              loader: 'css-loader',
+              options: {
+                modules: {
+                  localIdentName: '[name]-[local]-[hash:base64:6]',
+                },
+              },
             },
+            'stylus-loader',
+          ],
+        },
+
+        // CSS modules
+        {
+          test: /\.module\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
             {
-              loader: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use: ['css-loader'],
-              }),
+              loader: 'css-loader',
+              options: {
+                modules: {
+                  localIdentName: '[name]-[local]-[hash:base64:6]',
+                },
+              },
             },
           ],
+        },
+
+        // Plain CSS
+        {
+          test: /\.css$/,
+          exclude: /\.module\.css$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
       ],
     },

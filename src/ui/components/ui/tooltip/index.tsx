@@ -3,7 +3,7 @@ import * as Popper from 'react-popper';
 import * as modal from '../modal/modal.styl';
 import * as ReactDOM from 'react-dom';
 import * as styles from './tooltip.module.css';
-import { Placement } from '@popperjs/core';
+import { type Placement } from '@popperjs/core';
 import cn from 'classnames';
 
 interface Props {
@@ -47,10 +47,11 @@ export function Tooltip({
           },
         },
       ],
-    }
+    },
   );
   const [showPopper, setShowPopper] = React.useState(false);
 
+  // @ts-expect-error effect callback type mismatch
   React.useEffect(() => {
     const root = document.getElementById('app-modal');
 
@@ -80,15 +81,11 @@ export function Tooltip({
               {...attributesP.popper}
               {...props}
             >
-              <div
-                ref={setArrowRef}
-                className={styles.arrow}
-                style={stylesP.arrow}
-              />
+              <div ref={setArrowRef} className={styles.arrow} style={stylesP.arrow} />
               {content}
             </div>
           ),
-          el
+          el,
         )}
     </>
   );

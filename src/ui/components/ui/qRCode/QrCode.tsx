@@ -35,7 +35,7 @@ const QrCodeImage = ({ options, src, width, height, className, ...props }) => {
 };
 
 export class QRCode extends React.PureComponent {
-  readonly props;
+  declare readonly props;
   readonly state = {} as any;
 
   render() {
@@ -93,10 +93,7 @@ export class QRCode extends React.PureComponent {
 
     const rootClassName = cn(className);
     const hasChanged =
-      !state ||
-      state.text !== text ||
-      state.width !== width ||
-      state.height !== height;
+      !state || state.text !== text || state.width !== width || state.height !== height;
     return {
       errorCorrectionLevel,
       type,

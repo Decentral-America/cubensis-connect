@@ -13,14 +13,14 @@ const createDeffer = () => {
   return def;
 };
 
-setupInpageApi().catch(e => log.error(e));
+setupInpageApi().catch((e) => log.error(e));
 
 async function setupInpageApi() {
   let cbs = {};
   let args = {};
   const wavesAppDef = createDeffer();
   const wavesApp = {};
-  let wavesApi = {
+  const wavesApi = {
     initialPromise: wavesAppDef.promise,
   };
   const proxyApi = {
@@ -66,13 +66,13 @@ async function setupInpageApi() {
 
   const eventEmitter = new EventEmitter();
   const emitterApi = {
-    sendUpdate: async state => eventEmitter.emit('update', state),
+    sendUpdate: async (state) => eventEmitter.emit('update', state),
   };
   const dnode = setupDnode(connectionStream, emitterApi, 'inpageApi');
 
-  const inpageApi = await new Promise(resolve => {
-    dnode.once('remote', inpageApi => {
-      let remoteWithPromises = transformMethods(cbToPromise, inpageApi);
+  const inpageApi = await new Promise((resolve) => {
+    dnode.once('remote', (inpageApi) => {
+      const remoteWithPromises = transformMethods(cbToPromise, inpageApi);
       // Add event emitter api to background object
       remoteWithPromises.on = eventEmitter.on.bind(eventEmitter);
       resolve(remoteWithPromises);
@@ -96,19 +96,16 @@ async function setupInpageApi() {
 }
 
 function setupClickInterceptor(inpageApi) {
-  const excludeSites = ['waves.exchange'];
+  const excludeSites = ['decentral.exchange'];
 
   if (excludeSites.includes(location.host)) {
     return false;
   }
 
-  document.addEventListener('click', e => {
+  document.addEventListener('click', (e) => {
     const paymentApiResult = checkForPaymentApiLink(e);
     try {
-      if (
-        paymentApiResult &&
-        processPaymentAPILink(paymentApiResult, inpageApi)
-      ) {
+      if (paymentApiResult && processPaymentAPILink(paymentApiResult, inpageApi)) {
         e.preventDefault();
         e.stopPropagation();
       }
@@ -119,7 +116,7 @@ function setupClickInterceptor(inpageApi) {
 function checkForPaymentApiLink(e) {
   let node = e.target;
 
-  const check = node => {
+  const check = (node) => {
     const href = node.href;
 
     if (!node.href) {
@@ -129,15 +126,7 @@ function checkForPaymentApiLink(e) {
     try {
       const url = new URL(href);
 
-      if (
-        ![
-          'client.wavesplatform.com',
-          'dex.wavesplatform.com',
-          'decentral.exchange',
-          'nftfisher.com',
-          'waves.exchange',
-        ].find(item => url.host === item)
-      ) {
+      if (!['decentral.exchange', 'nftfisher.com'].find((item) => url.host === item)) {
         return false;
       }
 
@@ -182,17 +171,12 @@ function processPaymentAPILink({ type, hash }, inpageApi) {
         obj[item[0]] = decodeURIComponent(item[1].trim());
         return obj;
       },
-      { type }
+      { type },
     );
 
   switch (apiData.type) {
     case 'auth':
-      if (
-        !apiData.n ||
-        !apiData.d ||
-        !apiData.r ||
-        apiData.r.indexOf('https') !== 0
-      ) {
+      if (!apiData.n || !apiData.d || !apiData.r || apiData.r.indexOf('https') !== 0) {
         return false;
       }
 

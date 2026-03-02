@@ -10,7 +10,7 @@ import {
 import { MSG_STATUSES } from '../../constants';
 import background from '../services/Background';
 
-export const updateActiveMessageReducer = store => next => action => {
+export const updateActiveMessageReducer = (store) => (next) => (action) => {
   const { activePopup, messages } = store.getState();
   const activeMessage = activePopup && activePopup.msg;
 
@@ -21,9 +21,7 @@ export const updateActiveMessageReducer = store => next => action => {
       return next(action);
     }
 
-    const activeMessageUpdated = messages.find(
-      ({ id }) => id === activeMessage.id
-    );
+    const activeMessageUpdated = messages.find(({ id }) => id === activeMessage.id);
 
     if (activeMessageUpdated) {
       const { status } = activeMessageUpdated;
@@ -47,7 +45,7 @@ export const updateActiveMessageReducer = store => next => action => {
             approveError({
               error: activeMessageUpdated.err.message,
               message: activeMessageUpdated,
-            })
+            }),
           );
           background.deleteMessage(activeMessageUpdated.id);
           break;
@@ -66,13 +64,13 @@ export const updateActiveMessageReducer = store => next => action => {
     const { messageId, fee } = action.payload;
     background
       .updateTransactionFee(messageId, fee)
-      .then(message => store.dispatch(setActiveMessage(message)));
+      .then((message) => store.dispatch(setActiveMessage(message)));
   }
 
   return next(action);
 };
 
-export const clearMessages = () => next => action => {
+export const clearMessages = () => (next) => (action) => {
   if (ACTION.CLEAR_MESSAGES === action.type) {
     background.clearMessages();
     return;
@@ -81,56 +79,51 @@ export const clearMessages = () => next => action => {
   return next(action);
 };
 
-export const approve = store => next => action => {
+export const approve = (store) => (next) => (action) => {
   if (action.type !== ACTION.APPROVE) {
     return next(action);
   }
   const messageId = action.payload;
   const { selectedAccount, currentNetwork } = store.getState();
 
-  background.getMessageById(messageId).then(message => {
-    background
-      .approve(messageId, selectedAccount, currentNetwork)
-      .catch(async err => {
-        const errorMessage = err && err.message ? err.message : String(err);
+  background.getMessageById(messageId).then((message) => {
+    background.approve(messageId, selectedAccount, currentNetwork).catch(async (err) => {
+      const errorMessage = err && err.message ? err.message : String(err);
 
-        if (message.origin) {
-          const shouldIgnore = await background.shouldIgnoreError(
-            'contentScriptApprove',
-            errorMessage
-          );
+      if (message.origin) {
+        const shouldIgnore = await background.shouldIgnoreError(
+          'contentScriptApprove',
+          errorMessage,
+        );
 
-          if (shouldIgnore) {
-            return;
-          }
-        } else {
-          const shouldIgnore = await background.shouldIgnoreError(
-            'popupApprove',
-            errorMessage
-          );
+        if (shouldIgnore) {
+          return;
+        }
+      } else {
+        const shouldIgnore = await background.shouldIgnoreError('popupApprove', errorMessage);
 
-          if (shouldIgnore) {
-            return;
-          }
+        if (shouldIgnore) {
+          return;
+        }
+      }
+
+      Sentry.withScope((scope) => {
+        const fingerprint = ['{{ default }}', message.type];
+
+        if (message.type === 'transaction') {
+          fingerprint.push(message.data.type);
         }
 
-        Sentry.withScope(scope => {
-          const fingerprint = ['{{ default }}', message.type];
-
-          if (message.type === 'transaction') {
-            fingerprint.push(message.data.type);
-          }
-
-          scope.setFingerprint(fingerprint);
-          Sentry.captureException(err);
-        });
+        scope.setFingerprint(fingerprint);
+        Sentry.captureException(err);
       });
+    });
   });
 
   store.dispatch(approvePending(true));
 };
 
-export const reject = store => next => action => {
+export const reject = (store) => (next) => (action) => {
   if (action.type !== ACTION.REJECT) {
     return next(action);
   }
@@ -139,7 +132,7 @@ export const reject = store => next => action => {
   store.dispatch(approvePending(true));
 };
 
-export const rejectForever = store => next => action => {
+export const rejectForever = (store) => (next) => (action) => {
   if (action.type != ACTION.REJECT_FOREVER) {
     return next(action);
   }

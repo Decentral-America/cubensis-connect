@@ -51,11 +51,7 @@ export class PackageInfo extends React.PureComponent<IProps> {
               };
               return (
                 <div key={`${index}${config.messageType}`}>
-                  <MessageItem
-                    config={config}
-                    assets={assets}
-                    message={message}
-                  />
+                  <MessageItem config={config} assets={assets} message={message} />
                 </div>
               );
             })
@@ -64,20 +60,14 @@ export class PackageInfo extends React.PureComponent<IProps> {
         <div className={styles.toggleList} onClick={this.toggleHandler}>
           <div className={styles.icons}>
             {txs.map(({ config }, index) => (
-              <TxIcon
-                className={styles.icon}
-                txType={config.type}
-                key={index}
-              />
+              <TxIcon className={styles.icon} txType={config.type} key={index} />
             ))}
           </div>
           <div className={styles.button}>
             <span>
               <Trans
                 i18nKey={
-                  isOpened
-                    ? 'transactions.hideTransactions'
-                    : 'transactions.showTransactions'
+                  isOpened ? 'transactions.hideTransactions' : 'transactions.showTransactions'
                 }
               />
               <i className={isOpened ? styles.arrowUp : styles.arrowDown} />

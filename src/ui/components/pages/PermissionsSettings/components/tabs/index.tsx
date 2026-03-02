@@ -3,7 +3,7 @@ import cn from 'classnames';
 import * as styles from './index.styl';
 
 export class Tabs extends React.PureComponent<IProps, IState> {
-  selectHandler = name => () => {
+  selectHandler = (name) => () => {
     if (this.props.currentTab !== name) {
       this.props.onSelectTab(name);
     }

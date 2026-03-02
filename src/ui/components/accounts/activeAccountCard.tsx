@@ -1,5 +1,5 @@
-import { Money } from '@waves/data-entities';
-import { BigNumber } from '@waves/bignumber';
+import { type Money } from '@decentralchain/data-entities';
+import { type BigNumber } from '@decentralchain/bignumber';
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import cn from 'classnames';
@@ -35,7 +35,7 @@ export function ActiveAccountCard({
   onShowQr,
   onSwapClick,
 }: Props) {
-  const currentNetwork = useAppSelector(state => state.currentNetwork);
+  const currentNetwork = useAppSelector((state) => state.currentNetwork);
 
   return (
     <div className={styles.root} data-testid="activeAccountCard">
@@ -51,7 +51,7 @@ export function ActiveAccountCard({
         </div>
 
         <Tooltip content={<Trans i18nKey="assets.inStorage" />}>
-          {props => (
+          {(props) => (
             <button
               className={cn(styles.iconButton, styles.otherAccountsButton)}
               data-testid="otherAccountsButton"
@@ -86,23 +86,16 @@ export function ActiveAccountCard({
         <span className={styles.controlsExpand} />
 
         <Tooltip content={<Trans i18nKey="copyAddress" />}>
-          {props => (
+          {(props) => (
             <Copy text={account.address} onCopy={onCopy}>
-              <button
-                className={cn(styles.iconButton, 'copyIconBlack')}
-                {...props}
-              />
+              <button className={cn(styles.iconButton, 'copyIconBlack')} {...props} />
             </Copy>
           )}
         </Tooltip>
 
         <Tooltip content={<Trans i18nKey="showQR" />} placement="bottom-end">
-          {props => (
-            <button
-              className={cn(styles.iconButton, 'showQrIcon')}
-              onClick={onShowQr}
-              {...props}
-            />
+          {(props) => (
+            <button className={cn(styles.iconButton, 'showQrIcon')} onClick={onShowQr} {...props} />
           )}
         </Tooltip>
       </div>

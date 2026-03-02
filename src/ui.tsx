@@ -44,10 +44,7 @@ Sentry.init({
         ? hint.originalException.message
         : String(hint.originalException);
 
-    const shouldIgnore = await backgroundService.shouldIgnoreError(
-      'beforeSendPopup',
-      message
-    );
+    const shouldIgnore = await backgroundService.shouldIgnoreError('beforeSendPopup', message);
 
     if (shouldIgnore) {
       return null;
@@ -72,7 +69,7 @@ async function startUi() {
         <Root />
       </div>
     </Provider>,
-    document.getElementById('app-content')
+    document.getElementById('app-content'),
   );
 
   const updateState = createUpdateState(store);
@@ -81,7 +78,7 @@ async function startUi() {
   const connectionStream = new PortStream(port);
 
   const emitterApi = {
-    sendUpdate: async state => updateState(state),
+    sendUpdate: async (state) => updateState(state),
     // This method is used in Microsoft Edge browser
     closeEdgeNotificationWindow: async () => {
       if (isNotificationWindow) {
@@ -91,8 +88,8 @@ async function startUi() {
   };
 
   const dnode = setupDnode(connectionStream, emitterApi, 'api');
-  const background = await new Promise<any>(resolve => {
-    dnode.once('remote', background => {
+  const background = await new Promise<any>((resolve) => {
+    dnode.once('remote', (background) => {
       resolve(transformMethods(cbToPromise, background));
     });
   });
@@ -110,14 +107,11 @@ async function startUi() {
   if (isNotificationWindow) {
     background.resizeNotificationWindow(
       357 + window.outerWidth - window.innerWidth,
-      600 + window.outerHeight - window.innerHeight
+      600 + window.outerHeight - window.innerHeight,
     );
   }
 
-  const [state, networks] = await Promise.all([
-    background.getState(),
-    background.getNetworks(),
-  ]);
+  const [state, networks] = await Promise.all([background.getState(), background.getNetworks()]);
 
   updateState({ ...state, networks });
 

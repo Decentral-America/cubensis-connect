@@ -1,4 +1,4 @@
-import { SeedAdapter, TSignData } from '@decentralchain/signature-adapter';
+import { SeedAdapter, type TSignData } from '@decentralchain/signature-adapter';
 import { libs, seedUtils } from '@decentralchain/waves-transactions';
 import { concat, identity, ifElse, isNil, pipe } from 'ramda';
 
@@ -29,10 +29,7 @@ export function getInitedAdapter(user, seed = 'validation seed'): SeedAdapter {
   return new SeedAdapter('validation seed', user.networkCode);
 }
 
-export async function getTxId(
-  adapter: SeedAdapter,
-  tx: TSignData
-): Promise<string> {
+export async function getTxId(adapter: SeedAdapter, tx: TSignData): Promise<string> {
   return await adapter.makeSignable(tx).getId();
 }
 
@@ -76,11 +73,7 @@ function hashChain(input): Uint8Array {
   return keccak(blake2b(input));
 }
 
-async function getUrl(
-  urlString: string,
-  path = '',
-  required = true
-): Promise<Response> {
+async function getUrl(urlString: string, path = '', required = true): Promise<Response> {
   let url: URL;
 
   if (required && !urlString) {
@@ -140,10 +133,10 @@ const bytesToString = byteArrayToString;
 export const bytesToSafeString = ifElse(
   pipe(identity, bytesToString, isNil),
   pipe(identity, bytesToBase58, concat('base58:')),
-  pipe(identity, bytesToString)
+  pipe(identity, bytesToString),
 );
 
-export const readAttachment = data => {
+export const readAttachment = (data) => {
   if (!data) {
     return '';
   }

@@ -1,7 +1,7 @@
-import { UiStore } from '../store';
+import { type UiStore } from '../store';
 import { ACTION } from './constants';
 import { equals } from 'ramda';
-import { AssetDetail } from '../services/Background';
+import { type AssetDetail } from '../services/Background';
 
 interface Account {
   address: string;
@@ -224,6 +224,6 @@ export function createUpdateState(store: UiStore) {
       });
     }
 
-    actions.forEach(action => store.dispatch(action));
+    actions.forEach((action) => store.dispatch(action));
   };
 }

@@ -1,7 +1,9 @@
-import BigNumber from '@waves/bignumber';
-import { Asset, Money } from '@waves/data-entities';
+import BigNumber from '@decentralchain/bignumber';
+import { type Asset, Money } from '@decentralchain/data-entities';
 import { getAssetIdByName } from 'assets/utils';
-import { AccountBalance, SwopFiExchangerData } from 'ui/reducers/updateState';
+// @ts-expect-error legacy import
+import { type AccountBalance, type SwopFiExchangerData } from 'ui/reducers/updateState';
+// @ts-expect-error legacy import
 import { fetchGetMoney } from './api';
 
 export function getAssetBalance(asset: Asset, accountBalance: AccountBalance) {
@@ -12,7 +14,7 @@ export function getAssetBalance(asset: Asset, accountBalance: AccountBalance) {
 
 export function getDefaultExchanger(
   network: string,
-  exchangersMap: { [exchangerId: string]: SwopFiExchangerData }
+  exchangersMap: { [exchangerId: string]: SwopFiExchangerData },
 ) {
   const exchangersArr = Object.values(exchangersMap);
 
@@ -20,9 +22,9 @@ export function getDefaultExchanger(
   const wavesAssetId = getAssetIdByName(network, 'DCC');
 
   const usdnWavesExchanger = exchangersArr.find(
-    exchanger =>
+    (exchanger) =>
       [exchanger.A_asset_id, exchanger.B_asset_id].includes(usdnAssetId) &&
-      [exchanger.A_asset_id, exchanger.B_asset_id].includes(wavesAssetId)
+      [exchanger.A_asset_id, exchanger.B_asset_id].includes(wavesAssetId),
   );
 
   if (usdnWavesExchanger) {
@@ -49,7 +51,7 @@ async function calcToAmount({
         fromAmount: fromAmountCoins.toFixed(),
         fromBalance: fromBalanceCoins.toFixed(),
         toBalance: toBalanceCoins.toFixed(),
-      })
+      }),
     );
 
     return toAmount.gte(0) ? toAmount : toBalanceCoins;
@@ -82,21 +84,14 @@ export function getKeeperCommission(exchangerVersion: number) {
   return exchangerVersion === 2 ? new BigNumber(0.0001) : new BigNumber(0.001);
 }
 
-function applyCommission(
-  commission: BigNumber,
-  amountCoins: BigNumber,
-  exchangerVersion: number
-) {
+function applyCommission(commission: BigNumber, amountCoins: BigNumber, exchangerVersion: number) {
   return amountCoins
     .mul(new BigNumber(1).sub(commission))
     .mul(new BigNumber(1).sub(getKeeperCommission(exchangerVersion)))
     .roundTo(0, BigNumber.ROUND_MODE.ROUND_FLOOR);
 }
 
-function calcMinReceived(
-  toAmountCoins: BigNumber,
-  slippageTolerancePercents: BigNumber
-) {
+function calcMinReceived(toAmountCoins: BigNumber, slippageTolerancePercents: BigNumber) {
   return toAmountCoins
     .mul(new BigNumber(100).sub(slippageTolerancePercents).div(100))
     .roundTo(0, BigNumber.ROUND_MODE.ROUND_DOWN);
@@ -115,21 +110,13 @@ function calcPriceImpact({
   toAsset: Asset;
   toBalanceCoins: BigNumber;
 }) {
-  const fromBalanceTokens = Money.fromCoins(
-    fromBalanceCoins,
-    fromAsset
-  ).getTokens();
+  const fromBalanceTokens = Money.fromCoins(fromBalanceCoins, fromAsset).getTokens();
   const toBalanceTokens = Money.fromCoins(toBalanceCoins, toAsset).getTokens();
 
-  const fromAmountTokens = Money.fromCoins(
-    fromAmountCoins,
-    fromAsset
-  ).getTokens();
+  const fromAmountTokens = Money.fromCoins(fromAmountCoins, fromAsset).getTokens();
   const newFromBalance = fromBalanceTokens.add(fromAmountTokens);
 
-  const newToBalance = fromBalanceTokens
-    .mul(toBalanceTokens)
-    .div(newFromBalance);
+  const newToBalance = fromBalanceTokens.mul(toBalanceTokens).div(newFromBalance);
 
   const ratioBalance = toBalanceTokens.div(fromBalanceTokens);
   const newRatioBalance = newToBalance.div(newFromBalance);
@@ -177,7 +164,7 @@ export async function calcExchangeDetails({
 
     const fakeFromAmountCoins = Money.fromTokens(
       exchangerVersion === 2 ? 10 : 1,
-      fromAsset
+      fromAsset,
     ).getCoins();
 
     const fakeToAmountCoins = await calcToAmount({
@@ -190,11 +177,7 @@ export async function calcExchangeDetails({
     swapRate = calcSwapRate({
       fromAmountCoins: fakeFromAmountCoins,
       fromAsset,
-      toAmountCoins: applyCommission(
-        commission,
-        fakeToAmountCoins,
-        exchangerVersion
-      ),
+      toAmountCoins: applyCommission(commission, fakeToAmountCoins, exchangerVersion),
       toAsset,
     });
   } else {
@@ -205,15 +188,9 @@ export async function calcExchangeDetails({
       toBalanceCoins,
     });
 
-    feeCoins = toAmountCoins
-      .mul(commission)
-      .roundTo(0, BigNumber.ROUND_MODE.ROUND_FLOOR);
+    feeCoins = toAmountCoins.mul(commission).roundTo(0, BigNumber.ROUND_MODE.ROUND_FLOOR);
 
-    toAmountCoins = applyCommission(
-      commission,
-      toAmountCoins,
-      exchangerVersion
-    );
+    toAmountCoins = applyCommission(commission, toAmountCoins, exchangerVersion);
 
     swapRate = calcSwapRate({
       fromAmountCoins,

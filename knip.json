@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": ["src/background.js", "src/contentscript.js", "src/inpage.js", "src/ui.tsx"],
+  "project": ["src/**/*.{ts,tsx,js,jsx}"],
+  "paths": {
+    "ui/*": ["src/ui/*"],
+    "controllers/*": ["src/controllers/*"],
+    "lib/*": ["src/lib/*"],
+    "wallets/*": ["src/wallets/*"],
+    "accounts/*": ["src/accounts/*"],
+    "assets/*": ["src/assets/*"],
+    "constants/*": ["src/constants/*"]
+  },
+  "webpack": {
+    "config": []
+  }
+}

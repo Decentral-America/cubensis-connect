@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { clear } from './utils';
 import { App, CreateNewAccount, Network } from './utils/actions';
-import { By, until, WebElement } from 'selenium-webdriver';
+import { By, until, type WebElement } from 'selenium-webdriver';
 import { DEFAULT_ANIMATION_DELAY } from './utils/constants';
 
 describe('Network management', function () {
@@ -19,17 +19,13 @@ describe('Network management', function () {
   describe('Switching networks', function () {
     async function expectNetworkChangedTo(network: string) {
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-intro-loader')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-intro-loader')]")),
+        this.wait,
       );
 
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-import-import')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-import-import')]")),
+        this.wait,
       );
 
       expect(
@@ -38,12 +34,12 @@ describe('Network management', function () {
             until.elementLocated(
               By.xpath(
                 "//div[contains(@class, '-network-network')]" +
-                  "//span[contains(@class, 'network-networkBottom')]"
-              )
+                  "//span[contains(@class, 'network-networkBottom')]",
+              ),
             ),
-            this.wait
+            this.wait,
           )
-          .getText()
+          .getText(),
       ).matches(new RegExp(network, 'i'));
     }
 
@@ -69,32 +65,25 @@ describe('Network management', function () {
         await CreateNewAccount.importAccount.call(
           this,
           'rich',
-          'decentralchain private node seed with dcc tokens'
+          'decentralchain private node seed with dcc tokens',
         );
         await this.driver
-          .wait(
-            until.elementLocated(By.css('[data-testid="activeAccountCard"]')),
-            this.wait
-          )
+          .wait(until.elementLocated(By.css('[data-testid="activeAccountCard"]')), this.wait)
           .click();
 
         expect(
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-copy-copyTextOverflow')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-copy-copyTextOverflow')]")),
+              this.wait,
             )
-            .getText()
+            .getText(),
         ).to.be.matches(/^3[MN]/i);
 
         await this.driver.findElement(By.css('div.arrow-back-icon')).click();
         this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-assets-assets')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-assets-assets')]")),
+          this.wait,
         );
       });
     });
@@ -110,19 +99,14 @@ describe('Network management', function () {
         await this.driver
           .wait(
             until.elementIsVisible(
-              this.driver.wait(
-                until.elementLocated(By.css('div#customNetwork')),
-                this.wait
-              )
+              this.driver.wait(until.elementLocated(By.css('div#customNetwork')), this.wait),
             ),
-            this.wait
+            this.wait,
           )
           .findElement(By.css('input#node_address'))
           .sendKeys(validNodeUrl);
 
-        await this.driver
-          .findElement(By.css('button#networkSettingsSave'))
-          .click();
+        await this.driver.findElement(By.css('button#networkSettingsSave')).click();
 
         await expectNetworkChangedTo.call(this, customNetwork);
       });
@@ -135,37 +119,24 @@ describe('Network management', function () {
 
         before(async function () {
           await this.driver
-            .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class,'-network-editBtn')]")
-              )
-            )
+            .wait(until.elementLocated(By.xpath("//div[contains(@class,'-network-editBtn')]")))
             .click();
 
           await this.driver.wait(
             until.elementIsVisible(
-              this.driver.wait(
-                until.elementLocated(By.css('div#customNetwork')),
-                this.wait
-              )
+              this.driver.wait(until.elementLocated(By.css('div#customNetwork')), this.wait),
             ),
-            this.wait
+            this.wait,
           );
 
-          nodeAddressInput = this.driver.findElement(
-            By.css('input#node_address')
-          );
+          nodeAddressInput = this.driver.findElement(By.css('input#node_address'));
           nodeAddressError = this.driver.findElement(
             By.xpath(
-              "//input[@id='node_address']//following-sibling::div[contains(@class, '-error-error')]"
-            )
+              "//input[@id='node_address']//following-sibling::div[contains(@class, '-error-error')]",
+            ),
           );
-          matcherAddressInput = this.driver.findElement(
-            By.css('input#matcher_address')
-          );
-          saveAndApplyBtn = this.driver.findElement(
-            By.css('button#networkSettingsSave')
-          );
+          matcherAddressInput = this.driver.findElement(By.css('input#matcher_address'));
+          saveAndApplyBtn = this.driver.findElement(By.css('button#networkSettingsSave'));
         });
 
         beforeEach(async function () {
@@ -187,13 +158,13 @@ describe('Network management', function () {
               until.elementTextMatches(
                 this.driver.findElement(
                   By.xpath(
-                    "//input[@id='node_address']//following-sibling::div[contains(@class, '-error-error')]"
-                  )
+                    "//input[@id='node_address']//following-sibling::div[contains(@class, '-error-error')]",
+                  ),
                 ),
-                /Incorrect node address/i
+                /Incorrect node address/i,
               ),
-              this.wait
-            )
+              this.wait,
+            ),
           ).not.to.be.throw;
         });
 
@@ -204,10 +175,8 @@ describe('Network management', function () {
 
           expect(
             await this.driver.wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class,'-network-editBtn')]")
-              )
-            )
+              until.elementLocated(By.xpath("//div[contains(@class,'-network-editBtn')]")),
+            ),
           ).not.to.be.throw;
         });
       });

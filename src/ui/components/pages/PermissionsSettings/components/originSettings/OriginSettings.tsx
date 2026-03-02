@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next';
 import cn from 'classnames';
 import * as styles from './settings.styl';
 import { Button, BUTTON_TYPE, Input, Select } from 'ui/components/ui';
-import { BigNumber } from '@waves/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 
 const CONFIG = {
   list: [
@@ -53,19 +53,14 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
     return autoSign;
   }
 
-  static getDerivedStateFromProps(
-    props: IProps,
-    state: IState
-  ): Partial<IState> {
-    const { interval = null, totalAmount } =
-      OriginSettingsComponent._getAutoSign(props.autoSign);
+  static getDerivedStateFromProps(props: IProps, state: IState): Partial<IState> {
+    const { interval = null, totalAmount } = OriginSettingsComponent._getAutoSign(props.autoSign);
     const selected = CONFIG.list.find(({ value }) => value === interval).id;
     const notifications = props.permissions.find(
-      (item: TNotification) => item && item.type === 'useNotifications'
+      // @ts-expect-error legacy type mismatch
+      (item: TNotification) => item && item.type === 'useNotifications',
     ) as TNotification;
-    const inWhiteList = (props.origins[props.originName] || []).includes(
-      'whiteList'
-    );
+    const inWhiteList = (props.origins[props.originName] || []).includes('whiteList');
     let canShowNotifications = state.canShowNotifications;
     const canUse = notifications && notifications.canUse;
     const canUseNotify = canUse || (canUse == null && inWhiteList);
@@ -102,29 +97,19 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
     this.props.onClose();
   };
 
-  canUseNotificationsHandler = e => {
+  canUseNotificationsHandler = (e) => {
     this.setState({ canShowNotifications: e.target.checked });
-    this.calculateCanSave(
-      this.state.interval,
-      this.state.totalAmount,
-      e.target.checked
-    );
+    this.calculateCanSave(this.state.interval, this.state.totalAmount, e.target.checked);
   };
 
-  selectTimeHandler = time => {
+  selectTimeHandler = (time) => {
     const { value } = CONFIG.list.find(({ id }) => id === time);
     this.setState({ interval: value, edited: true, selected: time });
-    this.calculateCanSave(
-      value,
-      this.state.totalAmount,
-      this.state.canShowNotifications
-    );
+    this.calculateCanSave(value, this.state.totalAmount, this.state.canShowNotifications);
   };
 
   calculateCanSave(newInterval, newTotalAmount, newCanShowNotifications): void {
-    const sign = OriginSettingsComponent._getAutoSign(
-      this.props.originalAutoSign
-    );
+    const sign = OriginSettingsComponent._getAutoSign(this.props.originalAutoSign);
     let canSave = false;
 
     newTotalAmount = newInterval ? newTotalAmount : '';
@@ -168,7 +153,7 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
     this.props.onSave(data, this.props.originName, canShowNotifications);
   };
 
-  amountHandler = event => {
+  amountHandler = (event) => {
     const { value } = event.target;
     const parsedValue = value
       .replace(/[^0-9.]/g, '')
@@ -181,17 +166,13 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
     const newValue = parsedValue.join('.');
 
     this.setState({ totalAmount: parsedValue.join('.'), edited: true });
-    this.calculateCanSave(
-      this.state.interval,
-      newValue,
-      this.state.canShowNotifications
-    );
+    this.calculateCanSave(this.state.interval, newValue, this.state.canShowNotifications);
   };
 
   render(): React.ReactNode {
     const inWhiteList = this.props.permissions.includes('whiteList');
 
-    const timeList = CONFIG.list.map(item => {
+    const timeList = CONFIG.list.map((item) => {
       return {
         id: item.id,
         value: item.value,
@@ -211,15 +192,12 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
       <div className="modal cover">
         <div id="originSettings" className="modal-form">
           <h2 className={cn(styles.title)}>
-            <Trans i18nKey="permissionSettings.modal.title">
-              Permission details
-            </Trans>
+            <Trans i18nKey="permissionSettings.modal.title">Permission details</Trans>
           </h2>
 
           <div className={styles.description}>
             <Trans i18nKey="permissionSettings.modal.description">
-              This allows {{ originName }} to automatically sign transactions on
-              your behalf.
+              This allows {{ originName }} to automatically sign transactions on your behalf.
             </Trans>
           </div>
 
@@ -227,19 +205,13 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
             className={cn(styles.selectTime)}
             selectList={timeList}
             selected={this.state.selected}
-            description={
-              <Trans i18nKey="permissionSettings.modal.time">
-                Resolution time
-              </Trans>
-            }
+            description={<Trans i18nKey="permissionSettings.modal.time">Resolution time</Trans>}
             onSelectItem={this.selectTimeHandler}
           />
 
           <div className={cn(styles.amount)}>
             <div className="left input-title basic500 tag1">
-              <Trans i18nKey="permissionSettings.modal.amount">
-                Spending limit
-              </Trans>
+              <Trans i18nKey="permissionSettings.modal.amount">Spending limit</Trans>
             </div>
             <Input
               disabled={!this.state.interval}
@@ -259,19 +231,13 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
               onChange={this.canUseNotificationsHandler}
             />
             <label htmlFor="checkbox_noshow">
-              <Trans i18nKey="notifications.allowSending">
-                Allow sending messages
-              </Trans>
+              <Trans i18nKey="notifications.allowSending">Allow sending messages</Trans>
             </label>
           </div>
 
           {!inWhiteList ? (
             <div className="buttons-wrapper">
-              <Button
-                id="delete"
-                onClick={this.deleteHandler}
-                type={BUTTON_TYPE.WARNING}
-              >
+              <Button id="delete" onClick={this.deleteHandler} type={BUTTON_TYPE.WARNING}>
                 <Trans i18nKey="permissionSettings.modal.delete">Delete</Trans>
               </Button>
 
@@ -306,11 +272,7 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
             <Trans i18nKey="permissionSettings.modal.cancel">Cancel</Trans>
           </Button>
 
-          <Button
-            className="modal-close"
-            onClick={this.props.onClose}
-            type="transparent"
-          />
+          <Button className="modal-close" onClick={this.props.onClose} type="transparent" />
         </div>
       </div>
     );
@@ -325,11 +287,7 @@ interface IProps extends React.ComponentProps<'div'> {
   originalAutoSign: TAutoAuth;
   permissions: Array<TPermission>;
   originName: string;
-  onSave?: (
-    params: Partial<TAutoAuth>,
-    origin: string,
-    canShowNotifications: boolean
-  ) => void;
+  onSave?: (params: Partial<TAutoAuth>, origin: string, canShowNotifications: boolean) => void;
   onClose?: () => void;
   onDelete?: (origin: string) => void;
   onChangePerms?: (permission: TAutoAuth) => void;

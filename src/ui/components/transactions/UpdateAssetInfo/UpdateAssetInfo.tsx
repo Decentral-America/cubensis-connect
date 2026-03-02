@@ -12,9 +12,7 @@ export function UpdateAssetInfo(props) {
     <div className={styles.transaction}>
       <TxHeader {...props} />
 
-      <div
-        className={`${styles.updateAssetInfoTxScrollBox} transactionContent`}
-      >
+      <div className={`${styles.updateAssetInfoTxScrollBox} transactionContent`}>
         <div className="margin-main">
           <UpdateAssetInfoCard {...props} />
         </div>

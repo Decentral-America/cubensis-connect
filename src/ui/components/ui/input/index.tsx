@@ -3,10 +3,10 @@ import * as styles from './input.styl';
 import cn from 'classnames';
 
 export class Input extends React.Component {
-  props: any;
+  declare props: any;
 
   el: HTMLInputElement;
-  getRef = element => {
+  getRef = (element) => {
     this.el = element;
     if (this.props.inputRef) {
       this.props.inputRef.current = element;

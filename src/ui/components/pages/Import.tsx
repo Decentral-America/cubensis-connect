@@ -7,7 +7,7 @@ import * as CubensisConnectLock from '../../assets/img/cubensis-connect-lock.svg
 import { FeatureUpdateInfo } from './FeatureUpdateInfo';
 import { connect } from 'react-redux';
 import { setUiState } from '../../actions';
-import { AnyAction } from 'redux';
+import { type AnyAction } from 'redux';
 import { PAGES } from '../../pageConfig';
 
 interface Props {
@@ -17,11 +17,9 @@ interface Props {
 }
 
 export const Import = connect((state: any) => ({
-  showUpdateInfo:
-    !state.uiState.isFeatureUpdateShown && !!state.allNetworksAccounts.length,
+  showUpdateInfo: !state.uiState.isFeatureUpdateShown && !!state.allNetworksAccounts.length,
 }))(function Import({ showUpdateInfo, setTab, dispatch }: Props) {
-  const dismissFeatureInfo = () =>
-    dispatch(setUiState({ isFeatureUpdateShown: true }));
+  const dismissFeatureInfo = () => dispatch(setUiState({ isFeatureUpdateShown: true }));
   const exportToKeystore = () => setTab(PAGES.EXPORT_ACCOUNTS);
 
   return (
@@ -34,11 +32,7 @@ export const Import = connect((state: any) => ({
         height={200}
       />
 
-      <Button
-        id="createNewAccount"
-        type="submit"
-        onClick={() => setTab('new_account')}
-      >
+      <Button id="createNewAccount" type="submit" onClick={() => setTab('new_account')}>
         <Trans i18nKey="import.createNew" />
       </Button>
 

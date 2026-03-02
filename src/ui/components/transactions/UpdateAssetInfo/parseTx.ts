@@ -4,15 +4,12 @@ export const messageType = 'updateAssetInfo';
 export const txType = 'transaction';
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
   return [feeAssetId];
 }
 
 export function getFee(tx) {
-  return typeof tx.fee === 'object'
-    ? tx.fee
-    : { coins: tx.fee, assetId: 'DCC' };
+  return typeof tx.fee === 'object' ? tx.fee : { coins: tx.fee, assetId: 'DCC' };
 }
 
 export function getAmountSign() {

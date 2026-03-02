@@ -14,18 +14,12 @@ interface Props {
   className?: string;
 }
 
-export function AssetLogo({
-  className,
-  assetId,
-  name,
-  hasSponsorship,
-  hasScript,
-}: Props) {
+export function AssetLogo({ className, assetId, name, hasSponsorship, hasScript }: Props) {
   const style = {
     backgroundColor: new ColorHash().hex(assetId),
   };
 
-  const network = useAppSelector(state => state.currentNetwork);
+  const network = useAppSelector((state) => state.currentNetwork);
   const logoSrc = getAssetLogo(network, assetId);
 
   if (!logoSrc) {
@@ -58,7 +52,5 @@ export function AssetLogo({
     );
   }
 
-  return (
-    <img className={cn(styles.assetLogo, className)} src={logoSrc} alt="" />
-  );
+  return <img className={cn(styles.assetLogo, className)} src={logoSrc} alt="" />;
 }

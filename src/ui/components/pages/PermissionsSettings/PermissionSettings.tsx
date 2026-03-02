@@ -12,7 +12,7 @@ import {
 import cn from 'classnames';
 import { Loader, Modal } from 'ui/components/ui';
 import { List, OriginSettings, Tabs } from './components';
-import { BigNumber } from '@waves/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 
 class PermissionsSettingsComponent extends React.PureComponent {
   readonly state = {
@@ -23,21 +23,18 @@ class PermissionsSettingsComponent extends React.PureComponent {
     autoSign: null,
     originalAutoSign: null,
   };
-  readonly props;
+  declare readonly props;
 
-  deleteHandler = origin => {
+  deleteHandler = (origin) => {
     this.props.deleteOrigin(origin);
     this.closeSettingsHandler();
   };
 
   showSettingsHandler = (origin: string) => {
-    const [_, permissions] = Object.entries(this.props.origins).find(
-      ([name]) => name === origin
-    );
+    const [_, permissions] = Object.entries(this.props.origins).find(([name]) => name === origin);
     const autoSign =
-      ((permissions as any) || []).find(
-        ({ type }) => type === 'allowAutoSign'
-      ) || Object.create(null);
+      ((permissions as any) || []).find(({ type }) => type === 'allowAutoSign') ||
+      Object.create(null);
     const amount = new BigNumber(autoSign.totalAmount).div(10 ** 8);
     autoSign.totalAmount = amount.isNaN() ? 0 : amount.toFormat();
     this.setState({
@@ -57,7 +54,7 @@ class PermissionsSettingsComponent extends React.PureComponent {
     }
   };
 
-  onChangeOriginSettings = autoSign => {
+  onChangeOriginSettings = (autoSign) => {
     this.setState({ autoSign });
   };
 
@@ -76,7 +73,7 @@ class PermissionsSettingsComponent extends React.PureComponent {
   };
 
   render() {
-    const tabs = ['customList', 'whiteList'].map(name => ({
+    const tabs = ['customList', 'whiteList'].map((name) => ({
       item: (
         <Trans key={name} i18nKey={`permission.${name}`}>
           {name}
@@ -99,7 +96,7 @@ class PermissionsSettingsComponent extends React.PureComponent {
         <Tabs
           tabs={tabs}
           currentTab={this.state.originsList}
-          onSelectTab={originsList => this.setState({ originsList })}
+          onSelectTab={(originsList) => this.setState({ originsList })}
         />
 
         <List
@@ -127,26 +124,13 @@ class PermissionsSettingsComponent extends React.PureComponent {
           />
         </Modal>
 
-        <Modal
-          animation={Modal.ANIMATION.FLASH_SCALE}
-          showModal={allowed || disallowed || deleted}
-        >
+        <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={allowed || disallowed || deleted}>
           <div className="modal notification">
-            {allowed ? (
-              <Trans i18nKey="permissionsSettings.notify.allowed">
-                Allowed!
-              </Trans>
-            ) : null}
+            {allowed ? <Trans i18nKey="permissionsSettings.notify.allowed">Allowed!</Trans> : null}
             {disallowed ? (
-              <Trans i18nKey="permissionsSettings.notify.disallowed">
-                Disallowed!
-              </Trans>
+              <Trans i18nKey="permissionsSettings.notify.disallowed">Disallowed!</Trans>
             ) : null}
-            {deleted ? (
-              <Trans i18nKey="permissionsSettings.notify.deleted">
-                Deleted!
-              </Trans>
-            ) : null}
+            {deleted ? <Trans i18nKey="permissionsSettings.notify.deleted">Deleted!</Trans> : null}
           </div>
         </Modal>
       </div>
@@ -169,7 +153,4 @@ const actions = {
   setShowNotification,
 };
 
-export const PermissionsSettings = connect(
-  mapStateToProps,
-  actions
-)(PermissionsSettingsComponent);
+export const PermissionsSettings = connect(mapStateToProps, actions)(PermissionsSettingsComponent);

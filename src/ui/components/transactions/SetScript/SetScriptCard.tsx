@@ -15,13 +15,9 @@ interface IProps {
 
 export class SetScriptCard extends React.PureComponent<IProps> {
   render() {
-    const className = cn(
-      styles.setScriptTransactionCard,
-      this.props.className,
-      {
-        [styles.setScriptCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.setScriptTransactionCard, this.props.className, {
+      [styles.setScriptCard_collapsed]: this.props.collapsed,
+    });
 
     const { message, collapsed } = this.props;
     const { data = {} } = message;
@@ -45,11 +41,7 @@ export class SetScriptCard extends React.PureComponent<IProps> {
           </div>
 
           <div className={`${styles.cardContent} marginTop1`}>
-            <ShowScript
-              script={script}
-              showNotify={true}
-              hideScript={this.props.collapsed}
-            />
+            <ShowScript script={script} showNotify={true} hideScript={this.props.collapsed} />
           </div>
         </div>
         {!collapsed ? (

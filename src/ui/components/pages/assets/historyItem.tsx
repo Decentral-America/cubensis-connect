@@ -5,9 +5,9 @@ import * as React from 'react';
 import { TxIcon } from '../../transactions/BaseTransaction';
 import { useAppSelector } from '../../../store';
 import { Trans, useTranslation } from 'react-i18next';
-import { Asset, Money } from '@waves/data-entities';
-import { BigNumber } from '@waves/bignumber';
-import { TRANSACTION_TYPE } from '@waves/ts-types';
+import { Asset, Money } from '@decentralchain/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
+import { TRANSACTION_TYPE } from '@decentralchain/ts-types';
 import { Tooltip } from '../../ui/tooltip';
 import { getTxDetailLink } from '../../../urls';
 import { SWAP_DAPP_ADDRESS } from '../../../../constants';
@@ -23,32 +23,25 @@ interface Props {
 
 export function HistoryItem({ tx, className }: Props) {
   const { t } = useTranslation();
-  const address = useAppSelector(state => state.selectedAccount.address);
-  const networkCode = useAppSelector(
-    state => state.selectedAccount.networkCode
-  );
-  const assets = useAppSelector(state => state.assets);
-  const aliases = useAppSelector(state => state.balances[address]?.aliases);
+  const address = useAppSelector((state) => state.selectedAccount.address);
+  const networkCode = useAppSelector((state) => state.selectedAccount.networkCode);
+  const assets = useAppSelector((state) => state.assets);
+  const aliases = useAppSelector((state) => state.balances[address]?.aliases);
   const addressAlias = [address, ...(aliases || [])];
 
   let tooltip, label, info, messageType, addSign;
-  const isTxFailed =
-    tx.applicationStatus && tx.applicationStatus !== 'succeeded';
+  const isTxFailed = tx.applicationStatus && tx.applicationStatus !== 'succeeded';
 
   const fromCoins = (amount, assetId) =>
-    assets[assetId ?? 'DCC'] &&
-    Money.fromCoins(amount, new Asset(assets[assetId ?? 'DCC']));
+    assets[assetId ?? 'DCC'] && Money.fromCoins(amount, new Asset(assets[assetId ?? 'DCC']));
 
   const fromTokens = (amount, assetId) =>
-    assets[assetId ?? 'DCC'] &&
-    Money.fromTokens(amount, new Asset(assets[assetId ?? 'DCC']));
+    assets[assetId ?? 'DCC'] && Money.fromTokens(amount, new Asset(assets[assetId ?? 'DCC']));
 
   switch (tx.type) {
     case TRANSACTION_TYPE.GENESIS:
       tooltip = label = t('historyCard.genesis');
-      info = (
-        <Balance split showAsset balance={fromCoins(tx.amount, 'DCC')} />
-      );
+      info = <Balance split showAsset balance={fromCoins(tx.amount, 'DCC')} />;
       messageType = 'receive';
       break;
     case TRANSACTION_TYPE.ISSUE:
@@ -61,11 +54,9 @@ export function HistoryItem({ tx, className }: Props) {
           ? t('historyCard.issueNFT')
           : t('historyCard.issueSmartNFT')
         : !tx.script
-        ? t('historyCard.issueToken')
-        : t('historyCard.issueSmartToken');
-      info = (
-        <Balance split showAsset balance={fromCoins(tx.quantity, tx.assetId)} />
-      );
+          ? t('historyCard.issueToken')
+          : t('historyCard.issueSmartToken');
+      info = <Balance split showAsset balance={fromCoins(tx.quantity, tx.assetId)} />;
       messageType = 'issue';
 
       break;
@@ -104,69 +95,41 @@ export function HistoryItem({ tx, className }: Props) {
           split
           showAsset
           addSign={addSign}
-          balance={fromCoins(
-            tx.amount,
-            tx.type === TRANSACTION_TYPE.TRANSFER ? tx.assetId : 'DCC'
-          )}
+          balance={fromCoins(tx.amount, tx.type === TRANSACTION_TYPE.TRANSFER ? tx.assetId : 'DCC')}
         />
       );
       break;
     case TRANSACTION_TYPE.REISSUE:
       tooltip = label = t('historyCard.reissue');
-      info = (
-        <Balance
-          split
-          showAsset
-          addSign="+"
-          balance={fromCoins(tx.quantity, tx.assetId)}
-        />
-      );
+      info = <Balance split showAsset addSign="+" balance={fromCoins(tx.quantity, tx.assetId)} />;
       messageType = 'reissue';
       break;
     case TRANSACTION_TYPE.BURN:
       tooltip = label = t('historyCard.burn');
-      info = (
-        <Balance
-          split
-          showAsset
-          addSign="-"
-          balance={fromCoins(tx.amount, tx.assetId)}
-        />
-      );
+      info = <Balance split showAsset addSign="-" balance={fromCoins(tx.amount, tx.assetId)} />;
       messageType = 'burn';
       break;
     case TRANSACTION_TYPE.EXCHANGE:
       const priceAssetId = tx.order1?.assetPair?.priceAsset || 'DCC';
       const priceAsset = assets[priceAssetId];
 
-      const assetAmount = fromCoins(
-        tx.amount,
-        tx.order1.assetPair.amountAsset || 'DCC'
-      );
+      const assetAmount = fromCoins(tx.amount, tx.order1.assetPair.amountAsset || 'DCC');
 
       let priceAmount, totalPriceAmount;
       if (assetAmount && priceAsset) {
         priceAmount = fromTokens(
           new BigNumber(tx.price).div(
             new BigNumber(10).pow(
-              8 +
-                (tx.version < 3
-                  ? priceAsset.precision - assetAmount.asset.precision
-                  : 0)
-            )
+              8 + (tx.version < 3 ? priceAsset.precision - assetAmount.asset.precision : 0),
+            ),
           ),
-          priceAssetId
+          priceAssetId,
         );
-        totalPriceAmount = assetAmount.convertTo(
-          priceAmount.asset,
-          priceAmount.getTokens()
-        );
+        totalPriceAmount = assetAmount.convertTo(priceAmount.asset, priceAmount.getTokens());
       }
 
       tooltip = t('historyCard.exchange');
-      label = (
-        <Balance split showAsset addSign="-" balance={totalPriceAmount} />
-      );
+      label = <Balance split showAsset addSign="-" balance={totalPriceAmount} />;
       info = <Balance split showAsset addSign="+" balance={assetAmount} />;
       messageType = 'create-order';
       break;
@@ -181,14 +144,7 @@ export function HistoryItem({ tx, className }: Props) {
         addSign = '+';
       }
 
-      info = (
-        <Balance
-          split
-          showAsset
-          addSign={addSign}
-          balance={fromCoins(tx.amount, 'DCC')}
-        />
-      );
+      info = <Balance split showAsset addSign={addSign} balance={fromCoins(tx.amount, 'DCC')} />;
       messageType = 'lease';
       break;
     case TRANSACTION_TYPE.CANCEL_LEASE:
@@ -202,12 +158,7 @@ export function HistoryItem({ tx, className }: Props) {
       }
 
       info = (
-        <Balance
-          split
-          showAsset
-          addSign={addSign}
-          balance={fromCoins(tx.lease.amount, 'DCC')}
-        />
+        <Balance split showAsset addSign={addSign} balance={fromCoins(tx.lease.amount, 'DCC')} />
       );
       messageType = 'cancel-leasing';
       break;
@@ -223,16 +174,11 @@ export function HistoryItem({ tx, className }: Props) {
       addSign = '+';
       let balance = fromCoins(
         tx.transfers.reduce(
-          (
-            result: BigNumber,
-            transfer: { amount: number; recipient: string }
-          ) =>
-            result.add(
-              addressAlias.includes(transfer.recipient) ? transfer.amount : 0
-            ),
-          new BigNumber(0)
+          (result: BigNumber, transfer: { amount: number; recipient: string }) =>
+            result.add(addressAlias.includes(transfer.recipient) ? transfer.amount : 0),
+          new BigNumber(0),
         ),
-        tx.assetId
+        tx.assetId,
       );
       messageType = 'mass_transfer_receive';
 
@@ -266,13 +212,7 @@ export function HistoryItem({ tx, className }: Props) {
     case TRANSACTION_TYPE.SPONSORSHIP:
       tooltip = label = t('historyCard.sponsorshipEnable');
       messageType = 'sponsor_enable';
-      info = (
-        <Balance
-          split
-          showAsset
-          balance={fromCoins(tx.minSponsoredAssetFee, tx.assetId)}
-        />
-      );
+      info = <Balance split showAsset balance={fromCoins(tx.minSponsoredAssetFee, tx.assetId)} />;
 
       if (!tx.minSponsoredAssetFee) {
         tooltip = label = t('historyCard.sponsorshipDisable');
@@ -287,24 +227,19 @@ export function HistoryItem({ tx, className }: Props) {
       break;
     case TRANSACTION_TYPE.INVOKE_SCRIPT:
       if (
-        (tx.dApp === '3P8eoZF8RTpcrVXwYcDaNs7WBGMbrBR8d3u' &&
-          tx.call.function === 'swap') ||
+        (tx.dApp === '3P8eoZF8RTpcrVXwYcDaNs7WBGMbrBR8d3u' && tx.call.function === 'swap') ||
         (tx.dApp === SWAP_DAPP_ADDRESS &&
           (tx.call.function === 'testSeq' || tx.call.function === 'swap'))
       ) {
         tooltip = t('historyCard.swap');
 
         const payment = tx.payment[0];
-        const fromBalance =
-          payment && fromCoins(payment.amount, payment.assetId);
+        const fromBalance = payment && fromCoins(payment.amount, payment.assetId);
 
-        const incomingTransfer = tx.stateChanges.transfers.find(
-          t => t.address === tx.sender
-        );
+        const incomingTransfer = tx.stateChanges.transfers.find((t) => t.address === tx.sender);
 
         const toBalance =
-          incomingTransfer &&
-          fromCoins(incomingTransfer.amount, incomingTransfer.asset);
+          incomingTransfer && fromCoins(incomingTransfer.amount, incomingTransfer.asset);
 
         label = <Balance addSign="-" split showAsset balance={fromBalance} />;
         info = <Balance addSign="+" split showAsset balance={toBalance} />;
@@ -334,12 +269,9 @@ export function HistoryItem({ tx, className }: Props) {
         content={`${(isTxFailed && t('historyCard.failed')) || ''} ${tooltip}`}
         placement="right"
       >
-        {props => (
+        {(props) => (
           <div
-            className={cn(
-              styles.historyIconWrapper,
-              messageType === 'unknown' && 'skeleton-glow'
-            )}
+            className={cn(styles.historyIconWrapper, messageType === 'unknown' && 'skeleton-glow')}
             {...props}
           >
             <TxIcon txType={messageType} className={styles.historyIcon} />
@@ -361,10 +293,7 @@ export function HistoryItem({ tx, className }: Props) {
 
       <div className={cn('body1', styles.historyData)}>
         <div
-          className={cn(
-            info && typeof label === 'string' && 'basic500',
-            styles.historyLabel
-          )}
+          className={cn(info && typeof label === 'string' && 'basic500', styles.historyLabel)}
           title={typeof label === 'string' ? label : ''}
         >
           {label}
@@ -373,16 +302,12 @@ export function HistoryItem({ tx, className }: Props) {
       </div>
 
       <Tooltip content={<Trans i18nKey="historyCard.infoTooltip" />}>
-        {props => (
+        {(props) => (
           <button
             className={styles.infoButton}
             type="button"
             onClick={() => {
-              window.open(
-                getTxDetailLink(networkCode, tx.id),
-                '_blank',
-                'noopener'
-              );
+              window.open(getTxDetailLink(networkCode, tx.id), '_blank', 'noopener');
             }}
             {...props}
           >

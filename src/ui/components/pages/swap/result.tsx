@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react';
-import { Asset, Money } from '@waves/data-entities';
+import { Asset, Money } from '@decentralchain/data-entities';
 import cn from 'classnames';
 import * as React from 'react';
 import { Trans } from 'react-i18next';
@@ -39,13 +39,12 @@ const explorerBaseUrlsByNetwork = {
 };
 
 export function SwapResult({ fromMoney, transactionId, onClose }: Props) {
-  const assets = useAppSelector(state => state.assets);
-  const currentNetwork = useAppSelector(state => state.currentNetwork);
-  const selectedAccount = useAppSelector(state => state.selectedAccount);
+  const assets = useAppSelector((state) => state.assets);
+  const currentNetwork = useAppSelector((state) => state.currentNetwork);
+  const selectedAccount = useAppSelector((state) => state.selectedAccount);
 
   const server = useAppSelector(
-    state =>
-      state.networks.find(net => net.name === state.currentNetwork).server
+    (state) => state.networks.find((net) => net.name === state.currentNetwork).server,
   );
 
   const [swapStatus, setSwapStatus] = React.useState(SwapStatus.Pending);
@@ -60,8 +59,8 @@ export function SwapResult({ fromMoney, transactionId, onClose }: Props) {
     let timeout: number;
 
     async function updateStatus(prevTxStatus: TxStatus) {
-      const [txStatus] = (await fetch(txStatusUrl.toString()).then(res =>
-        res.json()
+      const [txStatus] = (await fetch(txStatusUrl.toString()).then((res) =>
+        res.json(),
       )) as TxStatus[];
 
       if (cancelled) {
@@ -70,14 +69,9 @@ export function SwapResult({ fromMoney, transactionId, onClose }: Props) {
 
       if (txStatus.status === 'confirmed') {
         if (txStatus.applicationStatus === 'succeeded') {
-          const txInfoUrl = new URL(
-            `/transactions/info/${transactionId}`,
-            server
-          );
+          const txInfoUrl = new URL(`/transactions/info/${transactionId}`, server);
 
-          const txInfo = (await fetch(txInfoUrl.toString()).then(res =>
-            res.json()
-          )) as {
+          const txInfo = (await fetch(txInfoUrl.toString()).then((res) => res.json())) as {
             stateChanges: {
               transfers: Array<{
                 address: string;
@@ -88,20 +82,15 @@ export function SwapResult({ fromMoney, transactionId, onClose }: Props) {
           };
 
           const transfer = txInfo.stateChanges.transfers.find(
-            t => t.address === selectedAccount.address
+            (t) => t.address === selectedAccount.address,
           );
 
-          setReceivedMoney(
-            new Money(
-              transfer.amount,
-              new Asset(assets[transfer.asset || 'DCC'])
-            )
-          );
+          setReceivedMoney(new Money(transfer.amount, new Asset(assets[transfer.asset || 'DCC'])));
           setSwapStatus(SwapStatus.Succeeded);
         } else {
           setSwapStatus(SwapStatus.Failed);
 
-          Sentry.withScope(scope => {
+          Sentry.withScope((scope) => {
             scope.setExtra('transactionId', transactionId);
             Sentry.captureException(new Error('Swap transaction failed'));
           });
@@ -113,7 +102,7 @@ export function SwapResult({ fromMoney, transactionId, onClose }: Props) {
       ) {
         setSwapStatus(SwapStatus.Failed);
 
-        Sentry.withScope(scope => {
+        Sentry.withScope((scope) => {
           scope.setExtra('transactionId', transactionId);
           Sentry.captureException(new Error('Swap transaction failed'));
         });
@@ -167,16 +156,12 @@ export function SwapResult({ fromMoney, transactionId, onClose }: Props) {
 
       <div className={styles.main}>
         <div className={styles.card}>
-          <div
-            className={cn(styles.cardIcon, 'create-order-transaction-icon')}
-          />
+          <div className={cn(styles.cardIcon, 'create-order-transaction-icon')} />
 
           <div className={styles.cardText}>
             <Balance addSign="-" split showAsset balance={fromMoney} />
 
-            {[SwapStatus.Pending, SwapStatus.Succeeded].includes(
-              swapStatus
-            ) && (
+            {[SwapStatus.Pending, SwapStatus.Succeeded].includes(swapStatus) && (
               <Balance addSign="+" split showAsset balance={receivedMoney} />
             )}
           </div>

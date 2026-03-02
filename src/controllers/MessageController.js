@@ -8,13 +8,13 @@ import {
   CustomAdapter,
   CubensisConnectAdapter,
 } from '@decentralchain/signature-adapter';
-import { Asset, Money } from '@waves/data-entities';
-import { BigNumber } from '@waves/bignumber';
+import { Asset, Money } from '@decentralchain/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
 import { networkByteFromAddress } from '../lib/cryptoUtil';
 import { ERRORS } from '../lib/KeeperError';
 import { PERMISSIONS } from './PermissionsController';
 import { calculateFeeFabric } from './CalculateFeeController';
-import { waves } from './wavesTransactionsController';
+import { waves } from './transactionsController';
 import { clone } from 'ramda';
 import create from 'parse-json-bignumber';
 
@@ -69,16 +69,14 @@ export class MessageController extends EventEmitter {
     this.signBytes = options.signBytes;
 
     // Broadcast and getMatcherPublicKey method from NetworkController
-    this.broadcast = messages => options.networkController.broadcast(messages);
+    this.broadcast = (messages) => options.networkController.broadcast(messages);
     this.getMatcherPublicKey = options.getMatcherPublicKey;
 
     this.getMessagesConfig = options.getMessagesConfig;
     this.getPackConfig = options.getPackConfig;
 
     // Get assetInfo method from AssetInfoController
-    this.assetInfo = options.assetInfoController.assetInfo.bind(
-      options.assetInfoController
-    );
+    this.assetInfo = options.assetInfoController.assetInfo.bind(options.assetInfoController);
     this.assetInfoController = options.assetInfoController;
     //tx by txId
     this.txInfo = options.txInfo;
@@ -87,10 +85,7 @@ export class MessageController extends EventEmitter {
     this.setPermission = options.setPermission;
     this.canAutoApprove = options.canAutoApprove;
 
-    this.getFee = calculateFeeFabric(
-      options.assetInfoController,
-      options.networkController
-    );
+    this.getFee = calculateFeeFabric(options.assetInfoController, options.networkController);
 
     this.rejectAllByTime();
     this._updateBadge();
@@ -102,9 +97,7 @@ export class MessageController extends EventEmitter {
    * @returns {Promise<Object>} id - message id
    */
   async newMessage(messageData) {
-    log.debug(
-      `New message ${messageData.type}: ${JSON.stringify(messageData.data)}`
-    );
+    log.debug(`New message ${messageData.type}: ${JSON.stringify(messageData.data)}`);
 
     let message;
     try {
@@ -113,11 +106,11 @@ export class MessageController extends EventEmitter {
       throw ERRORS.REQUEST_ERROR(messageData);
     }
 
-    let messages = this.store.getState().messages;
+    const messages = this.store.getState().messages;
 
     while (messages.length > this.getMessagesConfig().max_messages) {
       const oldest = messages
-        .filter(msg => Object.values(MSG_STATUSES).includes(msg.status))
+        .filter((msg) => Object.values(MSG_STATUSES).includes(msg.status))
         .sort((a, b) => a.timestamp - b.timestamp)[0];
       if (oldest) {
         this._deleteMessage(oldest.id);
@@ -175,7 +168,7 @@ export class MessageController extends EventEmitter {
         return Promise.reject(ERRORS.FAILED_MSG(message.err.message));
       default:
         return new Promise((resolve, reject) => {
-          this.once(`${id}:finished`, finishedMessage => {
+          this.once(`${id}:finished`, (finishedMessage) => {
             switch (finishedMessage.status) {
               case MSG_STATUSES.SIGNED:
               case MSG_STATUSES.PUBLISHED:
@@ -211,16 +204,14 @@ export class MessageController extends EventEmitter {
     const message = this._getMessageById(id);
     message.account = account || message.account;
     if (!message.account)
-      return Promise.reject(
-        'Message has empty account filed and no address is provided'
-      );
+      return Promise.reject('Message has empty account filed and no address is provided');
 
     return new Promise((resolve, reject) => {
       this._fillSignableData(message)
         .then(this._signMessage.bind(this))
         .then(this._broadcastMessage.bind(this))
         .then(this._processSuccessPath.bind(this))
-        .catch(e => {
+        .catch((e) => {
           message.status = MSG_STATUSES.FAILED;
           message.err = {
             message: e.toString(),
@@ -244,9 +235,7 @@ export class MessageController extends EventEmitter {
    */
   reject(id, forever) {
     const message = this._getMessageById(id);
-    message.status = !forever
-      ? MSG_STATUSES.REJECTED
-      : MSG_STATUSES.REJECTED_FOREVER;
+    message.status = !forever ? MSG_STATUSES.REJECTED : MSG_STATUSES.REJECTED_FOREVER;
     this._updateMessage(message);
     this.emit(`${message.id}:finished`, message);
   }
@@ -283,10 +272,7 @@ export class MessageController extends EventEmitter {
     const time = Date.now();
     const { messages } = this.store.getState();
     messages.forEach(({ id, timestamp, status }) => {
-      if (
-        time - timestamp > message_expiration_ms &&
-        status === MSG_STATUSES.UNAPPROVED
-      ) {
+      if (time - timestamp > message_expiration_ms && status === MSG_STATUSES.UNAPPROVED) {
         this.reject(id);
       }
     });
@@ -302,7 +288,7 @@ export class MessageController extends EventEmitter {
     if (typeof ids === 'string') {
       this._deleteMessage(ids);
     } else if (ids && ids.length > 0) {
-      ids.forEach(id => this._deleteMessage(id));
+      ids.forEach((id) => this._deleteMessage(id));
     } else {
       this._updateStore([]);
     }
@@ -319,10 +305,10 @@ export class MessageController extends EventEmitter {
       MSG_STATUSES.PUBLISHED,
       MSG_STATUSES.FAILED,
     ];
-    let unusedMessages = [],
+    const unusedMessages = [],
       actualMessages = [];
 
-    this.messages.messages.forEach(message => {
+    this.messages.messages.forEach((message) => {
       const { status } = message;
       if (unusedStatuses.indexOf(status) === -1) {
         actualMessages.push(message);
@@ -337,39 +323,32 @@ export class MessageController extends EventEmitter {
   }
 
   getUnapproved() {
-    return this.messages.messages.filter(
-      ({ status }) => status === MSG_STATUSES.UNAPPROVED
-    );
+    return this.messages.messages.filter(({ status }) => status === MSG_STATUSES.UNAPPROVED);
   }
 
   _updateMessagesByTimeout() {
     clearTimeout(this._updateTimer);
     const { update_messages_ms } = this.getMessagesConfig();
-    this._updateTimer = setTimeout(
-      () => this.rejectAllByTime(),
-      update_messages_ms
-    );
+    this._updateTimer = setTimeout(() => this.rejectAllByTime(), update_messages_ms);
   }
 
   _updateMessage(message) {
     const messages = this.store.getState().messages;
     const id = message.id;
-    const index = messages.findIndex(message => message.id === id);
+    const index = messages.findIndex((message) => message.id === id);
     messages[index] = message;
     this._updateStore(messages);
   }
 
   _getMessageById(id) {
-    const result = this.store
-      .getState()
-      .messages.find(message => message.id === id);
+    const result = this.store.getState().messages.find((message) => message.id === id);
     if (!result) throw new Error(`Failed to ge message with id ${id}`);
     return result;
   }
 
   _deleteMessage(id) {
     const { messages } = this.store.getState();
-    const index = messages.findIndex(message => message.id === id);
+    const index = messages.findIndex((message) => message.id === id);
     if (index > -1) {
       messages.splice(index, 1);
       this._updateStore(messages);
@@ -387,12 +366,7 @@ export class MessageController extends EventEmitter {
   }
 
   async _transformData(data) {
-    if (
-      !data ||
-      typeof data !== 'object' ||
-      data instanceof BigNumber ||
-      data instanceof Money
-    ) {
+    if (!data || typeof data !== 'object' || data instanceof BigNumber || data instanceof Money) {
       return data;
     }
 
@@ -429,10 +403,7 @@ export class MessageController extends EventEmitter {
         if (field.hasOwnProperty('tokens') && field.hasOwnProperty('assetId')) {
           const asset = await this.assetInfo(data[key].assetId);
           data[key] = Money.fromTokens(field.tokens, asset);
-        } else if (
-          field.hasOwnProperty('coins') &&
-          field.hasOwnProperty('assetId')
-        ) {
+        } else if (field.hasOwnProperty('coins') && field.hasOwnProperty('assetId')) {
           const asset = await this.assetInfo(data[key].assetId);
           data[key] = Money.fromCoins(field.coins, asset);
         } else if (
@@ -460,7 +431,7 @@ export class MessageController extends EventEmitter {
         return message;
       case 'transactionPackage':
         message.data = await Promise.all(
-          message.data.map(async data => await this._transformData(data))
+          message.data.map(async (data) => await this._transformData(data)),
         );
         return message;
       default:
@@ -477,25 +448,21 @@ export class MessageController extends EventEmitter {
         signedData = await this.signTx(
           message.account.address,
           message.data,
-          message.account.network
+          message.account.network,
         );
         break;
       case 'transactionPackage':
         signedData = await Promise.all(
-          message.data.map(txParams => {
-            return this.signTx(
-              message.account.address,
-              txParams,
-              message.account.network
-            );
-          })
+          message.data.map((txParams) => {
+            return this.signTx(message.account.address, txParams, message.account.network);
+          }),
         );
         break;
       case 'auth':
         signedData = await this.auth(
           message.account.address,
           message.data,
-          message.account.network
+          message.account.network,
         );
         signedData = message.data.isRequest ? signedData.signature : signedData;
         break;
@@ -504,14 +471,14 @@ export class MessageController extends EventEmitter {
           'signWavesAuth',
           message.data,
           message.account.address,
-          message.account.network
+          message.account.network,
         );
         break;
       case 'request':
         signedData = await this.signRequest(
           message.account.address,
           message.data,
-          message.account.network
+          message.account.network,
         );
         break;
       case 'customData':
@@ -519,14 +486,14 @@ export class MessageController extends EventEmitter {
           'signCustomData',
           message.data,
           message.account.address,
-          message.account.network
+          message.account.network,
         );
         break;
       case 'bytes':
         signedData = await this.signBytes(
           message.account.address,
           message.data,
-          message.account.network
+          message.account.network,
         );
         break;
       case 'pairing':
@@ -592,15 +559,12 @@ export class MessageController extends EventEmitter {
     if (data && data.type === 'customData') {
       return waves.parseCustomData(data);
     }
-    let signableData = await this._transformData({ ...data.data });
+    const signableData = await this._transformData({ ...data.data });
 
     const adapter = new InfoAdapter(account);
     const signable = adapter.makeSignable({ ...data, data: signableData });
 
-    const [id, bytes] = await Promise.all([
-      signable.getId(),
-      signable.getBytes(),
-    ]);
+    const [id, bytes] = await Promise.all([signable.getId(), signable.getBytes()]);
     return { id, bytes: Array.from(bytes) };
   }
 
@@ -618,15 +582,13 @@ export class MessageController extends EventEmitter {
   }
 
   async _validateAndTransform(message) {
-    let result = { ...message };
+    const result = { ...message };
     let messageMeta;
     if (message.data && message.data.successPath) {
       result.successPath = message.data.successPath;
     }
 
-    const hasFee =
-      message.data.data &&
-      (message.data.data.fee || message.data.data.matcherFee);
+    const hasFee = message.data.data && (message.data.data.fee || message.data.data.matcherFee);
 
     switch (message.type) {
       case 'wavesAuth':
@@ -639,10 +601,7 @@ export class MessageController extends EventEmitter {
       case 'auth':
         try {
           result.successPath = result.successPath
-            ? new URL(
-                result.successPath,
-                message.data.referrer || 'https://' + message.origin
-              ).href
+            ? new URL(result.successPath, message.data.referrer || 'https://' + message.origin).href
             : null;
         } catch (e) {
           result.successPath = null;
@@ -655,23 +614,18 @@ export class MessageController extends EventEmitter {
           data: {
             data: message.data.data,
             prefix: 'WavesWalletAuthentication',
-            host:
-              message.data.host || new URL('https://' + message.origin).host,
+            host: message.data.host || new URL('https://' + message.origin).host,
             name: message.data.name,
             icon: message.data.icon,
           },
         };
 
-        messageMeta = await this._getMessageDataHash(
-          result.data,
-          message.account
-        );
+        messageMeta = await this._getMessageDataHash(result.data, message.account);
         result.messageHash = messageMeta.id;
         result.bytes = Array.from(messageMeta.bytes);
         break;
       case 'transactionPackage':
-        if (!Array.isArray(message.data))
-          throw new Error('Should contain array of txParams');
+        if (!Array.isArray(message.data)) throw new Error('Should contain array of txParams');
         const { max, allow_tx } = this.getPackConfig();
         const {} = this.getMessagesConfig();
 
@@ -681,9 +635,7 @@ export class MessageController extends EventEmitter {
           throw new Error(`Max transactions in pack is ${max}`);
         }
 
-        const unavailableTx = message.data.filter(
-          ({ type }) => !allow_tx.includes(type)
-        );
+        const unavailableTx = message.data.filter(({ type }) => !allow_tx.includes(type));
 
         if (unavailableTx.length) {
           throw new Error(`Tx type can be ${allow_tx.join(', ')}`);
@@ -692,17 +644,14 @@ export class MessageController extends EventEmitter {
         const ids = [];
         const bytes = [];
 
-        const dataPromises = message.data.map(async txParams => {
+        const dataPromises = message.data.map(async (txParams) => {
           const hasFee = !!txParams.data.fee;
           this._validateTx(txParams);
           const data = this._prepareTx(txParams.data, message.account);
           let readyData = { ...txParams, data };
           const feeData = !hasFee ? await this._getFee(message, readyData) : {};
           readyData = { ...readyData, data: { ...data, ...feeData } };
-          messageMeta = await this._getMessageDataHash(
-            readyData,
-            message.account
-          );
+          messageMeta = await this._getMessageDataHash(readyData, message.account);
           ids.push(messageMeta.id);
           bytes.push(messageMeta.bytes);
           readyData.id = messageMeta.id;
@@ -714,18 +663,10 @@ export class MessageController extends EventEmitter {
         break;
       case 'order':
         this._validateOrder(result.data);
-        result.data.data = await this._prepareOrder(
-          result.data.data,
-          message.account
-        );
-        const matcherFeeData = !hasFee
-          ? await this._getFee(message, result.data)
-          : {};
+        result.data.data = await this._prepareOrder(result.data.data, message.account);
+        const matcherFeeData = !hasFee ? await this._getFee(message, result.data) : {};
         result.data.data = { ...result.data.data, ...matcherFeeData };
-        messageMeta = await this._getMessageDataHash(
-          result.data,
-          message.account
-        );
+        messageMeta = await this._getMessageDataHash(result.data, message.account);
         result.messageHash = messageMeta.id;
         result.bytes = Array.from(messageMeta.bytes);
         result.json = await this._prepareMessageJson(clone(result));
@@ -763,10 +704,7 @@ export class MessageController extends EventEmitter {
           senderPublicKey: message.account.publicKey,
         };
         result.data.data = { ...requestDefaults, ...result.data.data };
-        messageMeta = await this._getMessageDataHash(
-          result.data,
-          message.account
-        );
+        messageMeta = await this._getMessageDataHash(result.data, message.account);
         result.messageHash = messageMeta.id;
         result.bytes = Array.from(messageMeta.bytes);
         break;
@@ -796,7 +734,7 @@ export class MessageController extends EventEmitter {
   }
 
   async _getFee(message, signData) {
-    let signableData = await this._transformData({ ...signData });
+    const signableData = await this._transformData({ ...signData });
 
     const adapter = new InfoAdapter(message.account);
 
@@ -811,7 +749,7 @@ export class MessageController extends EventEmitter {
   }
 
   _getMoneyLikeValue(moneyLike) {
-    for (let key of ['tokens', 'coins', 'amount']) {
+    for (const key of ['tokens', 'coins', 'amount']) {
       if (key in moneyLike) {
         return moneyLike[key];
       }
@@ -883,10 +821,7 @@ export class MessageController extends EventEmitter {
         break;
       case 11:
         tx.data.transfers.forEach(({ amount }) => {
-          if (
-            !this._isMoneyLikeValuePositive(amount) &&
-            !this._isNumberLikePositive(amount)
-          ) {
+          if (!this._isMoneyLikeValuePositive(amount) && !this._isNumberLikePositive(amount)) {
             throw new Error('amount is not valid');
           }
         });
@@ -902,7 +837,7 @@ export class MessageController extends EventEmitter {
       }
       case 16:
         if (tx.data.payment) {
-          tx.data.payment.forEach(payment => {
+          tx.data.payment.forEach((payment) => {
             if (!this._isMoneyLikeValuePositive(payment)) {
               throw new Error('payment is not valid');
             }
@@ -915,7 +850,7 @@ export class MessageController extends EventEmitter {
   _prepareTx(txParams, account) {
     const defaultFee = Money.fromCoins(
       0,
-      new Asset(this.assetInfoController.getWavesAsset())
+      new Asset(this.assetInfoController.getWavesAsset()),
     ).toJSON();
 
     const txDefaults = {
@@ -947,10 +882,7 @@ export class MessageController extends EventEmitter {
   }
 
   async _prepareOrder(orderParams, account) {
-    const defaultFee = Money.fromCoins(
-      0,
-      new Asset(this.assetInfoController.getWavesAsset())
-    );
+    const defaultFee = Money.fromCoins(0, new Asset(this.assetInfoController.getWavesAsset()));
 
     const orderDefaults = {
       timestamp: Date.now(),

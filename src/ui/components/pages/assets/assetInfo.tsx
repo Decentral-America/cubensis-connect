@@ -1,9 +1,9 @@
 import { Trans } from 'react-i18next';
 import { Balance, Button, Copy, DateFormat, Ellipsis } from '../../ui';
 import * as React from 'react';
-import { Asset, Money } from '@waves/data-entities';
+import { Asset, Money } from '@decentralchain/data-entities';
 import { useAppSelector } from '../../../store';
-import { AssetDetail } from '../../../services/Background';
+import { type AssetDetail } from '../../../services/Background';
 import { getAssetDetailLink } from '../../../urls';
 
 interface Props {
@@ -13,9 +13,7 @@ interface Props {
 }
 
 export function AssetInfo({ asset, onCopy, onClose }: Props) {
-  const networkCode = useAppSelector(
-    state => state.selectedAccount.networkCode
-  );
+  const networkCode = useAppSelector((state) => state.selectedAccount.networkCode);
 
   return (
     <div className="modal cover">
@@ -70,18 +68,10 @@ export function AssetInfo({ asset, onCopy, onClose }: Props) {
           </div>
           <div className="tag1">
             <Trans
-              i18nKey={
-                asset.reissuable
-                  ? 'assetInfo.reissuable'
-                  : 'assetInfo.notReissuable'
-              }
+              i18nKey={asset.reissuable ? 'assetInfo.reissuable' : 'assetInfo.notReissuable'}
             />
             ,&nbsp;
-            <Trans
-              i18nKey={
-                asset.hasScript ? 'assetInfo.scripted' : 'assetInfo.notScripted'
-              }
-            />
+            <Trans i18nKey={asset.hasScript ? 'assetInfo.scripted' : 'assetInfo.notScripted'} />
           </div>
         </div>
 

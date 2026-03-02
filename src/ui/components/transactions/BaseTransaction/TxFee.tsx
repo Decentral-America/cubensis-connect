@@ -1,14 +1,14 @@
 import { Balance, Select } from '../../ui';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { BalanceAssets } from './TxInfo';
-import { Asset, Money } from '@waves/data-entities';
-import { BigNumber } from '@waves/bignumber';
+import { type BalanceAssets } from './TxInfo';
+import { type Asset, Money } from '@decentralchain/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
 import { DEFAULT_FEE_CONFIG } from '../../../../constants';
 import { updateTransactionFee } from '../../../actions';
-import { getMoney, IMoneyLike } from '../../../utils/converters';
+import { getMoney, type IMoneyLike } from '../../../utils/converters';
 import { getFee } from './parseTx';
-import { TRANSACTION_TYPE } from '@waves/ts-types';
+import { TRANSACTION_TYPE } from '@decentralchain/ts-types';
 import { omit } from 'ramda';
 
 const DCC_MIN_FEE = DEFAULT_FEE_CONFIG.calculate_fee_rules.default.fee;
@@ -41,22 +41,16 @@ export const TxFee = connect(
     const minSponsorBalance: Money = convertFee(initialFee, assets['DCC']);
 
     const sponsoredBalance = Object.entries(
-      (ownProps.sponsoredBalance as BalanceAssets) || {}
+      (ownProps.sponsoredBalance as BalanceAssets) || {},
     ).filter(
       ([assetId, assetBalance]) =>
-        new BigNumber(assetBalance.sponsorBalance).gte(
-          minSponsorBalance.getCoins()
-        ) &&
-        new BigNumber(assetBalance.balance).gte(
-          convertFee(initialFee, assets[assetId]).getCoins()
-        )
+        new BigNumber(assetBalance.sponsorBalance).gte(minSponsorBalance.getCoins()) &&
+        new BigNumber(assetBalance.balance).gte(convertFee(initialFee, assets[assetId]).getCoins()),
     );
 
     const isEditable =
       !!sponsoredBalance.length &&
-      [TRANSACTION_TYPE.TRANSFER, TRANSACTION_TYPE.INVOKE_SCRIPT].includes(
-        message.data.type
-      ) &&
+      [TRANSACTION_TYPE.TRANSFER, TRANSACTION_TYPE.INVOKE_SCRIPT].includes(message.data.type) &&
       (fee.asset.displayName === 'DCC' || !!fee.asset.minSponsoredFee);
 
     return {
@@ -68,7 +62,7 @@ export const TxFee = connect(
       sponsoredBalance: Object.fromEntries(sponsoredBalance),
     };
   },
-  { updateTransactionFee }
+  { updateTransactionFee },
 )(function TxFee({
   isEditable = false,
   fee,
@@ -88,7 +82,7 @@ export const TxFee = connect(
     };
   }
 
-  let options: FeeOption[] = [];
+  const options: FeeOption[] = [];
   if ('DCC' in sponsoredBalance || initialFee.asset.id === 'DCC') {
     options.push(getOption('DCC'));
     sponsoredBalance = omit(['DCC'], sponsoredBalance);
@@ -100,7 +94,7 @@ export const TxFee = connect(
   options.push(
     ...Object.keys(sponsoredBalance)
       .map(getOption)
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => a.name.localeCompare(b.name)),
   );
 
   return (
@@ -133,6 +127,6 @@ function convertFee(from: Money, toAsset: Asset): Money {
       .mul(new BigNumber(minSponsoredFee(toAsset)))
       .div(new BigNumber(minSponsoredFee(from.asset)))
       .roundTo(0, BigNumber.ROUND_MODE.ROUND_UP),
-    toAsset
+    toAsset,
   );
 }

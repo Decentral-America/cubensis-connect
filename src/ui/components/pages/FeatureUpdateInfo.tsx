@@ -35,9 +35,7 @@ export function FeatureUpdateInfo({ onClose, onSubmit }) {
 
         <Button
           type="submit"
-          onClick={() =>
-            background.sendEvent('click', { id: 'featureUpdateInfo.backupBtn' })
-          }
+          onClick={() => background.sendEvent('click', { id: 'featureUpdateInfo.backupBtn' })}
         >
           <Trans i18nKey="featureUpdateInfo.backupBtn" />
         </Button>

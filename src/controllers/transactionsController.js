@@ -1,11 +1,7 @@
-import {
-  customData,
-  verifyCustomData,
-  wavesAuth,
-} from '@decentralchain/waves-transactions';
+import { customData, verifyCustomData, wavesAuth } from '@decentralchain/waves-transactions';
 
 export const waves = {
-  parseWavesAuth: message => {
+  parseWavesAuth: (message) => {
     if (!message || message.type !== 'wavesAuth') {
       throw new Error('Incorrect data for sign wavesAuth data');
     }
@@ -21,7 +17,7 @@ export const waves = {
     return wavesAuth(data, user.seed);
   },
 
-  parseCustomData: message => {
+  parseCustomData: (message) => {
     if (!message || message.type !== 'customData') {
       throw new Error('Incorrect data for sign custom data');
     }
@@ -33,7 +29,7 @@ export const waves = {
     };
   },
 
-  verifyCustomData: async data => {
+  verifyCustomData: async (data) => {
     return verifyCustomData(data);
   },
 

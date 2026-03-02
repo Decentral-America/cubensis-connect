@@ -13,12 +13,12 @@ import {
 } from 'ui/components/ui';
 import { ExtendedPermission } from 'ui/components/permissions';
 import { connect } from 'react-redux';
-import { BigNumber } from '@waves/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 import { TxHeader } from '../BaseTransaction';
 import { SignClass } from '../SignClass';
 
 class OriginAuthComponent extends SignClass {
-  getRef = el => this.setState({ el });
+  getRef = (el) => this.setState({ el });
 
   render() {
     const { message, assets } = this.props;
@@ -38,19 +38,14 @@ class OriginAuthComponent extends SignClass {
             origin: message.origin,
             params: { interval, totalAmount: amount, type },
           };
-    const notifyPermissions = showNotify
-      ? { canUse: showNotify, origin: message.origin }
-      : null;
+    const notifyPermissions = showNotify ? { canUse: showNotify, origin: message.origin } : null;
     const params = { notifyPermissions, approvePermissions };
 
     return (
       <div className={styles.transaction}>
         <TxHeader {...this.props} />
 
-        <div
-          className={`${styles.originAuthTxScrollBox} transactionContent`}
-          ref={this.getRef}
-        >
+        <div className={`${styles.originAuthTxScrollBox} transactionContent`} ref={this.getRef}>
           <div className="margin-main">
             <OriginAuthCard {...this.props} />
           </div>
@@ -67,7 +62,7 @@ class OriginAuthComponent extends SignClass {
               originName={message.origin}
               autoSign={null}
               showNotify={false}
-              onChangePerms={perms => this.setState(perms)}
+              onChangePerms={(perms) => this.setState(perms)}
             />
           </CollapsedContent>
         </div>
@@ -94,7 +89,7 @@ class OriginAuthComponent extends SignClass {
           </DropdownButton>
           <ApproveBtn
             id="approve"
-            onClick={e => this.props.approve(e, params)}
+            onClick={(e) => this.props.approve(e, params)}
             type={BUTTON_TYPE.SUBMIT}
           >
             <Trans i18nKey="sign.auth" />
@@ -105,7 +100,7 @@ class OriginAuthComponent extends SignClass {
   }
 }
 
-const mapsToProps = state => ({
+const mapsToProps = (state) => ({
   origins: state.origins,
 });
 

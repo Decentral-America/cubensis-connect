@@ -44,8 +44,8 @@ const DateFromFormat = ({ value, format }) => {
     <span>
       {
         Object.keys(TYPES)
-          .map(type => ({ index: format.indexOf(type), type }))
-          .filter(c => c.index > -1)
+          .map((type) => ({ index: format.indexOf(type), type }))
+          .filter((c) => c.index > -1)
           .sort((a, b) => a.index - b.index)
           .reduce(
             (prev, current, ind) => {
@@ -56,16 +56,11 @@ const DateFromFormat = ({ value, format }) => {
                 prev.data.push(<span key={res + ind}>{res}</span>);
               }
               const Comp = TYPES[current.type];
-              prev.data.push(
-                <Comp
-                  value={value}
-                  key={current.type + prev.index + ind}
-                ></Comp>
-              );
+              prev.data.push(<Comp value={value} key={current.type + prev.index + ind}></Comp>);
               prev.index += current.type.length;
               return prev;
             },
-            { data: [], index: 0 }
+            { data: [], index: 0 },
           ).data
       }
     </span>

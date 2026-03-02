@@ -5,12 +5,12 @@ import { Trans } from 'react-i18next';
 import { Button, Error, Pills } from '../ui';
 import { addUser, setUiState } from '../../actions';
 import { WalletTypes } from '../../services/Background';
-import { AppState } from 'ui/store';
+import { type AppState } from 'ui/store';
 
 const SHUFFLE_COUNT = 500;
 
 class ConfirmBackupComponent extends React.Component {
-  props;
+  declare props;
   state = {
     seed: null,
     list: [],
@@ -27,13 +27,13 @@ class ConfirmBackupComponent extends React.Component {
       return null;
     }
 
-    const list = seed
-      .split(' ')
-      .map((text, id) => ({ text, id, selected: true, hidden: false }));
+    const list = seed.split(' ').map((text, id) => ({ text, id, selected: true, hidden: false }));
     let count = SHUFFLE_COUNT;
 
     while (count--) {
-      const index = Math.floor(Math.random() * list.length);
+      const randomBytes = new Uint32Array(1);
+      crypto.getRandomValues(randomBytes);
+      const index = randomBytes[0] % list.length;
       const item = list.splice(index, 1)[0];
       list.push(item);
     }
@@ -41,13 +41,13 @@ class ConfirmBackupComponent extends React.Component {
     return { ...state, list, seed };
   }
 
-  onSelect = list => this._onSelect(list);
+  onSelect = (list) => this._onSelect(list);
 
-  onUnSelect = list => this._onUnSelect(list);
+  onUnSelect = (list) => this._onUnSelect(list);
 
   onClear = () => this._onClear();
 
-  onSubmit = e => this._onSubmit(e);
+  onSubmit = (e) => this._onSubmit(e);
 
   render() {
     const { selectedList, list, complete, wrongSeed } = this.state;
@@ -75,19 +75,12 @@ class ConfirmBackupComponent extends React.Component {
           )}
           {showClear ? (
             <Error show={true} className={styles.noMargin}>
-              <Trans i18nKey="confirmBackup.wrongSeed">
-                Wrong order, try again
-              </Trans>
+              <Trans i18nKey="confirmBackup.wrongSeed">Wrong order, try again</Trans>
             </Error>
           ) : null}
         </div>
 
-        <Pills
-          className={styles.writeSeed}
-          list={list}
-          selected={true}
-          onSelect={this.onSelect}
-        />
+        <Pills className={styles.writeSeed} list={list} selected={true} onSelect={this.onSelect} />
         {showButton ? (
           <Button
             id="confirmBackup"
@@ -128,20 +121,20 @@ class ConfirmBackupComponent extends React.Component {
   }
 
   private _onUnSelect({ id }) {
-    const selected = this.state.selectedList.filter(item => item.id !== id);
+    const selected = this.state.selectedList.filter((item) => item.id !== id);
     this._setSelected(selected);
   }
 
   private _setSelected(selected) {
     const list = this.state.list;
-    const selectedTextsList = selected.map(item => item.text);
-    const selectedIdsList = selected.map(item => item.id);
+    const selectedTextsList = selected.map((item) => item.text);
+    const selectedIdsList = selected.map((item) => item.id);
 
     const state = {
       selectedList: selected,
       wrongSeed: this.state.seed !== selectedTextsList.join(' '),
       complete: selected.length === list.length,
-      list: this.state.list.map(item => {
+      list: this.state.list.map((item) => {
         item.hidden = selectedIdsList.includes(item.id);
         return item;
       }),

@@ -14,13 +14,9 @@ interface IProps {
 
 export class CancelOrderCard extends React.PureComponent<IProps> {
   render() {
-    const className = cn(
-      styles.cancelOrderTransactionCard,
-      this.props.className,
-      {
-        [styles.cancelOrderCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.cancelOrderTransactionCard, this.props.className, {
+      [styles.cancelOrderCard_collapsed]: this.props.collapsed,
+    });
 
     return (
       <div className={className}>
@@ -43,9 +39,7 @@ export class CancelOrderCard extends React.PureComponent<IProps> {
             <div className="tx-title tag1 basic500">
               <Trans i18nKey="transactions.orderId" />
             </div>
-            <div className={styles.txValue}>
-              {this.props.message?.data?.data?.id}
-            </div>
+            <div className={styles.txValue}>{this.props.message?.data?.data?.id}</div>
           </div>
         </div>
       </div>

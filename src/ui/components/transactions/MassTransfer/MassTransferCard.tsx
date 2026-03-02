@@ -15,20 +15,13 @@ const Transfers = ({ transfers, totalAmount, count = MIN_COUNT }) => {
   const assets = { [totalAmount.asset.id]: totalAmount.asset };
 
   return transfers.slice(0, count).map(({ recipient, amount }) => {
-    const money = getMoney(
-      getTransferAmount(amount, totalAmount.asset.id),
-      assets
-    );
+    const money = getMoney(getTransferAmount(amount, totalAmount.asset.id), assets);
     const isAddress = recipient.length == ADDRESS_LENGTH;
 
     return (
       <div key={recipient} className={styles.txRow}>
         <div
-          className={cn(
-            'body3',
-            'tx-title-black',
-            styles.massTransferRecipient
-          )}
+          className={cn('body3', 'tx-title-black', styles.massTransferRecipient)}
           title={recipient}
         >
           {isAddress ? <Ellipsis text={recipient} /> : recipient}
@@ -51,18 +44,14 @@ interface IProps {
 export class MassTransferCard extends React.PureComponent<IProps> {
   readonly state = Object.create(null);
 
-  toggleShowRecipients = count => {
+  toggleShowRecipients = (count) => {
     this.setState({ count });
   };
 
   render() {
-    const className = cn(
-      styles.massTransferTransactionCard,
-      this.props.className,
-      {
-        [styles.massTransferCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.massTransferTransactionCard, this.props.className, {
+      [styles.massTransferCard_collapsed]: this.props.collapsed,
+    });
 
     const { message, assets, collapsed } = this.props;
     const { data = {} } = message;
@@ -97,10 +86,7 @@ export class MassTransferCard extends React.PureComponent<IProps> {
               <Trans i18nKey="transactions.recipients" />
             </div>
             <div className={styles.txValue}>
-              <PlateCollapsable
-                className={styles.expandableList}
-                showExpand={!collapsed}
-              >
+              <PlateCollapsable className={styles.expandableList} showExpand={!collapsed}>
                 <Transfers
                   transfers={tx.transfers}
                   totalAmount={amount}
@@ -115,10 +101,7 @@ export class MassTransferCard extends React.PureComponent<IProps> {
               <div className="tx-title tag1 basic500">
                 <Trans i18nKey="transactions.attachment" />
               </div>
-              <Attachment
-                className="plate fullwidth"
-                attachment={readAttachment(tx.attachment)}
-              />
+              <Attachment className="plate fullwidth" attachment={readAttachment(tx.attachment)} />
             </div>
           ) : null}
         </div>

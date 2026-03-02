@@ -25,10 +25,10 @@ export class WindowManager {
             width,
             height,
           },
-          window => {
+          (window) => {
             this._notificationWindowId = window.id;
             resolve();
-          }
+          },
         );
       });
     }
@@ -44,22 +44,20 @@ export class WindowManager {
 
   async closeWindow() {
     const notificationWindow = await this._getNotificationWindow();
-    if (notificationWindow)
-      extension.windows.remove(notificationWindow.id, console.error);
+    if (notificationWindow) extension.windows.remove(notificationWindow.id, console.error);
   }
 
   async _getNotificationWindow() {
     // get all extension windows
     const windows = await new Promise((resolve, reject) =>
-      extension.windows.getAll({}, windows => {
+      extension.windows.getAll({}, (windows) => {
         resolve(windows || []);
-      })
+      }),
     );
 
     // find our ui window
     return windows.find(
-      window =>
-        window.type === 'popup' && window.id === this._notificationWindowId
+      (window) => window.type === 'popup' && window.id === this._notificationWindowId,
     );
   }
 }

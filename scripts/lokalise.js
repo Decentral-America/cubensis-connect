@@ -28,7 +28,7 @@ function getLocales(locales = [], path = './') {
     return Promise.resolve();
   }
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     function onError(error) {
       console.error('\n\x1b[31mDownload lokalise error', error, '\n');
       resolve();
@@ -52,7 +52,7 @@ function getLocales(locales = [], path = './') {
 }
 
 function getFile(url, locales, path) {
-  const parse = res => {
+  const parse = (res) => {
     return unzipFile(res, locales, path);
   };
 
@@ -70,9 +70,7 @@ function unzipFile(response, locales, path) {
       const fileName = entry.path;
       const type = entry.type; // 'Directory' or 'File'
 
-      const existLocales = locales.filter(lang =>
-        fileName.includes(`${lang}/`)
-      );
+      const existLocales = locales.filter((lang) => fileName.includes(`${lang}/`));
 
       if (!existLocales.length) {
         console.warn('[skip lang]', fileName);

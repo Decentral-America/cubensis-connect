@@ -1,9 +1,9 @@
-import { Builder, By, until, WebDriver } from 'selenium-webdriver';
+import { Builder, By, until, type WebDriver } from 'selenium-webdriver';
 import * as chrome from 'selenium-webdriver/chrome';
 import * as net from 'net';
-import * as mocha from 'mocha';
+import type * as mocha from 'mocha';
 import * as path from 'path';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { GenericContainer, type StartedTestContainer } from 'testcontainers';
 import { App } from './actions';
 
 declare module 'mocha' {
@@ -22,16 +22,8 @@ export async function mochaGlobalSetup(this: GlobalFixturesContext) {
   const exposedPorts = [4444, 5900];
 
   this.selenium = await new GenericContainer('selenium/standalone-chrome')
-    .withBindMount(
-      path.resolve(__dirname, '..', '..', 'dist'),
-      '/app/dist',
-      'ro'
-    )
-    .withBindMount(
-      path.resolve(__dirname, '..', 'fixtures'),
-      '/app/test/fixtures',
-      'ro'
-    )
+    .withBindMount(path.resolve(__dirname, '..', '..', 'dist'), '/app/dist', 'ro')
+    .withBindMount(path.resolve(__dirname, '..', 'fixtures'), '/app/test/fixtures', 'ro')
     .withExposedPorts(...exposedPorts)
     .start();
 
@@ -40,7 +32,7 @@ export async function mochaGlobalSetup(this: GlobalFixturesContext) {
       (port: number) =>
         new Promise((resolve, reject) => {
           net
-            .createServer(from => {
+            .createServer((from) => {
               const to = net.createConnection({
                 port: this.selenium.getMappedPort(port),
               });
@@ -56,8 +48,8 @@ export async function mochaGlobalSetup(this: GlobalFixturesContext) {
             .once('error', reject)
             .listen(port)
             .unref();
-        })
-    )
+        }),
+    ),
   );
 }
 
@@ -76,17 +68,15 @@ export const mochaHooks = () => ({
       .setChromeOptions(
         new chrome.Options().addArguments(
           `--load-extension=/app/dist/chrome`,
-          '--disable-dev-shm-usage'
-        )
+          '--disable-dev-shm-usage',
+        ),
       )
       .build();
 
     // detect Cubensis Connect extension URL
     await this.driver.get('chrome://system');
     for (const ext of (
-      await this.driver
-        .wait(until.elementLocated(By.css('div#extensions-value')))
-        .getText()
+      await this.driver.wait(until.elementLocated(By.css('div#extensions-value'))).getText()
     ).split('\n')) {
       const [id, name] = ext.split(' : ');
       if (name.toLowerCase() === 'Cubensis Connect'.toLowerCase()) {

@@ -38,7 +38,7 @@ export const TransactionWallet = ({
       onSelect(account);
     }
   };
-  const selectHandler = e => {
+  const selectHandler = (e) => {
     if (onActive) {
       e.preventDefault();
       e.stopPropagation();
@@ -64,7 +64,7 @@ export const TransactionWallet = ({
           }
           placement="top-start"
         >
-          {props => (
+          {(props) => (
             <Copy text={account.address} onCopy={onCopy}>
               <div className={styles.accountName} {...props}>
                 {account.name}
@@ -76,9 +76,7 @@ export const TransactionWallet = ({
 
       <div className={styles.controls} onClick={clickHandler}>
         {children}
-        {hideButton ? null : (
-          <Button type="custom" onClick={selectHandler} className={iconClass} />
-        )}
+        {hideButton ? null : <Button type="custom" onClick={selectHandler} className={iconClass} />}
       </div>
 
       <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={showCopied}>

@@ -30,17 +30,14 @@ interface Props {
 
 export function ExportKeystoreChooseAccounts({ accounts, onSubmit }: Props) {
   const [selected, setSelected] = React.useState(
-    () => new Set(accounts.map(({ address }) => address))
+    () => new Set(accounts.map(({ address }) => address)),
   );
 
-  function toggleSelected(
-    accounts: ExportKeystoreAccount[],
-    isSelected: boolean
-  ) {
-    setSelected(prevSelected => {
+  function toggleSelected(accounts: ExportKeystoreAccount[], isSelected: boolean) {
+    setSelected((prevSelected) => {
       const newSelected = new Set(prevSelected);
 
-      accounts.forEach(acc => {
+      accounts.forEach((acc) => {
         if (isSelected) {
           newSelected.add(acc.address);
         } else {
@@ -55,7 +52,7 @@ export function ExportKeystoreChooseAccounts({ accounts, onSubmit }: Props) {
   return (
     <form
       className={styles.root}
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
 
         onSubmit(accounts.filter(({ address }) => selected.has(address)));
@@ -71,35 +68,27 @@ export function ExportKeystoreChooseAccounts({ accounts, onSubmit }: Props) {
 
       <div className={styles.accounts}>
         {allNetworks
-          .map(
-            network =>
-              [
-                network,
-                accounts.filter(acc => acc.network === network),
-              ] as const
-          )
+          .map((network) => [network, accounts.filter((acc) => acc.network === network)] as const)
           .filter(([_, accounts]) => accounts.length !== 0)
           .map(([network, accounts]) => (
             <div key={network} className={styles.accountsGroup}>
               <header className={styles.accountsGroupHeader}>
                 <i className={cn(styles.accountsGroupIcon, 'networkIcon')} />
 
-                <h2 className={styles.accountsGroupLabel}>
-                  {networkLabels[network]}
-                </h2>
+                <h2 className={styles.accountsGroupLabel}>{networkLabels[network]}</h2>
 
                 <input
-                  checked={accounts.every(acc => selected.has(acc.address))}
+                  checked={accounts.every((acc) => selected.has(acc.address))}
                   className={styles.checkbox}
                   type="checkbox"
-                  onChange={event => {
+                  onChange={(event) => {
                     toggleSelected(accounts, event.currentTarget.checked);
                   }}
                 />
               </header>
 
               <ul className={styles.accountList}>
-                {accounts.map(account => (
+                {accounts.map((account) => (
                   <li
                     key={account.address}
                     className={styles.accountListItem}
@@ -119,7 +108,7 @@ export function ExportKeystoreChooseAccounts({ accounts, onSubmit }: Props) {
                       name="selected"
                       type="checkbox"
                       value={account.address}
-                      onChange={event => {
+                      onChange={(event) => {
                         toggleSelected([account], event.currentTarget.checked);
                       }}
                     />
@@ -131,15 +120,8 @@ export function ExportKeystoreChooseAccounts({ accounts, onSubmit }: Props) {
       </div>
 
       <div className={styles.buttons}>
-        <Button
-          data-testid="exportButton"
-          disabled={selected.size === 0}
-          type="submit"
-        >
-          <Trans
-            i18nKey="exportKeystore.chooseAccountsExportBtn"
-            count={selected.size}
-          />
+        <Button data-testid="exportButton" disabled={selected.size === 0} type="submit">
+          <Trans i18nKey="exportKeystore.chooseAccountsExportBtn" count={selected.size} />
         </Button>
       </div>
     </form>

@@ -57,11 +57,8 @@ class KeeperError extends Error {
  *  }
  * }
  */
-export const ERRORS = Object.entries(ERRORS_DATA).reduce(
-  (acc, [code, data]) => {
-    const { msg, name } = data;
-    acc[name] = e => new KeeperError(msg, code, e);
-    return acc;
-  },
-  Object.create(null)
-);
+export const ERRORS = Object.entries(ERRORS_DATA).reduce((acc, [code, data]) => {
+  const { msg, name } = data;
+  acc[name] = (e) => new KeeperError(msg, code, e);
+  return acc;
+}, Object.create(null));

@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { AssetDetail } from 'ui/services/Background';
-import { AppState } from 'ui/store';
+import { type AssetDetail } from 'ui/services/Background';
+import { type AppState } from 'ui/store';
 import { getAsset } from '../../../actions';
 import { Loader } from '../loader';
 
-const AssetComponent = ({
-  getAsset,
-  children,
-  assets,
-  assetId,
-  ...props
-}: IProps) => {
+const AssetComponent = ({ getAsset, children, assets, assetId, ...props }: IProps) => {
   if (!assets[assetId]) {
     getAsset(assetId);
 

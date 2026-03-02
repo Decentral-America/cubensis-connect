@@ -17,7 +17,7 @@ export function ImportKeystoreChooseFile({ error, onSubmit }: Props) {
   return (
     <form
       className={styles.root}
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
         onSubmit(keystoreFile, password);
       }}
@@ -38,7 +38,7 @@ export function ImportKeystoreChooseFile({ error, onSubmit }: Props) {
             data-testid="fileInput"
             type="file"
             value=""
-            onChange={event => {
+            onChange={(event) => {
               setKeystoreFile(event.currentTarget.files[0] || null);
             }}
           />
@@ -49,11 +49,7 @@ export function ImportKeystoreChooseFile({ error, onSubmit }: Props) {
           className={cn('body1', styles.keystoreFileName)}
           title={keystoreFile ? keystoreFile.name : undefined}
         >
-          {keystoreFile ? (
-            keystoreFile.name
-          ) : (
-            <Trans i18nKey="importKeystore.noFileSelected" />
-          )}
+          {keystoreFile ? keystoreFile.name : <Trans i18nKey="importKeystore.noFileSelected" />}
         </span>
       </label>
 
@@ -67,7 +63,7 @@ export function ImportKeystoreChooseFile({ error, onSubmit }: Props) {
         placeholder={t('importKeystore.passwordPlaceholder')}
         type="password"
         value={password}
-        onChange={event => {
+        onChange={(event) => {
           setPassword(event.currentTarget.value);
         }}
       />
@@ -78,11 +74,7 @@ export function ImportKeystoreChooseFile({ error, onSubmit }: Props) {
         </Error>
       )}
 
-      <Button
-        data-testid="submitButton"
-        disabled={keystoreFile == null || !password}
-        type="submit"
-      >
+      <Button data-testid="submitButton" disabled={keystoreFile == null || !password} type="submit">
         <Trans i18nKey="importKeystore.chooseFileSubmitBtn" />
       </Button>
     </form>

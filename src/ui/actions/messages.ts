@@ -1,7 +1,7 @@
 import { ACTION } from './constants';
-import { IMoneyLike } from '../utils/converters';
+import { type IMoneyLike } from '../utils/converters';
 
-export const approve = messageId => ({
+export const approve = (messageId) => ({
   type: ACTION.APPROVE,
   payload: messageId,
 });
@@ -11,12 +11,12 @@ export const clearMessages = () => ({
   payload: null,
 });
 
-export const reject = messageId => ({
+export const reject = (messageId) => ({
   type: ACTION.REJECT,
   payload: messageId,
 });
 
-export const rejectForever = messageId => ({
+export const rejectForever = (messageId) => ({
   type: ACTION.REJECT_FOREVER,
   payload: { messageId, forever: true },
 });

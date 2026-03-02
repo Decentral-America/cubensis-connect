@@ -7,7 +7,7 @@ import { Button, Error, Input } from '../ui';
 import { CONFIG } from '../../appConfig';
 
 class ChangeAccountNameComponent extends React.PureComponent {
-  readonly props;
+  declare readonly props;
   readonly state = { newName: '', error: false, errors: [] };
   inputEl: Input;
 
@@ -34,10 +34,10 @@ class ChangeAccountNameComponent extends React.PureComponent {
     return errors;
   }
 
-  getRef = input => (this.inputEl = input);
+  getRef = (input) => (this.inputEl = input);
 
-  setNewNameHandler = event => this.setNewName(event);
-  onSubmit = event => this.changeName(event);
+  setNewNameHandler = (event) => this.setNewName(event);
+  onSubmit = (event) => this.changeName(event);
 
   blurHandler = () => this.onBlur();
 
@@ -51,10 +51,7 @@ class ChangeAccountNameComponent extends React.PureComponent {
 
   setNewName(event) {
     const newName = event.target.value;
-    const errors = ChangeAccountNameComponent.validateName(
-      newName,
-      this.props.accounts
-    );
+    const errors = ChangeAccountNameComponent.validateName(newName, this.props.accounts);
     this.setState({ newName, error: false, errors });
   }
 
@@ -110,15 +107,12 @@ class ChangeAccountNameComponent extends React.PureComponent {
   }
 
   onBlur() {
-    const errors = ChangeAccountNameComponent.validateName(
-      this.state.newName,
-      this.props.accounts
-    );
+    const errors = ChangeAccountNameComponent.validateName(this.state.newName, this.props.accounts);
     this.setState({ errors, error: errors.length ? errors : null });
   }
 }
 
-const mapToProps = store => {
+const mapToProps = (store) => {
   const activeAccount = store.selectedAccount.address;
   const selected = store.localState.assets.account
     ? store.localState.assets.account.address
@@ -134,7 +128,4 @@ const actions = {
   changeAccountName,
 };
 
-export const ChangeAccountName = connect(
-  mapToProps,
-  actions
-)(ChangeAccountNameComponent);
+export const ChangeAccountName = connect(mapToProps, actions)(ChangeAccountNameComponent);

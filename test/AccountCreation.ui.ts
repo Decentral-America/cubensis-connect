@@ -1,18 +1,9 @@
-import { By, Key, until, WebElement } from 'selenium-webdriver';
+import { By, Key, until, type WebElement } from 'selenium-webdriver';
 import { expect } from 'chai';
-import * as mocha from 'mocha';
+import type * as mocha from 'mocha';
 import { clear } from './utils';
-import {
-  App,
-  Assets,
-  CreateNewAccount,
-  Network,
-  Settings,
-} from './utils/actions';
-import {
-  SEND_UPDATE_DEBOUNCE_DELAY,
-  STORAGE_SET_DEBOUNCE_DELAY,
-} from './utils/constants';
+import { App, Assets, CreateNewAccount, Network, Settings } from './utils/actions';
+import { SEND_UPDATE_DEBOUNCE_DELAY, STORAGE_SET_DEBOUNCE_DELAY } from './utils/constants';
 
 describe('Account creation', function () {
   this.timeout(60 * 1000);
@@ -22,14 +13,14 @@ describe('Account creation', function () {
       await this.driver.wait(
         until.elementLocated(
           By.xpath(
-            "//div[(contains(@class, '-assets-assets') or contains(@class, '-import-import'))]"
-          )
+            "//div[(contains(@class, '-assets-assets') or contains(@class, '-import-import'))]",
+          ),
         ),
-        this.wait
+        this.wait,
       );
 
       const activeAccountCards = await this.driver.findElements(
-        By.css('[data-testid="activeAccountCard"]')
+        By.css('[data-testid="activeAccountCard"]'),
       );
 
       if (!activeAccountCards.length) {
@@ -40,21 +31,15 @@ describe('Account creation', function () {
 
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-accountInfo-deleteButton')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-accountInfo-deleteButton')]")),
+          this.wait,
         )
         .click();
 
-      await this.driver
-        .wait(until.elementLocated(By.id('deleteAccount')), this.wait)
-        .click();
+      await this.driver.wait(until.elementLocated(By.id('deleteAccount')), this.wait).click();
     }
 
-    expect(
-      await this.driver.findElements(By.id('createNewAccount'))
-    ).to.have.length(1);
+    expect(await this.driver.findElements(By.id('createNewAccount'))).to.have.length(1);
   }
 
   before(async function () {
@@ -63,10 +48,8 @@ describe('Account creation', function () {
 
     await App.open.call(this);
     await this.driver.wait(
-      until.elementLocated(
-        By.xpath("//div[contains(@class, '-import-import')]")
-      ),
-      this.wait
+      until.elementLocated(By.xpath("//div[contains(@class, '-import-import')]")),
+      this.wait,
     );
   });
 
@@ -85,42 +68,34 @@ describe('Account creation', function () {
     it('Creating the first account via the "Create a new account" button', async function () {
       await this.driver.findElement(By.css('button#createNewAccount')).click();
 
-      await this.driver
-        .wait(until.elementLocated(By.css('button#continue')), this.wait)
-        .click();
+      await this.driver.wait(until.elementLocated(By.css('button#continue')), this.wait).click();
 
       await this.driver
         .wait(until.elementLocated(By.css('input#newAccountName')), this.wait)
         .sendKeys(ACCOUNTS.FIRST);
       await this.driver
         .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('button#createBackup'))
-          ),
-          this.wait
+          until.elementIsEnabled(this.driver.findElement(By.css('button#createBackup'))),
+          this.wait,
         )
         .click();
 
       const seed: string[] = (
-        await this.driver
-          .wait(until.elementLocated(By.css('div.cant-select')), this.wait)
-          .getText()
+        await this.driver.wait(until.elementLocated(By.css('div.cant-select')), this.wait).getText()
       ).split(' ');
       await this.driver.findElement(By.css('button#continue')).click();
 
       const writePills = this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-confirmBackup-writeSeed')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-confirmBackup-writeSeed')]")),
+        this.wait,
       );
       for (const word of seed) {
         await writePills
           .findElement(
             By.xpath(
               "//div[not(contains(@class, '-pills-hidden'))]" +
-                `/div[contains(@class,'-pills-text')][text()='${word}']`
-            )
+                `/div[contains(@class,'-pills-text')][text()='${word}']`,
+            ),
           )
           .click();
         await this.driver.sleep(PILL_ANIMATION_DELAY);
@@ -129,9 +104,7 @@ describe('Account creation', function () {
         .wait(until.elementLocated(By.css('button#confirmBackup')), this.wait)
         .click();
 
-      expect(await Assets.getActiveAccountName.call(this)).to.equal(
-        ACCOUNTS.FIRST
-      );
+      expect(await Assets.getActiveAccountName.call(this)).to.equal(ACCOUNTS.FIRST);
     });
 
     describe('Creating an additional account via the "Add account" button', function () {
@@ -141,52 +114,38 @@ describe('Account creation', function () {
             await Assets.addAccount.call(this);
 
             await this.driver
-              .wait(
-                until.elementLocated(By.css('button#createNewAccount')),
-                this.wait
-              )
+              .wait(until.elementLocated(By.css('button#createNewAccount')), this.wait)
               .click();
           });
 
           it('Each time you open the "Create new account" screen, new addresses are generated', async function () {
             const prevAddress = await this.driver
               .wait(
-                until.elementLocated(
-                  By.xpath("//div[contains(@class, '-newwallet-greyLine')]")
-                )
+                until.elementLocated(By.xpath("//div[contains(@class, '-newwallet-greyLine')]")),
               )
               .getText();
-            await this.driver
-              .findElement(By.css('div.arrow-back-icon'))
-              .click();
+            await this.driver.findElement(By.css('div.arrow-back-icon')).click();
 
             await this.driver
-              .wait(
-                until.elementLocated(By.css('button#createNewAccount')),
-                this.wait
-              )
+              .wait(until.elementLocated(By.css('button#createNewAccount')), this.wait)
               .click();
 
             expect(
               await this.driver
                 .wait(
-                  until.elementLocated(
-                    By.xpath("//div[contains(@class, '-newwallet-greyLine')]")
-                  )
+                  until.elementLocated(By.xpath("//div[contains(@class, '-newwallet-greyLine')]")),
                 )
-                .getText()
+                .getText(),
             ).to.be.not.equal(prevAddress);
           });
 
           it('You can select any account from the list of 5 generated', async function () {
             const addressEl = this.driver.wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-newwallet-greyLine')]")
-              )
+              until.elementLocated(By.xpath("//div[contains(@class, '-newwallet-greyLine')]")),
             );
             let prevAddress = null;
             const avatarList = await this.driver.findElements(
-              By.xpath("//div[contains(@class, '-avatar-avatar-')]")
+              By.xpath("//div[contains(@class, '-avatar-avatar-')]"),
             );
             expect(avatarList).length(5);
 
@@ -204,22 +163,18 @@ describe('Account creation', function () {
         });
 
         describe('Account name page', function () {
-          let accountNameInput: WebElement,
-            createBackupBtn: WebElement,
-            errorDiv: WebElement;
+          let accountNameInput: WebElement, createBackupBtn: WebElement, errorDiv: WebElement;
           before(function () {
             accountNameInput = this.driver.wait(
               until.elementLocated(By.css('input#newAccountName')),
-              this.wait
+              this.wait,
             );
-            createBackupBtn = this.driver.findElement(
-              By.css('button#createBackup')
-            );
+            createBackupBtn = this.driver.findElement(By.css('button#createBackup'));
             errorDiv = this.driver.findElement(
               By.xpath(
                 "//input[@id='newAccountName']" +
-                  "//following-sibling::div[contains(@class, '-error-error')]"
-              )
+                  "//following-sibling::div[contains(@class, '-error-error')]",
+              ),
             );
           });
 
@@ -254,11 +209,8 @@ describe('Account creation', function () {
             await App.open.call(this);
             expect(
               await this.driver
-                .wait(
-                  until.elementLocated(By.css('div.cant-select')),
-                  this.wait
-                )
-                .getText()
+                .wait(until.elementLocated(By.css('div.cant-select')), this.wait)
+                .getText(),
             ).to.be.equals(rightSeed);
             await this.driver.findElement(By.css('button#continue')).click();
           });
@@ -269,8 +221,7 @@ describe('Account creation', function () {
 
         describe('Confirm backup page', function () {
           let clearButton: WebElement;
-          const xpWriteSeed =
-              "//div[contains(@class, '-confirmBackup-writeSeed')]",
+          const xpWriteSeed = "//div[contains(@class, '-confirmBackup-writeSeed')]",
             xpReadSeed = "//div[contains(@class, '-confirmBackup-readSeed')]",
             xpVisiblePill =
               "//div[(contains(@class, '-pills-pill-') and not(contains(@class, '-pills-hidden')))]",
@@ -281,49 +232,38 @@ describe('Account creation', function () {
             const wrongSeed = rightSeed.split(' ').reverse();
             const seedPills = await this.driver.wait(
               until.elementLocated(By.xpath(xpWriteSeed)),
-              this.wait
+              this.wait,
             );
             for (const word of wrongSeed) {
               await seedPills
                 .findElement(
                   By.xpath(
                     "//div[not(contains(@class, '-pills-hidden'))]" +
-                      `//div[contains(@class,'-pills-text')][text()='${word}']`
-                  )
+                      `//div[contains(@class,'-pills-text')][text()='${word}']`,
+                  ),
                 )
                 .click();
               await this.driver.sleep(PILL_ANIMATION_DELAY);
             }
             const errorDiv = this.driver.wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class,'-error-error')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class,'-error-error')]")),
+              this.wait,
             );
             expect(await errorDiv.isDisplayed()).to.be.true;
             expect(await errorDiv.getText()).is.not.empty;
             clearButton = this.driver.findElement(
-              By.xpath("//div[contains(@class, '-confirmBackup-clearSeed')]")
+              By.xpath("//div[contains(@class, '-confirmBackup-clearSeed')]"),
             );
             expect(
               await this.driver
-                .findElement(
-                  By.xpath(
-                    "//div[contains(@class, '-confirmBackup-clearSeed')]"
-                  )
-                )
-                .isDisplayed()
+                .findElement(By.xpath("//div[contains(@class, '-confirmBackup-clearSeed')]"))
+                .isDisplayed(),
             ).to.be.true;
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpReadSeed + xpVisiblePill)
-              )
-            ).length(PILLS_COUNT);
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpWriteSeed + xpVisiblePill)
-              )
-            ).to.be.empty;
+            expect(await this.driver.findElements(By.xpath(xpReadSeed + xpVisiblePill))).length(
+              PILLS_COUNT,
+            );
+            expect(await this.driver.findElements(By.xpath(xpWriteSeed + xpVisiblePill))).to.be
+              .empty;
           });
 
           it('The "Clear" button resets a completely filled phrase', async function () {
@@ -331,26 +271,19 @@ describe('Account creation', function () {
             await this.driver.sleep(PILL_ANIMATION_DELAY);
 
             expect(
-              await this.driver.findElements(
-                By.xpath("//div[contains(@class,'-error-error')]")
-              )
+              await this.driver.findElements(By.xpath("//div[contains(@class,'-error-error')]")),
             ).to.be.empty;
 
             expect(
               await this.driver.findElements(
-                By.xpath("//div[contains(@class, '-confirmBackup-clearSeed')]")
-              )
+                By.xpath("//div[contains(@class, '-confirmBackup-clearSeed')]"),
+              ),
             ).to.be.empty;
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpReadSeed + xpVisiblePill)
-              )
-            ).to.be.empty;
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpWriteSeed + xpVisiblePill)
-              )
-            ).length(PILLS_COUNT);
+            expect(await this.driver.findElements(By.xpath(xpReadSeed + xpVisiblePill))).to.be
+              .empty;
+            expect(await this.driver.findElements(By.xpath(xpWriteSeed + xpVisiblePill))).length(
+              PILLS_COUNT,
+            );
           });
 
           it('The "Clear" button resets a partially filled phrase', function () {
@@ -361,78 +294,61 @@ describe('Account creation', function () {
           it('The word can be reset by clicking (any, not only the last)', async function () {
             const writePills = await this.driver.wait(
               until.elementsLocated(By.xpath(xpWriteSeed + xpVisiblePill)),
-              this.wait
+              this.wait,
             );
             for (const writePill of writePills) {
               await writePill.click();
               await this.driver.sleep(PILL_ANIMATION_DELAY);
             }
             await this.driver.wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-confirmBackup-clearSeed')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-confirmBackup-clearSeed')]")),
+              this.wait,
             );
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpReadSeed + xpVisiblePill)
-              )
-            ).length(PILLS_COUNT);
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpWriteSeed + xpVisiblePill)
-              )
-            ).to.be.empty;
+            expect(await this.driver.findElements(By.xpath(xpReadSeed + xpVisiblePill))).length(
+              PILLS_COUNT,
+            );
+            expect(await this.driver.findElements(By.xpath(xpWriteSeed + xpVisiblePill))).to.be
+              .empty;
 
             const readPills = await this.driver.findElements(
               By.xpath(
                 "//div[contains(@class, '-confirmBackup-readSeed')]" +
-                  "//div[(contains(@class, '-pills-pill-') and not(contains(@class, '-pills-hidden')))]"
-              )
+                  "//div[(contains(@class, '-pills-pill-') and not(contains(@class, '-pills-hidden')))]",
+              ),
             );
             for (const readPill of readPills) {
               await readPill.click();
               await this.driver.sleep(PILL_ANIMATION_DELAY);
             }
 
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpReadSeed + xpVisiblePill)
-              )
-            ).to.be.empty;
-            expect(
-              await this.driver.findElements(
-                By.xpath(xpWriteSeed + xpVisiblePill)
-              )
-            ).length(PILLS_COUNT);
+            expect(await this.driver.findElements(By.xpath(xpReadSeed + xpVisiblePill))).to.be
+              .empty;
+            expect(await this.driver.findElements(By.xpath(xpWriteSeed + xpVisiblePill))).length(
+              PILLS_COUNT,
+            );
           });
 
           it('Additional account successfully created while filling in the phrase in the correct order', async function () {
             const writePills = this.driver.wait(
               until.elementLocated(By.xpath(xpWriteSeed)),
-              this.wait
+              this.wait,
             );
             for (const word of rightSeed.split(' ')) {
               await writePills
                 .findElement(
                   By.xpath(
                     "//div[not(contains(@class, '-pills-hidden'))]" +
-                      `/div[contains(@class,'-pills-text')][text()='${word}']`
-                  )
+                      `/div[contains(@class,'-pills-text')][text()='${word}']`,
+                  ),
                 )
                 .click();
               await this.driver.sleep(PILL_ANIMATION_DELAY);
             }
             await this.driver
-              .wait(
-                until.elementLocated(By.css('button#confirmBackup')),
-                this.wait
-              )
+              .wait(until.elementLocated(By.css('button#confirmBackup')), this.wait)
               .click();
 
-            expect(await Assets.getOtherAccountNames.call(this)).to.include(
-              ACCOUNTS.ANY
-            );
+            expect(await Assets.getOtherAccountNames.call(this)).to.include(ACCOUNTS.ANY);
           });
         });
       });
@@ -457,26 +373,21 @@ describe('Account creation', function () {
 
     it('Importing the first account via the "Import account" button', async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="importSeed"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="importSeed"]')), this.wait)
         .click();
 
       await this.driver
         .wait(
           until.elementLocated(
-            By.xpath("//div[contains(@class, '-importSeed-content')]//textarea")
+            By.xpath("//div[contains(@class, '-importSeed-content')]//textarea"),
           ),
-          this.wait
+          this.wait,
         )
         .sendKeys(ACCOUNTS.FIRST.SEED);
       await this.driver
         .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('button#importAccount'))
-          ),
-          this.wait
+          until.elementIsEnabled(this.driver.findElement(By.css('button#importAccount'))),
+          this.wait,
         )
         .click();
 
@@ -484,17 +395,10 @@ describe('Account creation', function () {
         .wait(until.elementLocated(By.css('input#newAccountName')), this.wait)
         .sendKeys(ACCOUNTS.FIRST.NAME);
       await this.driver
-        .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('button#continue'))
-          ),
-          this.wait
-        )
+        .wait(until.elementIsEnabled(this.driver.findElement(By.css('button#continue'))), this.wait)
         .click();
 
-      expect(await Assets.getActiveAccountName.call(this)).to.be.equals(
-        ACCOUNTS.FIRST.NAME
-      );
+      expect(await Assets.getActiveAccountName.call(this)).to.be.equals(ACCOUNTS.FIRST.NAME);
     });
 
     describe('Importing an additional account via the "Add account" button', function () {
@@ -503,31 +407,22 @@ describe('Account creation', function () {
           await Assets.addAccount.call(this);
 
           await this.driver
-            .wait(
-              until.elementLocated(By.css('[data-testid="importSeed"]')),
-              this.wait
-            )
+            .wait(until.elementLocated(By.css('[data-testid="importSeed"]')), this.wait)
             .click();
         });
         describe('Welcome back page', function () {
-          let seedTextarea: WebElement,
-            importAccountBtn: WebElement,
-            currentAddressDiv: WebElement;
+          let seedTextarea: WebElement, importAccountBtn: WebElement, currentAddressDiv: WebElement;
 
           before(function () {
             seedTextarea = this.driver.wait(
               until.elementLocated(
-                By.xpath(
-                  "//div[contains(@class, '-importSeed-content')]//textarea"
-                )
+                By.xpath("//div[contains(@class, '-importSeed-content')]//textarea"),
               ),
-              this.wait
+              this.wait,
             );
-            importAccountBtn = this.driver.findElement(
-              By.css('button#importAccount')
-            );
+            importAccountBtn = this.driver.findElement(By.css('button#importAccount'));
             currentAddressDiv = this.driver.findElement(
-              By.xpath("//div[contains(@class, '-importSeed-greyLine')]")
+              By.xpath("//div[contains(@class, '-importSeed-greyLine')]"),
             );
           });
 
@@ -549,11 +444,11 @@ describe('Account creation', function () {
                 until.elementLocated(
                   By.xpath(
                     "//div[contains(@class, '-importSeed-content')]//textarea" +
-                      "//following-sibling::div[contains(@class, '-error-error')]"
-                  )
+                      "//following-sibling::div[contains(@class, '-error-error')]",
+                  ),
                 ),
-                this.wait
-              )
+                this.wait,
+              ),
             ).to.be.not.empty;
           });
 
@@ -572,9 +467,7 @@ describe('Account creation', function () {
             lastAddress = currentAddress;
             // delete inserted char
             await seedTextarea.sendKeys(Key.BACK_SPACE);
-            expect(await currentAddressDiv.getText()).to.be.not.equal(
-              lastAddress
-            );
+            expect(await currentAddressDiv.getText()).to.be.not.equal(lastAddress);
           });
 
           it('You can paste a seed from the clipboard');
@@ -587,21 +480,19 @@ describe('Account creation', function () {
         });
 
         describe('Account name page', function () {
-          let accountNameInput: WebElement,
-            continueBtn: WebElement,
-            errorDiv: WebElement;
+          let accountNameInput: WebElement, continueBtn: WebElement, errorDiv: WebElement;
 
           before(function () {
             accountNameInput = this.driver.wait(
               until.elementLocated(By.css('input#newAccountName')),
-              this.wait
+              this.wait,
             );
             continueBtn = this.driver.findElement(By.css('button#continue'));
             errorDiv = this.driver.findElement(
               By.xpath(
                 "//input[@id='newAccountName']" +
-                  "//following-sibling::div[contains(@class, '-error-error')]"
-              )
+                  "//following-sibling::div[contains(@class, '-error-error')]",
+              ),
             );
           });
 
@@ -624,7 +515,7 @@ describe('Account creation', function () {
             await continueBtn.click();
 
             expect(await Assets.getOtherAccountNames.call(this)).to.include(
-              ACCOUNTS.MORE_25_CHARS.NAME
+              ACCOUNTS.MORE_25_CHARS.NAME,
             );
           });
         });
@@ -639,60 +530,48 @@ describe('Account creation', function () {
   describe('Import accounts using keystore file', function () {
     describe('validation', () => {
       it(
-        'keeps "Continue" button disabled until both keystore file is selected and password is entered'
+        'keeps "Continue" button disabled until both keystore file is selected and password is entered',
       );
     });
 
     describe('file parsing and decryption', () => {
       beforeEach(async function () {
-        await this.driver
-          .findElement(By.css('[data-testid="importKeystore"]'))
-          .click();
+        await this.driver.findElement(By.css('[data-testid="importKeystore"]')).click();
       });
 
       afterEach(async function () {
         await this.driver
-          .findElement(
-            By.xpath("//div[contains(@class, '-menu-arrowBackIcon')]")
-          )
+          .findElement(By.xpath("//div[contains(@class, '-menu-arrowBackIcon')]"))
           .click();
       });
 
       function extractParsedAccountsFromDOM(this: mocha.Context) {
         return this.driver
           .findElements(By.css('[data-testid="accountsGroup"]'))
-          .then(accountGroups =>
+          .then((accountGroups) =>
             Promise.all(
-              accountGroups.map(group =>
+              accountGroups.map((group) =>
                 Promise.all([
-                  group
-                    .findElement(By.css('[data-testid="accountsGroupLabel"]'))
-                    .getText(),
-                  group
-                    .findElements(By.css('[data-testid="accountCard"]'))
-                    .then(accountCards =>
-                      Promise.all(
-                        accountCards.map(card =>
-                          Promise.all([
-                            card
-                              .findElement(
-                                By.css('[data-testid="accountName"]')
-                              )
-                              .getText(),
-                            card.getAttribute('title'),
-                          ]).then(([name, address]) => ({
-                            name,
-                            address,
-                          }))
-                        )
-                      )
+                  group.findElement(By.css('[data-testid="accountsGroupLabel"]')).getText(),
+                  group.findElements(By.css('[data-testid="accountCard"]')).then((accountCards) =>
+                    Promise.all(
+                      accountCards.map((card) =>
+                        Promise.all([
+                          card.findElement(By.css('[data-testid="accountName"]')).getText(),
+                          card.getAttribute('title'),
+                        ]).then(([name, address]) => ({
+                          name,
+                          address,
+                        })),
+                      ),
                     ),
+                  ),
                 ]).then(([label, accounts]) => ({
                   label,
                   accounts,
-                }))
-              )
-            )
+                })),
+              ),
+            ),
           );
       }
 
@@ -704,16 +583,12 @@ describe('Account creation', function () {
         await this.driver
           .findElement(By.css('[data-testid="passwordInput"]'))
           .sendKeys('xHZ7Zaxu2wuncWC');
-        await this.driver
-          .findElement(By.css('[data-testid="submitButton"]'))
-          .click();
+        await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
         expect(await extractParsedAccountsFromDOM.call(this)).to.deep.equal([
           {
             label: 'Mainnet',
-            accounts: [
-              { name: 'test2', address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r' },
-            ],
+            accounts: [{ name: 'test2', address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r' }],
           },
           {
             label: 'Testnet',
@@ -724,9 +599,7 @@ describe('Account creation', function () {
           },
           {
             label: 'Stagenet',
-            accounts: [
-              { name: 'test4', address: '3MWxaD2xCMBUHnKkLJUqH3xFca2ak8wdd6D' },
-            ],
+            accounts: [{ name: 'test4', address: '3MWxaD2xCMBUHnKkLJUqH3xFca2ak8wdd6D' }],
           },
         ]);
       });
@@ -739,9 +612,7 @@ describe('Account creation', function () {
         await this.driver
           .findElement(By.css('[data-testid="passwordInput"]'))
           .sendKeys('N72r78ByXBfNBnN#');
-        await this.driver
-          .findElement(By.css('[data-testid="submitButton"]'))
-          .click();
+        await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
         expect(await extractParsedAccountsFromDOM.call(this)).to.deep.equal([
           {
@@ -760,38 +631,30 @@ describe('Account creation', function () {
 
     describe('actual import', function () {
       function extractAccountCheckboxesFromDOM(this: mocha.Context) {
-        return this.driver
-          .findElements(By.css('[data-testid="accountCard"]'))
-          .then(cards =>
-            Promise.all(
-              cards.map(card =>
-                Promise.all([
-                  card.getAttribute('title'),
-                  card
-                    .findElement(By.css('[data-testid="accountName"]'))
-                    .getText(),
-                  card.findElement(By.name('selected')).then(
-                    checkbox =>
-                      checkbox
-                        .getAttribute('checked')
-                        .then(checked => checked === 'true'),
-                    () => null
-                  ),
-                ]).then(([address, name, selected]) => ({
-                  address,
-                  name,
-                  selected,
-                }))
-              )
-            )
-          );
+        return this.driver.findElements(By.css('[data-testid="accountCard"]')).then((cards) =>
+          Promise.all(
+            cards.map((card) =>
+              Promise.all([
+                card.getAttribute('title'),
+                card.findElement(By.css('[data-testid="accountName"]')).getText(),
+                card.findElement(By.name('selected')).then(
+                  (checkbox) =>
+                    checkbox.getAttribute('checked').then((checked) => checked === 'true'),
+                  () => null,
+                ),
+              ]).then(([address, name, selected]) => ({
+                address,
+                name,
+                selected,
+              })),
+            ),
+          ),
+        );
       }
 
       describe('when no accounts exist', function () {
         it('allows to select and import all accounts', async function () {
-          await this.driver
-            .findElement(By.css('[data-testid="importKeystore"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="importKeystore"]')).click();
 
           await this.driver
             .findElement(By.css('[data-testid="fileInput"]'))
@@ -800,13 +663,9 @@ describe('Account creation', function () {
           await this.driver
             .findElement(By.css('[data-testid="passwordInput"]'))
             .sendKeys('xHZ7Zaxu2wuncWC');
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
-          expect(
-            await extractAccountCheckboxesFromDOM.call(this)
-          ).to.have.deep.ordered.members([
+          expect(await extractAccountCheckboxesFromDOM.call(this)).to.have.deep.ordered.members([
             {
               name: 'test2',
               address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r',
@@ -831,23 +690,17 @@ describe('Account creation', function () {
 
           await this.driver
             .findElement(
-              By.css(
-                'input[type="checkbox"][value="3Mxpfxhrwyn4ynCi7WpogBQ8ccP2iD86jNi"]'
-              )
+              By.css('input[type="checkbox"][value="3Mxpfxhrwyn4ynCi7WpogBQ8ccP2iD86jNi"]'),
             )
             .click();
 
           await this.driver
             .findElement(
-              By.css(
-                'input[type="checkbox"][value="3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r"]'
-              )
+              By.css('input[type="checkbox"][value="3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r"]'),
             )
             .click();
 
-          expect(
-            await extractAccountCheckboxesFromDOM.call(this)
-          ).to.have.deep.ordered.members([
+          expect(await extractAccountCheckboxesFromDOM.call(this)).to.have.deep.ordered.members([
             {
               name: 'test2',
               address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r',
@@ -870,21 +723,15 @@ describe('Account creation', function () {
             },
           ]);
 
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
           await Network.switchTo.call(this, 'Testnet');
 
-          expect(
-            await Assets.getAllAccountNames.call(this)
-          ).to.have.ordered.members(['test']);
+          expect(await Assets.getAllAccountNames.call(this)).to.have.ordered.members(['test']);
 
           await Network.switchTo.call(this, 'Stagenet');
 
-          expect(
-            await Assets.getAllAccountNames.call(this)
-          ).to.have.ordered.members(['test4']);
+          expect(await Assets.getAllAccountNames.call(this)).to.have.ordered.members(['test4']);
 
           await this.driver.sleep(STORAGE_SET_DEBOUNCE_DELAY);
 
@@ -915,9 +762,7 @@ describe('Account creation', function () {
         it('allows to select only unexisting accounts', async function () {
           await Assets.addAccount.call(this);
 
-          await this.driver
-            .findElement(By.css('[data-testid="importKeystore"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="importKeystore"]')).click();
 
           await this.driver
             .findElement(By.css('[data-testid="fileInput"]'))
@@ -926,13 +771,9 @@ describe('Account creation', function () {
           await this.driver
             .findElement(By.css('[data-testid="passwordInput"]'))
             .sendKeys('xHZ7Zaxu2wuncWC');
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
-          expect(
-            await extractAccountCheckboxesFromDOM.call(this)
-          ).to.have.deep.ordered.members([
+          expect(await extractAccountCheckboxesFromDOM.call(this)).to.have.deep.ordered.members([
             {
               name: 'test2',
               address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r',
@@ -955,27 +796,22 @@ describe('Account creation', function () {
             },
           ]);
 
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
           await Network.switchTo.call(this, 'Testnet');
 
-          expect(
-            await Assets.getAllAccountNames.call(this)
-          ).to.have.ordered.members(['test', 'test3']);
+          expect(await Assets.getAllAccountNames.call(this)).to.have.ordered.members([
+            'test',
+            'test3',
+          ]);
 
           await Network.switchTo.call(this, 'Stagenet');
 
-          expect(
-            await Assets.getAllAccountNames.call(this)
-          ).to.have.ordered.members(['test4']);
+          expect(await Assets.getAllAccountNames.call(this)).to.have.ordered.members(['test4']);
 
           await Network.switchTo.call(this, 'Mainnet');
 
-          expect(
-            await Assets.getAllAccountNames.call(this)
-          ).to.have.ordered.members(['test2']);
+          expect(await Assets.getAllAccountNames.call(this)).to.have.ordered.members(['test2']);
 
           await this.driver.sleep(STORAGE_SET_DEBOUNCE_DELAY);
 
@@ -1024,9 +860,7 @@ describe('Account creation', function () {
         it('does not allow selecting anything and shows the "Skip" button', async function () {
           await Assets.addAccount.call(this);
 
-          await this.driver
-            .findElement(By.css('[data-testid="importKeystore"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="importKeystore"]')).click();
 
           await this.driver
             .findElement(By.css('[data-testid="fileInput"]'))
@@ -1035,13 +869,9 @@ describe('Account creation', function () {
           await this.driver
             .findElement(By.css('[data-testid="passwordInput"]'))
             .sendKeys('xHZ7Zaxu2wuncWC');
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
-          expect(
-            await extractAccountCheckboxesFromDOM.call(this)
-          ).to.have.deep.ordered.members([
+          expect(await extractAccountCheckboxesFromDOM.call(this)).to.have.deep.ordered.members([
             {
               name: 'test2',
               address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r',
@@ -1064,13 +894,11 @@ describe('Account creation', function () {
             },
           ]);
 
-          await this.driver
-            .findElement(By.css('[data-testid="skipButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="skipButton"]')).click();
 
           await this.driver.wait(
             until.elementLocated(By.css('[data-testid="activeAccountCard"]')),
-            this.wait
+            this.wait,
           );
         });
       });
@@ -1082,15 +910,13 @@ describe('Account creation', function () {
           await CreateNewAccount.importAccount.call(
             this,
             'test2',
-            'this is the seed for the test account'
+            'this is the seed for the test account',
           );
 
           await this.driver.sleep(SEND_UPDATE_DEBOUNCE_DELAY);
 
           await Assets.addAccount.call(this);
-          await this.driver
-            .findElement(By.css('[data-testid="importKeystore"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="importKeystore"]')).click();
 
           await this.driver
             .findElement(By.css('[data-testid="fileInput"]'))
@@ -1099,13 +925,9 @@ describe('Account creation', function () {
           await this.driver
             .findElement(By.css('[data-testid="passwordInput"]'))
             .sendKeys('xHZ7Zaxu2wuncWC');
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
-          expect(
-            await extractAccountCheckboxesFromDOM.call(this)
-          ).to.include.deep.members([
+          expect(await extractAccountCheckboxesFromDOM.call(this)).to.include.deep.members([
             {
               name: 'test2 (1)',
               address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r',
@@ -1113,15 +935,14 @@ describe('Account creation', function () {
             },
           ]);
 
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
           await this.driver.sleep(SEND_UPDATE_DEBOUNCE_DELAY);
 
-          expect(
-            await Assets.getAllAccountNames.call(this)
-          ).to.have.ordered.members(['test2', 'test2 (1)']);
+          expect(await Assets.getAllAccountNames.call(this)).to.have.ordered.members([
+            'test2',
+            'test2 (1)',
+          ]);
 
           await this.driver.sleep(STORAGE_SET_DEBOUNCE_DELAY);
 
@@ -1142,22 +963,20 @@ describe('Account creation', function () {
           await CreateNewAccount.importAccount.call(
             this,
             'test2',
-            'this is a seed for the test account'
+            'this is a seed for the test account',
           );
 
           await Assets.addAccount.call(this);
           await CreateNewAccount.importAccount.call(
             this,
             'test2 (1)',
-            'this is an another seed for the test account'
+            'this is an another seed for the test account',
           );
 
           await this.driver.sleep(SEND_UPDATE_DEBOUNCE_DELAY);
 
           await Assets.addAccount.call(this);
-          await this.driver
-            .findElement(By.css('[data-testid="importKeystore"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="importKeystore"]')).click();
 
           await this.driver
             .findElement(By.css('[data-testid="fileInput"]'))
@@ -1166,13 +985,9 @@ describe('Account creation', function () {
           await this.driver
             .findElement(By.css('[data-testid="passwordInput"]'))
             .sendKeys('xHZ7Zaxu2wuncWC');
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
-          expect(
-            await extractAccountCheckboxesFromDOM.call(this)
-          ).to.include.deep.members([
+          expect(await extractAccountCheckboxesFromDOM.call(this)).to.include.deep.members([
             {
               name: 'test2 (2)',
               address: '3PCj4z3TZ1jqZ7A9zYBoSbHnvRqFq2uy89r',
@@ -1180,15 +995,15 @@ describe('Account creation', function () {
             },
           ]);
 
-          await this.driver
-            .findElement(By.css('[data-testid="submitButton"]'))
-            .click();
+          await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
           await this.driver.sleep(SEND_UPDATE_DEBOUNCE_DELAY);
 
-          expect(
-            await Assets.getAllAccountNames.call(this)
-          ).to.have.ordered.members(['test2', 'test2 (1)', 'test2 (2)']);
+          expect(await Assets.getAllAccountNames.call(this)).to.have.ordered.members([
+            'test2',
+            'test2 (1)',
+            'test2 (2)',
+          ]);
 
           await this.driver.sleep(STORAGE_SET_DEBOUNCE_DELAY);
 

@@ -43,9 +43,7 @@ export class CollapsedContent extends React.PureComponent<IProps, IState> {
         <div className={styles.title} onClick={this.toggleHandler}>
           {this.props.titleElement}
         </div>
-        {this.state.isShowed ? (
-          <div className={styles.content}>{this.props.children}</div>
-        ) : null}
+        {this.state.isShowed ? <div className={styles.content}>{this.props.children}</div> : null}
       </div>
     );
   }

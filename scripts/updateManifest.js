@@ -5,7 +5,7 @@ module.exports = (path, options = {}, to) => {
   const remove = options.remove || [];
   const add = options.add || [];
 
-  remove.forEach(jsonPath => {
+  remove.forEach((jsonPath) => {
     let currentData = data;
     const arrayPath = jsonPath.split('.');
     const path = arrayPath.slice(0, -1);

@@ -4,8 +4,7 @@ export const messageType = 'cancel-leasing';
 export const txType = 'transaction';
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
   const amountAssetId = 'DCC';
 
   if (feeAssetId === amountAssetId) {

@@ -20,8 +20,5 @@ export function getAmountSign() {
 }
 
 export function isMe(tx: any, type: string) {
-  return (
-    tx.type === SIGN_TYPE.CANCEL_ORDER &&
-    (type === txType || type === 'request')
-  );
+  return tx.type === SIGN_TYPE.CANCEL_ORDER && (type === txType || type === 'request');
 }

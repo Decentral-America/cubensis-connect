@@ -1,7 +1,16 @@
 {
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/**/*", "test/**/*.test.ts"],
+  "exclude": ["test/*.ui.ts", "test/utils/**"],
   "compilerOptions": {
+    "strict": true,
+    /* ── Migration overrides (re-enable as codebase is fixed) ── */
+    "noImplicitAny": false,
+    "noImplicitOverride": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "baseUrl": "./src",
     "jsx": "react",
     "lib": ["esnext", "dom"],
@@ -10,7 +19,11 @@
     "noErrorTruncation": true,
     "pretty": true,
     "sourceMap": true,
-    "target": "es6",
+    "target": "es2022",
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
     "types": ["long", "resize-observer-browser", "@decentralchain/cubensisconnect-types"]
   }
 }

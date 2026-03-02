@@ -16,8 +16,7 @@ interface Props {
 
 class BottomComponent extends React.Component<Props> {
   render() {
-    const hideNet =
-      this.props.locked || !this.props.initialized || this.props.hide;
+    const hideNet = this.props.locked || !this.props.initialized || this.props.hide;
 
     const className = cn(styles.bottom, this.props.className, {
       [styles.hidden]: hideNet,
@@ -39,6 +38,4 @@ const mapStateToProps = ({ version, state }) => ({
   initialized: state && state.initialized,
 });
 
-export const Bottom = connect(mapStateToProps, { setNetwork, loading })(
-  BottomComponent
-);
+export const Bottom = connect(mapStateToProps, { setNetwork, loading })(BottomComponent);

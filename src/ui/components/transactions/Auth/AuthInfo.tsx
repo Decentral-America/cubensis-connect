@@ -14,9 +14,7 @@ export class AuthInfo extends React.PureComponent<IProps> {
 
     return (
       <div>
-        <div
-          className={`${styles.txRow} ${styles.borderedBottom} margin-main-big `}
-        >
+        <div className={`${styles.txRow} ${styles.borderedBottom} margin-main-big `}>
           <div className="tx-title body3 basic500">
             <Trans i18nKey="transactions.dataHash" />
           </div>

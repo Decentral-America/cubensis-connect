@@ -4,10 +4,8 @@ export const messageType = 'burn';
 export const txType = 'transaction';
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
-  const amountAssetId =
-    tx.amount && tx.amount.assetId ? tx.amount.assetId : tx.assetId || 'DCC';
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const amountAssetId = tx.amount && tx.amount.assetId ? tx.amount.assetId : tx.assetId || 'DCC';
 
   if (feeAssetId === amountAssetId) {
     return [amountAssetId];

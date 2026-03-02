@@ -15,7 +15,7 @@ interface State {
 export class DropdownButton extends React.PureComponent<Props, State> {
   private element: HTMLDivElement;
 
-  getRef = element => (this.element = element);
+  getRef = (element) => (this.element = element);
 
   clickHandler = () => {
     const showList = this.state.showList;
@@ -29,7 +29,7 @@ export class DropdownButton extends React.PureComponent<Props, State> {
     this.setState({ showList: !this.state.showList });
   };
 
-  clickOutHandler = e => {
+  clickOutHandler = (e) => {
     let el = e.target;
 
     while (el) {
@@ -70,10 +70,7 @@ export class DropdownButton extends React.PureComponent<Props, State> {
     const [defaultItem, ...otherItems] = children;
 
     return (
-      <div
-        className={cn(styles.splitButton, className, 'buttons-group')}
-        ref={this.getRef}
-      >
+      <div className={cn(styles.splitButton, className, 'buttons-group')} ref={this.getRef}>
         <div className={'relative flex'}>
           {defaultItem}
 
@@ -87,12 +84,7 @@ export class DropdownButton extends React.PureComponent<Props, State> {
         </div>
 
         {this.state.showList && (
-          <div
-            className={cn(
-              styles.list,
-              placement === 'top' && styles.listPlacementTop
-            )}
-          >
+          <div className={cn(styles.list, placement === 'top' && styles.listPlacementTop)}>
             {otherItems.map((item, index) => (
               <div key={index} className={styles.listItem}>
                 {item}

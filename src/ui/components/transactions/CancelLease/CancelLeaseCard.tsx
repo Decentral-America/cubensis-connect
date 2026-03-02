@@ -16,13 +16,9 @@ interface IProps {
 
 export class CancelLeaseCard extends React.PureComponent<IProps> {
   render() {
-    const className = cn(
-      styles.cancelLeaseTransactionCard,
-      this.props.className,
-      {
-        [styles.cancelLeaseCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.cancelLeaseTransactionCard, this.props.className, {
+      [styles.cancelLeaseCard_collapsed]: this.props.collapsed,
+    });
 
     const { message, assets } = this.props;
     const { data = {} } = message;

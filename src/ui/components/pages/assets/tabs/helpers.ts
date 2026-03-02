@@ -1,18 +1,14 @@
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { setUiState } from '../../../../actions';
-import { TRANSACTION_TYPE } from '@waves/ts-types';
-import {
-  AssetFilters,
-  NftFilters,
-  TxHistoryFilters,
-} from '../../../../reducers/updateState';
+import { TRANSACTION_TYPE } from '@decentralchain/ts-types';
+import { type AssetFilters, type NftFilters, type TxHistoryFilters } from '../../../../reducers/updateState';
 import * as React from 'react';
-import { Dispatch, SetStateAction } from 'react';
-import { AssetDetail } from '../../../../services/Background';
+import { type Dispatch, type SetStateAction } from 'react';
+import { type AssetDetail } from '../../../../services/Background';
 
 function useFilter<T, F extends keyof T>(name: string, fields: F[]) {
   const dispatch = useAppDispatch();
-  const stateFilters: T = useAppSelector(state => state.uiState[name] || {});
+  const stateFilters: T = useAppSelector((state) => state.uiState[name] || {});
 
   const manageFilters = fields.reduce<{
     [K in keyof T]?: [Pick<T, K>[K], Dispatch<SetStateAction<Pick<T, K>[K]>>];
@@ -21,20 +17,17 @@ function useFilter<T, F extends keyof T>(name: string, fields: F[]) {
     return manage;
   }, {});
 
-  const valueFilters = fields.reduce<{ [K in F]?: Pick<T, K>[K] }>(
-    (newFilters, field) => {
-      newFilters[field] = manageFilters[field][0];
-      return newFilters;
-    },
-    {}
-  );
+  const valueFilters = fields.reduce<{ [K in F]?: Pick<T, K>[K] }>((newFilters, field) => {
+    newFilters[field] = manageFilters[field][0];
+    return newFilters;
+  }, {});
 
   React.useEffect(() => {
     if (
       fields.reduce(
         (isEqualEachFilter, field) =>
           isEqualEachFilter && valueFilters[field] == stateFilters[field],
-        true
+        true,
       )
     ) {
       return;
@@ -46,7 +39,7 @@ function useFilter<T, F extends keyof T>(name: string, fields: F[]) {
   return {
     ...manageFilters,
     clearFilters: () => {
-      fields.forEach(field => manageFilters[field][1](null));
+      fields.forEach((field) => manageFilters[field][1](null));
     },
   };
 }
@@ -60,28 +53,25 @@ export function useAssetFilter() {
 }
 
 export function useNftFilter() {
-  return useFilter<NftFilters, keyof NftFilters>('nftFilters', [
-    'term',
-    'onlyMy',
-  ]);
+  return useFilter<NftFilters, keyof NftFilters>('nftFilters', ['term', 'onlyMy']);
 }
 
 export function useTxHistoryFilter() {
-  return useFilter<TxHistoryFilters, keyof TxHistoryFilters>(
-    'txHistoryFilters',
-    ['term', 'type', 'onlyIncoming', 'onlyOutgoing']
-  );
+  return useFilter<TxHistoryFilters, keyof TxHistoryFilters>('txHistoryFilters', [
+    'term',
+    'type',
+    'onlyIncoming',
+    'onlyOutgoing',
+  ]);
 }
 
 export function sortAssetEntries<T>(
   assetEntries: Array<[string, T]>,
   assets: Record<string, AssetDetail>,
-  showSuspiciousAssets: boolean
+  showSuspiciousAssets: boolean,
 ): Array<[string, T]> {
   return assetEntries
-    .filter(
-      ([assetId]) => showSuspiciousAssets || !assets[assetId]?.isSuspicious
-    )
+    .filter(([assetId]) => showSuspiciousAssets || !assets[assetId]?.isSuspicious)
     .sort(
       ([a], [b]) =>
         (a === 'DCC' && -1) ||
@@ -90,9 +80,7 @@ export function sortAssetEntries<T>(
           assets[b] &&
           (+!!assets[b].isFavorite - +!!assets[a].isFavorite ||
             +!!assets[a].isSuspicious - +!!assets[b].isSuspicious ||
-            (assets[a].displayName ?? '').localeCompare(
-              assets[b].displayName ?? ''
-            )))
+            (assets[a].displayName ?? '').localeCompare(assets[b].displayName ?? ''))),
     );
 }
 
@@ -111,7 +99,7 @@ export const MONTH = [
   'Dec',
 ];
 
-export const buildTxTypeOptions = t => [
+export const buildTxTypeOptions = (t) => [
   {
     id: 0,
     value: 0,

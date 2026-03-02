@@ -1,10 +1,7 @@
-import { Account } from 'accounts/types';
+import { type Account } from 'accounts/types';
 import { ACTION } from '../actions';
-import { AssetDetail } from '../services/Background';
-import {
-  ITransaction,
-  WithId,
-} from '@decentralchain/waves-transactions/dist/transactions';
+import { type AssetDetail } from '../services/Background';
+import { type TTransaction, type WithId } from '@decentralchain/waves-transactions/dist/transactions';
 
 export * from './localState';
 export * from './remoteConfig';
@@ -12,14 +9,12 @@ export * from './notifications';
 
 const MAX_HISTORY = 10;
 
-function createSimpleReducer<
-  TState = unknown,
-  TActionType extends string = string
->(initialState: TState, actionType: TActionType) {
-  return (
-    state = initialState,
-    action: { type: TActionType; payload: TState }
-  ) => (actionType === action.type ? action.payload : state);
+function createSimpleReducer<TState = unknown, TActionType extends string = string>(
+  initialState: TState,
+  actionType: TActionType,
+) {
+  return (state = initialState, action: { type: TActionType; payload: TState }) =>
+    actionType === action.type ? action.payload : state;
 }
 
 export const tab = createSimpleReducer('', ACTION.CHANGE_TAB);
@@ -54,10 +49,7 @@ export interface UiState {
 }
 
 export const uiState = createSimpleReducer<UiState>({}, ACTION.UPDATE_UI_STATE);
-export const accounts = createSimpleReducer<Array<Account>>(
-  [],
-  ACTION.UPDATE_ACCOUNTS
-);
+export const accounts = createSimpleReducer<Array<Account>>([], ACTION.UPDATE_ACCOUNTS);
 export const allNetworksAccounts = createSimpleReducer<
   Array<{
     address: string;
@@ -78,7 +70,7 @@ interface SelectedAccountState {
 
 export function selectedAccount(
   state: SelectedAccountState = {},
-  action: { type: string; payload: SelectedAccountState }
+  action: { type: string; payload: SelectedAccountState },
 ) {
   switch (action.type) {
     case ACTION.SELECT_ACCOUNT:
@@ -119,7 +111,7 @@ export interface AccountBalance {
   assets?: BalanceAssets;
   aliases: string[];
   nfts: AssetDetail[];
-  txHistory: Array<ITransaction & WithId>;
+  txHistory: Array<TTransaction & WithId>;
 }
 
 export const balances = createSimpleReducer<{
@@ -132,14 +124,11 @@ export const customCodes = createSimpleReducer({}, ACTION.UPDATE_CODES);
 export const customMatcher = createSimpleReducer({}, ACTION.UPDATE_MATCHER);
 export const langs = createSimpleReducer({}, ACTION.UPDATE_LANGS);
 export const origins = createSimpleReducer({}, ACTION.UPDATE_ORIGINS);
-export const idleOptions = createSimpleReducer(
-  {},
-  ACTION.REMOTE_CONFIG.UPDATE_IDLE
-);
+export const idleOptions = createSimpleReducer({}, ACTION.REMOTE_CONFIG.UPDATE_IDLE);
 
 export const messages = (
   state: unknown[] = [],
-  action: { type: string; payload: { unapprovedMessages: unknown[] } }
+  action: { type: string; payload: { unapprovedMessages: unknown[] } },
 ) => {
   if (action.type === ACTION.UPDATE_MESSAGES) {
     return [...action.payload.unapprovedMessages];
@@ -148,14 +137,11 @@ export const messages = (
   return state;
 };
 
-export const assets = createSimpleReducer<Record<string, AssetDetail>>(
-  {},
-  ACTION.SET_ASSETS
-);
+export const assets = createSimpleReducer<Record<string, AssetDetail>>({}, ACTION.SET_ASSETS);
 
 export const backTabs = (
   state: unknown[] = [],
-  { type, payload }: { type: string; payload: unknown }
+  { type, payload }: { type: string; payload: unknown },
 ) => {
   if (type === ACTION.ADD_BACK_TAB) {
     state = [...state, payload].slice(-MAX_HISTORY);

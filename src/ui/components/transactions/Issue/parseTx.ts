@@ -1,14 +1,12 @@
 import { SIGN_TYPE } from '@decentralchain/signature-adapter';
-import { Asset, Money } from '@waves/data-entities';
+import { Asset, Money } from '@decentralchain/data-entities';
 
 export const messageType = 'issue';
 export const txType = 'transaction';
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
-  const amountAssetId =
-    tx.amount && tx.amount.assetId ? tx.amount.assetId : tx.assetId || 'DCC';
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const amountAssetId = tx.amount && tx.amount.assetId ? tx.amount.assetId : tx.assetId || 'DCC';
 
   if (feeAssetId === amountAssetId) {
     return [amountAssetId];
@@ -25,7 +23,7 @@ export function getAmount(tx = null) {
     new Asset({
       ...tx,
       precision: Number(tx.precision || tx.decimals) || 0,
-    })
+    }),
   );
 }
 

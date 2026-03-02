@@ -51,8 +51,8 @@ function setupConnection() {
   const pluginStream = new PortStream(pluginPort);
 
   // forward communication plugin->inpage
-  pump(pageStream, pluginStream, pageStream, err =>
-    logStreamDisconnectWarning('CubensisConnect Contentscript Forwarding', err)
+  pump(pageStream, pluginStream, pageStream, (err) =>
+    logStreamDisconnectWarning('CubensisConnect Contentscript Forwarding', err),
   );
 }
 

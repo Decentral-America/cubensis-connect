@@ -20,11 +20,7 @@ export class WavesAuthInfo extends React.PureComponent<IProps> {
             <Trans i18nKey="transactions.wavesAuthTimeStamp" />
           </div>
           <div className={'fullwidth'}>
-            <DateFormat
-              value={data.timestamp}
-              showRaw={true}
-              className={'fullwidth'}
-            />
+            <DateFormat value={data.timestamp} showRaw={true} className={'fullwidth'} />
           </div>
         </div>
         <div className={styles.txRow}>

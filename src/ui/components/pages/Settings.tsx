@@ -8,7 +8,7 @@ import { PAGES } from '../../pageConfig';
 import { Tooltip } from '../ui/tooltip';
 
 class SettingsComponent extends React.Component {
-  readonly props;
+  declare readonly props;
   lock = () => {
     this.props.setTab(null);
     this.props.lock();
@@ -55,9 +55,7 @@ class SettingsComponent extends React.Component {
               onClick={this.permissionsHandler}
             >
               <div className="body1 left">
-                <Trans i18nKey="settings.permissionsControl">
-                  Permissions control
-                </Trans>
+                <Trans i18nKey="settings.permissionsControl">Permissions control</Trans>
               </div>
             </Button>
           </div>
@@ -91,10 +89,7 @@ class SettingsComponent extends React.Component {
         </div>
 
         <div className={styles.quickSettingsMenu}>
-          <div
-            className={`${styles.clickProtection} tag1`}
-            data-testid="clickProtection"
-          >
+          <div className={`${styles.clickProtection} tag1`} data-testid="clickProtection">
             <PowerButton
               onClick={this.toggleAutoLockHandler}
               enabled={this.props.autoClickProtection}
@@ -103,9 +98,7 @@ class SettingsComponent extends React.Component {
             />
             <div className={`${styles.powerBtnState} left`}>
               <div>
-                <Trans i18nKey="settings.autoClick">
-                  Auto-click protection
-                </Trans>
+                <Trans i18nKey="settings.autoClick">Auto-click protection</Trans>
               </div>
               <div data-testid="clickProtectionStatus">
                 {!this.props.autoClickProtection ? (
@@ -124,13 +117,7 @@ class SettingsComponent extends React.Component {
               className={styles.helpTooltip}
               data-testid="clickProtectionTooltip"
             >
-              {props => (
-                <i
-                  className="helpIcon"
-                  data-testid="clickProtectionIcon"
-                  {...props}
-                />
-              )}
+              {(props) => <i className="helpIcon" data-testid="clickProtectionIcon" {...props} />}
             </Tooltip>
           </div>
 
@@ -166,12 +153,8 @@ class SettingsComponent extends React.Component {
               className={styles.helpTooltip}
               data-testid="showSuspiciousAssetsTooltip"
             >
-              {props => (
-                <i
-                  className="helpIcon"
-                  data-testid="showSuspiciousAssetsIcon"
-                  {...props}
-                />
+              {(props) => (
+                <i className="helpIcon" data-testid="showSuspiciousAssetsIcon" {...props} />
               )}
             </Tooltip>
           </div>
@@ -180,15 +163,10 @@ class SettingsComponent extends React.Component {
         <div className={`${styles.settingsFooter} tag1`}>
           <div className={styles.buttonsWrapper}>
             <div>
-              <div
-                className={styles.deleteAccounts}
-                onClick={this.deleteHandler}
-              >
+              <div className={styles.deleteAccounts} onClick={this.deleteHandler}>
                 <i className={styles.icon}> </i>
                 <span>
-                  <Trans i18nKey="settings.deleteAccounts">
-                    Delete accounts
-                  </Trans>
+                  <Trans i18nKey="settings.deleteAccounts">Delete accounts</Trans>
                 </span>
               </div>
             </div>
@@ -214,6 +192,4 @@ const mapStateToProps = function (store) {
   };
 };
 
-export const Settings = connect(mapStateToProps, { lock, setUiState })(
-  SettingsComponent
-);
+export const Settings = connect(mapStateToProps, { lock, setUiState })(SettingsComponent);

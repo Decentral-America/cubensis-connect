@@ -23,7 +23,7 @@ export class Modal extends React.PureComponent {
     FLASH: 'flash_modal',
     FLASH_SCALE: 'flash_scale_modal',
   };
-  readonly props: IProps;
+  declare readonly props: IProps;
   el: HTMLDivElement;
 
   constructor(props: IProps) {
@@ -50,7 +50,7 @@ export class Modal extends React.PureComponent {
       >
         {this.props.children}
       </ModalWrapper>,
-      this.el
+      this.el,
     );
   }
 }

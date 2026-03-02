@@ -4,8 +4,8 @@ import { seedUtils } from '@decentralchain/waves-transactions';
 import { ImportKeystoreChooseFile } from './chooseFile';
 import {
   ImportKeystoreChooseAccounts,
-  ImportKeystoreNetwork,
-  ImportKeystoreProfiles,
+  type ImportKeystoreNetwork,
+  type ImportKeystoreProfiles,
 } from './chooseAccounts';
 import { batchAddAccounts } from 'ui/actions/user';
 import { WalletTypes } from '../../../services/Background';
@@ -23,10 +23,7 @@ function readFileAsText(file: File) {
   });
 }
 
-const networkCodeToNetworkMap: Record<
-  'S' | 'T' | 'W',
-  Exclude<ImportKeystoreNetwork, 'custom'>
-> = {
+const networkCodeToNetworkMap: Record<'S' | 'T' | 'W', Exclude<ImportKeystoreNetwork, 'custom'>> = {
   S: 'stagenet',
   T: 'testnet',
   W: 'mainnet',
@@ -68,11 +65,9 @@ function parseKeystore(json: string): EncryptedKeystore | null {
       if (typeof profiles === 'string') {
         return {
           type: WalletTypes.Keystore,
-          decrypt: password => {
+          decrypt: (password) => {
             try {
-              return JSON.parse(
-                seedUtils.decryptSeed(atob(profiles), password)
-              );
+              return JSON.parse(seedUtils.decryptSeed(atob(profiles), password));
             } catch (err) {
               return null;
             }
@@ -82,16 +77,13 @@ function parseKeystore(json: string): EncryptedKeystore | null {
     } else if (obj.data) {
       const { encryptionRounds, saveUsers } = JSON.parse(atob(obj.data));
 
-      if (
-        typeof saveUsers === 'string' &&
-        typeof encryptionRounds === 'number'
-      ) {
+      if (typeof saveUsers === 'string' && typeof encryptionRounds === 'number') {
         return {
           type: WalletTypes.KeystoreWx,
-          decrypt: password => {
+          decrypt: (password) => {
             try {
               const accounts: ExchangeKeystoreAccount[] = JSON.parse(
-                seedUtils.decryptSeed(saveUsers, password, encryptionRounds)
+                seedUtils.decryptSeed(saveUsers, password, encryptionRounds),
               );
 
               const profiles: ImportKeystoreProfiles = {
@@ -101,7 +93,7 @@ function parseKeystore(json: string): EncryptedKeystore | null {
                 testnet: { accounts: [] },
               };
 
-              accounts.forEach(acc => {
+              accounts.forEach((acc) => {
                 const networkCode = String.fromCharCode(acc.networkByte);
                 const network = findNetworkByNetworkCode(networkCode);
 
@@ -134,14 +126,10 @@ interface Props {
 
 export function ImportKeystore({ setTab }: Props) {
   const dispatch = useAppDispatch();
-  const allNetworksAccounts = useAppSelector(
-    state => state.allNetworksAccounts
-  );
+  const allNetworksAccounts = useAppSelector((state) => state.allNetworksAccounts);
   const { t } = useTranslation();
   const [error, setError] = React.useState<string | null>(null);
-  const [profiles, setProfiles] = React.useState<ImportKeystoreProfiles | null>(
-    null
-  );
+  const [profiles, setProfiles] = React.useState<ImportKeystoreProfiles | null>(null);
   const [walletType, setWalletType] = React.useState<WalletTypes | null>(null);
 
   if (profiles == null) {
@@ -171,17 +159,16 @@ export function ImportKeystore({ setTab }: Props) {
 
             Object.entries(newProfiles).forEach(([network, profile]) => {
               const currentNetworkAccounts = allNetworksAccounts.filter(
-                acc => acc.network === network
+                (acc) => acc.network === network,
               );
 
-              profile.accounts.forEach(profileAccount => {
+              profile.accounts.forEach((profileAccount) => {
                 const accounts = currentNetworkAccounts.filter(
-                  acc => acc.address !== profileAccount.address
+                  (acc) => acc.address !== profileAccount.address,
                 );
 
                 let sameNameAccount = accounts.find(
-                  existingAccount =>
-                    existingAccount.name === profileAccount.name
+                  (existingAccount) => existingAccount.name === profileAccount.name,
                 );
 
                 while (sameNameAccount) {
@@ -190,15 +177,14 @@ export function ImportKeystore({ setTab }: Props) {
                   if (suffixMatch) {
                     profileAccount.name = profileAccount.name.replace(
                       suffixRe,
-                      `(${Number(suffixMatch[1]) + 1})`
+                      `(${Number(suffixMatch[1]) + 1})`,
                     );
                   } else {
                     profileAccount.name += ' (1)';
                   }
 
                   sameNameAccount = accounts.find(
-                    existingAccount =>
-                      existingAccount.name === profileAccount.name
+                    (existingAccount) => existingAccount.name === profileAccount.name,
                   );
                 }
               });
@@ -220,18 +206,18 @@ export function ImportKeystore({ setTab }: Props) {
       onSkip={() => {
         setTab('');
       }}
-      onSubmit={selectedAccounts => {
+      onSubmit={(selectedAccounts) => {
         dispatch(
           batchAddAccounts(
-            selectedAccounts.map(acc => ({
+            selectedAccounts.map((acc) => ({
               seed: acc.seed,
               type: 'seed',
               name: acc.name,
               network: findNetworkByNetworkCode(acc.networkCode),
               hasBackup: true,
             })),
-            walletType
-          )
+            walletType,
+          ),
         );
       }}
     />

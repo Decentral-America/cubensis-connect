@@ -20,23 +20,17 @@ describe('Others', function () {
       await this.driver
         .wait(
           until.elementLocated(
-            By.xpath(
-              "//div[contains(@class, '-bottom-bottom')]//div[contains(@class, 'version')]"
-            )
+            By.xpath("//div[contains(@class, '-bottom-bottom')]//div[contains(@class, 'version')]"),
           ),
-          this.wait
+          this.wait,
         )
-        .getText()
+        .getText(),
     ).matches(new RegExp(version, 'g'));
   });
 
-  it(
-    'After signAndPublishTransaction() "View transaction" button leads to the correct Explorer'
-  );
+  it('After signAndPublishTransaction() "View transaction" button leads to the correct Explorer');
 
-  it(
-    'Signature requests are automatically removed from pending requests after 30 minutes'
-  );
+  it('Signature requests are automatically removed from pending requests after 30 minutes');
 
   it('Switch account on confirmation screen');
 
@@ -48,7 +42,7 @@ describe('Others', function () {
       await CreateNewAccount.importAccount.call(
         this,
         'rich',
-        'DCC private node seed with DCC tokens'
+        'DCC private node seed with DCC tokens',
       );
     });
 
@@ -61,55 +55,45 @@ describe('Others', function () {
       await actions
         .move({
           origin: await this.driver.wait(
-            until.elementLocated(
-              By.css('[data-testid="DCC"] [data-testid="moreBtn"]')
-            ),
-            this.wait
+            until.elementLocated(By.css('[data-testid="DCC"] [data-testid="moreBtn"]')),
+            this.wait,
           ),
         })
         .perform();
 
       await this.driver
         .wait(
-          until.elementLocated(
-            By.css('[data-testid="DCC"] [data-testid="sendBtn"]')
-          ),
-          this.wait
+          until.elementLocated(By.css('[data-testid="DCC"] [data-testid="sendBtn"]')),
+          this.wait,
         )
         .click();
     });
 
     afterEach(async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="rejectButton"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="rejectButton"]')), this.wait)
         .click();
 
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="closeTransaction"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="closeTransaction"]')), this.wait)
         .click();
     });
 
     it('Send DCC to an address', async function () {
       const recipientInput = await this.driver.wait(
         until.elementLocated(By.css('[data-testid="recipientInput"]')),
-        this.wait
+        this.wait,
       );
 
-      expect(
-        await this.driver.switchTo().activeElement().getAttribute('data-testid')
-      ).to.equal('recipientInput');
+      expect(await this.driver.switchTo().activeElement().getAttribute('data-testid')).to.equal(
+        'recipientInput',
+      );
 
       await recipientInput.sendKeys('3MsX9C2MzzxE4ySF5aYcJoaiPfkyxZMg4cW');
 
       const amountInput = await this.driver.wait(
         until.elementLocated(By.css('[data-testid="amountInput"]')),
-        this.wait
+        this.wait,
       );
 
       await amountInput.sendKeys('123123123.123');
@@ -117,7 +101,7 @@ describe('Others', function () {
       expect(
         await this.driver.executeScript(function () {
           return arguments[0].value;
-        }, amountInput)
+        }, amountInput),
       ).to.equal('123 123 123.123');
 
       await amountInput.clear();
@@ -127,9 +111,7 @@ describe('Others', function () {
         .findElement(By.css('[data-testid="attachmentInput"]'))
         .sendKeys('This is an attachment');
 
-      const submitButton = await this.driver.findElement(
-        By.css('[data-testid="submitButton"]')
-      );
+      const submitButton = await this.driver.findElement(By.css('[data-testid="submitButton"]'));
 
       await submitButton.click();
 
@@ -137,68 +119,48 @@ describe('Others', function () {
 
       const transferAmount = await this.driver.wait(
         until.elementLocated(By.css('[data-testid="transferAmount"]')),
-        this.wait
+        this.wait,
       );
 
-      expect(await transferAmount.getText()).to.equal(
-        '-\n0\n.12300000\n DCC'
+      expect(await transferAmount.getText()).to.equal('-\n0\n.12300000\n DCC');
+
+      expect(await this.driver.findElement(By.css('[data-testid="recipient"]')).getText()).to.equal(
+        '3MsX9C2MzzxE4ySF5aYcJoaiPfkyxZMg4cW',
       );
 
       expect(
-        await this.driver
-          .findElement(By.css('[data-testid="recipient"]'))
-          .getText()
-      ).to.equal('3MsX9C2MzzxE4ySF5aYcJoaiPfkyxZMg4cW');
-
-      expect(
-        await this.driver
-          .findElement(By.css('[data-testid="attachmentContent"]'))
-          .getText()
+        await this.driver.findElement(By.css('[data-testid="attachmentContent"]')).getText(),
       ).to.equal('This is an attachment');
     });
 
     it('Send assets to an alias', async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="recipientInput"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="recipientInput"]')), this.wait)
         .sendKeys('an_alias');
 
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid="amountInput"]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid="amountInput"]')), this.wait)
         .sendKeys('0.87654321');
 
       await this.driver
         .findElement(By.css('[data-testid="attachmentInput"]'))
         .sendKeys('This is an attachment');
 
-      await this.driver
-        .findElement(By.css('[data-testid="submitButton"]'))
-        .click();
+      await this.driver.findElement(By.css('[data-testid="submitButton"]')).click();
 
       const transferAmount = await this.driver.wait(
         until.elementLocated(By.css('[data-testid="transferAmount"]')),
-        this.wait
+        this.wait,
       );
 
-      expect(await transferAmount.getText()).to.equal(
-        '-\n0\n.87654321\n DCC'
+      expect(await transferAmount.getText()).to.equal('-\n0\n.87654321\n DCC');
+
+      expect(await this.driver.findElement(By.css('[data-testid="recipient"]')).getText()).to.equal(
+        'an_alias',
       );
 
       expect(
-        await this.driver
-          .findElement(By.css('[data-testid="recipient"]'))
-          .getText()
-      ).to.equal('an_alias');
-
-      expect(
-        await this.driver
-          .findElement(By.css('[data-testid="attachmentContent"]'))
-          .getText()
+        await this.driver.findElement(By.css('[data-testid="attachmentContent"]')).getText(),
       ).to.equal('This is an attachment');
     });
   });

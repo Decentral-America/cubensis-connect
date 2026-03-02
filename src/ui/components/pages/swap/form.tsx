@@ -1,5 +1,5 @@
-import BigNumber from '@waves/bignumber';
-import { Asset, Money } from '@waves/data-entities';
+import BigNumber from '@decentralchain/bignumber';
+import { Asset, Money } from '@decentralchain/data-entities';
 import cn from 'classnames';
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -11,15 +11,15 @@ import { Loader } from 'ui/components/ui/loader/Loader';
 import { Modal } from 'ui/components/ui/modal/Modal';
 import { Select } from 'ui/components/ui/select/Select';
 import { Tooltip } from 'ui/components/ui/tooltip';
-import { AccountBalance, AssetBalance } from 'ui/reducers/updateState';
-import { AssetDetail } from 'ui/services/Background';
+import { type AccountBalance, type AssetBalance } from 'ui/reducers/updateState';
+import { type AssetDetail } from 'ui/services/Background';
 import { useAppDispatch, useAppSelector } from 'ui/store';
 import {
   ExchangeChannelClient,
   ExchangeChannelError,
   ExchangeChannelErrorCode,
   ExchangeChannelErrorType,
-  ExchangePool,
+  type ExchangePool,
 } from './channelClient';
 import * as styles from './form.module.css';
 import { updateAssets } from 'ui/actions/assets';
@@ -75,40 +75,35 @@ export function SwapForm({
 }: Props) {
   const { t } = useTranslation();
 
-  const assets = useAppSelector(state => state.assets);
-  const accountBalance = useAppSelector(
-    state => state.balances[state.selectedAccount.address]
-  );
+  const assets = useAppSelector((state) => state.assets);
+  const accountBalance = useAppSelector((state) => state.balances[state.selectedAccount.address]);
 
-  const currentNetwork = useAppSelector(state => state.currentNetwork);
+  const currentNetwork = useAppSelector((state) => state.currentNetwork);
 
   const swapChannel = useAppSelector(
-    state => state.config.network_config[state.currentNetwork].swapChannel
+    (state) => state.config.network_config[state.currentNetwork].swapChannel,
   );
 
   const wavesFeeCoinsBN = new BigNumber(wavesFeeCoins);
 
-  const sponsoredAssetBalanceEntries = Object.entries(
-    accountBalance.assets
-  ).filter(([assetId, assetBalance]) => {
-    const sponsoredAssetFee = convertToSponsoredAssetFee(
-      wavesFeeCoinsBN,
-      new Asset(assets[assetId]),
-      assetBalance
-    );
+  const sponsoredAssetBalanceEntries = Object.entries(accountBalance.assets).filter(
+    ([assetId, assetBalance]) => {
+      const sponsoredAssetFee = convertToSponsoredAssetFee(
+        wavesFeeCoinsBN,
+        new Asset(assets[assetId]),
+        assetBalance,
+      );
 
-    return (
-      assetBalance.minSponsoredAssetFee != null &&
-      new BigNumber(assetBalance.sponsorBalance).gte(wavesFeeCoinsBN) &&
-      new BigNumber(assetBalance.balance).gte(sponsoredAssetFee.getCoins())
-    );
-  });
+      return (
+        assetBalance.minSponsoredAssetFee != null &&
+        new BigNumber(assetBalance.sponsorBalance).gte(wavesFeeCoinsBN) &&
+        new BigNumber(assetBalance.balance).gte(sponsoredAssetFee.getCoins())
+      );
+    },
+  );
 
   if (sponsoredAssetBalanceEntries.length === 0) {
-    sponsoredAssetBalanceEntries.push([
-      'WAVES',
-      accountBalance.assets['WAVES'],
-    ]);
+    sponsoredAssetBalanceEntries.push(['WAVES', accountBalance.assets['WAVES']]);
   }
 
   const [{ fromAssetId, toAssetId }, setAssetIds] = React.useState({
@@ -116,19 +111,11 @@ export function SwapForm({
     toAssetId: initialToAssetId,
   });
 
-  const [feeAssetId, setFeeAssetId] = React.useState(
-    sponsoredAssetBalanceEntries[0][0]
-  );
+  const [feeAssetId, setFeeAssetId] = React.useState(sponsoredAssetBalanceEntries[0][0]);
 
-  const fromAsset = React.useMemo(
-    () => new Asset(assets[fromAssetId]),
-    [assets, fromAssetId]
-  );
+  const fromAsset = React.useMemo(() => new Asset(assets[fromAssetId]), [assets, fromAssetId]);
 
-  const toAsset = React.useMemo(
-    () => new Asset(assets[toAssetId]),
-    [assets, toAssetId]
-  );
+  const toAsset = React.useMemo(() => new Asset(assets[toAssetId]), [assets, toAssetId]);
 
   const feeAsset = new Asset(assets[feeAssetId]);
 
@@ -136,35 +123,27 @@ export function SwapForm({
   const toAssetBalance = getAssetBalance(toAsset, accountBalance);
   const feeAssetBalance = getAssetBalance(feeAsset, accountBalance);
 
-  function formatSponsoredAssetBalanceEntry([assetId, assetBalance]: [
-    string,
-    AssetBalance
-  ]) {
+  function formatSponsoredAssetBalanceEntry([assetId, assetBalance]: [string, AssetBalance]) {
     const fee = convertToSponsoredAssetFee(
       new BigNumber(wavesFeeCoins),
       new Asset(assets[assetId]),
-      assetBalance
+      assetBalance,
     );
 
     return `${fee.getTokens().toFormat()} ${fee.asset.displayName}`;
   }
 
   const [fromAmountValue, setFromAmountValue] = React.useState('');
-  const [isPriceDirectionSwapped, setIsPriceDirectionSwapped] =
-    React.useState(false);
+  const [isPriceDirectionSwapped, setIsPriceDirectionSwapped] = React.useState(false);
 
   const fromAmountTokens = new BigNumber(fromAmountValue || '0');
 
-  const [exchangeInfo, setExchangeInfo] =
-    React.useState<ExchangeInfoState | null>(null);
+  const [exchangeInfo, setExchangeInfo] = React.useState<ExchangeInfoState | null>(null);
 
-  const [channelClient, setChannelClient] =
-    React.useState<ExchangeChannelClient | null>(null);
+  const [channelClient, setChannelClient] = React.useState<ExchangeChannelClient | null>(null);
 
   React.useEffect(() => {
-    const client = new ExchangeChannelClient(
-      new URL('/v1', swapChannel).toString()
-    );
+    const client = new ExchangeChannelClient(new URL('/v1', swapChannel).toString());
 
     setChannelClient(client);
 
@@ -179,9 +158,7 @@ export function SwapForm({
     latestFromAmountValueRef.current = fromAmountValue;
   }, [fromAmountValue]);
 
-  const [exchangeChannelError, setExchangeChannelError] = React.useState<
-    string | null
-  >(null);
+  const [exchangeChannelError, setExchangeChannelError] = React.useState<string | null>(null);
 
   const watchExchange = React.useCallback(() => {
     let fromTokens = new BigNumber(latestFromAmountValueRef.current || '0');
@@ -204,9 +181,7 @@ export function SwapForm({
               return;
             } else if (err.type === ExchangeChannelErrorType.ExchangeError) {
               if (err.code === ExchangeChannelErrorCode.INVALID_ASSET_PAIR) {
-                setExchangeChannelError(
-                  t('swap.exchangeChannelInvalidAssetPairError')
-                );
+                setExchangeChannelError(t('swap.exchangeChannelInvalidAssetPairError'));
                 return;
               }
             }
@@ -216,8 +191,7 @@ export function SwapForm({
           return;
         }
 
-        const { priceImpact, route, toAmountCoins, worstAmountCoins } =
-          response;
+        const { priceImpact, route, toAmountCoins, worstAmountCoins } = response;
 
         setExchangeChannelError(null);
 
@@ -227,7 +201,7 @@ export function SwapForm({
           toAmountTokens: new Money(toAmountCoins, toAsset).getTokens(),
           worstAmountTokens: new Money(worstAmountCoins, toAsset).getTokens(),
         });
-      }
+      },
     );
   }, [channelClient, fromAsset, toAsset]);
 
@@ -242,16 +216,14 @@ export function SwapForm({
   const sponsoredAssetFee = convertToSponsoredAssetFee(
     wavesFeeCoinsBN,
     feeAsset,
-    accountBalance.assets[feeAssetId]
+    accountBalance.assets[feeAssetId],
   );
 
   const validationErrorMessage =
     fromAmountTokens.gt(fromAssetBalance.getTokens()) ||
     feeAssetBalance.getTokens().lt(sponsoredAssetFee.getTokens()) ||
     (fromAssetId === feeAssetId &&
-      fromAmountTokens
-        .add(sponsoredAssetFee.getTokens())
-        .gt(fromAssetBalance.getTokens()))
+      fromAmountTokens.add(sponsoredAssetFee.getTokens()).gt(fromAssetBalance.getTokens()))
       ? t('swap.insufficientFundsError')
       : null;
 
@@ -272,12 +244,10 @@ export function SwapForm({
     }
   }
 
-  const [showSelectAsset, setShowSelectAsset] = React.useState<'from' | 'to'>(
-    null
-  );
+  const [showSelectAsset, setShowSelectAsset] = React.useState<'from' | 'to'>(null);
 
   const slippageToleranceIndex = useAppSelector(
-    state => state.uiState.slippageToleranceIndex ?? 2
+    (state) => state.uiState.slippageToleranceIndex ?? 2,
   );
 
   const slippageTolerance = SLIPPAGE_TOLERANCE_OPTIONS[slippageToleranceIndex];
@@ -290,7 +260,7 @@ export function SwapForm({
               .mul(new BigNumber(100).sub(slippageTolerance).sub(KEEPER_FEE))
               .div(100)
               .roundTo(toAsset.precision, BigNumber.ROUND_MODE.ROUND_FLOOR),
-        toAsset
+        toAsset,
       )
     : null;
 
@@ -298,18 +268,16 @@ export function SwapForm({
     () =>
       (exchangeInfo ? exchangeInfo.route : [])
         .flatMap((pool, index) =>
-          index === 0 ? [pool.fromAssetId, pool.toAssetId] : [pool.toAssetId]
+          index === 0 ? [pool.fromAssetId, pool.toAssetId] : [pool.toAssetId],
         )
-        .map(assetId => new Asset(assets[assetId])),
-    [assets, exchangeInfo]
+        .map((assetId) => new Asset(assets[assetId])),
+    [assets, exchangeInfo],
   );
 
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    const assetsToUpdate = Array.from(
-      new Set(routeAssets.filter(asset => asset == null))
-    );
+    const assetsToUpdate = Array.from(new Set(routeAssets.filter((asset) => asset == null)));
 
     if (assetsToUpdate.length !== 0) {
       dispatch(updateAssets(assetsToUpdate));
@@ -318,7 +286,7 @@ export function SwapForm({
 
   return (
     <form
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
 
         onSwap({
@@ -337,7 +305,7 @@ export function SwapForm({
           asset: fromAssetBalance.asset.displayName,
         })}
         value={fromAmountValue}
-        onChange={newValue => {
+        onChange={(newValue) => {
           setFromAmount(newValue);
         }}
         onMaxClick={() => {
@@ -347,7 +315,7 @@ export function SwapForm({
             const fee = convertToSponsoredAssetFee(
               new BigNumber(wavesFeeCoins),
               new Asset(assets[feeAssetId]),
-              accountBalance.assets[feeAssetId]
+              accountBalance.assets[feeAssetId],
             );
 
             max = max.gt(fee) ? max.minus(fee) : max.cloneWithCoins(0);
@@ -370,7 +338,7 @@ export function SwapForm({
               return;
             }
 
-            setAssetIds(prevState => ({
+            setAssetIds((prevState) => ({
               fromAssetId: prevState.toAssetId,
               toAssetId: prevState.fromAssetId,
             }));
@@ -379,19 +347,14 @@ export function SwapForm({
               fromAmountValue === ''
                 ? ''
                 : fromAmountTokens.eq(0)
-                ? '0'
-                : exchangeInfo.toAmountTokens.toFixed();
+                  ? '0'
+                  : exchangeInfo.toAmountTokens.toFixed();
 
             setFromAmount(newFromAmount);
-            setIsPriceDirectionSwapped(prevState => !prevState);
+            setIsPriceDirectionSwapped((prevState) => !prevState);
           }}
         >
-          <svg
-            className={styles.swapDirectionBtnIcon}
-            width="14"
-            height="14"
-            fill="currentColor"
-          >
+          <svg className={styles.swapDirectionBtnIcon} width="14" height="14" fill="currentColor">
             <path d="M3.4 3.43 2.131 4.697a.6.6 0 0 1-.848-.849l2.29-2.29a.6.6 0 0 1 .85 0l2.29 2.29a.6.6 0 0 1-.848.849L4.599 3.43V12a.6.6 0 0 1-1.2 0V3.43ZM10.6 10.551l1.266-1.266a.6.6 0 1 1 .848.848l-2.29 2.291a.6.6 0 0 1-.85 0l-2.29-2.29a.6.6 0 0 1 .848-.85L9.4 10.552v-8.57a.6.6 0 0 1 1.2 0v8.57Z" />
           </svg>
         </button>
@@ -407,10 +370,7 @@ export function SwapForm({
           value={
             exchangeInfo == null
               ? ''
-              : (fromAmountTokens.eq(0)
-                  ? new BigNumber(0)
-                  : exchangeInfo.toAmountTokens
-                ).toFixed()
+              : (fromAmountTokens.eq(0) ? new BigNumber(0) : exchangeInfo.toAmountTokens).toFixed()
           }
           onLogoClick={() => {
             setShowSelectAsset('to');
@@ -426,15 +386,12 @@ export function SwapForm({
                 className={styles.tooltipContent}
                 content={<Trans i18nKey="swap.gainTooltip" />}
               >
-                {props => (
+                {(props) => (
                   <span {...props}>
                     +
                     {exchangeInfo.toAmountTokens
                       .sub(exchangeInfo.worstAmountTokens)
-                      .toFixed(
-                        toAsset.precision,
-                        BigNumber.ROUND_MODE.ROUND_FLOOR
-                      )}{' '}
+                      .toFixed(toAsset.precision, BigNumber.ROUND_MODE.ROUND_FLOOR)}{' '}
                     {toAsset.displayName} (
                     {exchangeInfo.toAmountTokens
                       .div(exchangeInfo.worstAmountTokens)
@@ -450,9 +407,7 @@ export function SwapForm({
         )}
       </div>
 
-      {exchangeChannelError && (
-        <div className={styles.error}>{exchangeChannelError}</div>
-      )}
+      {exchangeChannelError && <div className={styles.error}>{exchangeChannelError}</div>}
 
       <div className={styles.summary}>
         <div className={styles.summaryRow}>
@@ -461,7 +416,7 @@ export function SwapForm({
               className={styles.tooltipContent}
               content={<Trans i18nKey="swap.slippageToleranceTooltip" />}
             >
-              {props => (
+              {(props) => (
                 <span className={styles.summaryLabelTooltip} {...props}>
                   <Trans i18nKey="swap.slippageTolerance" />
                 </span>
@@ -504,7 +459,7 @@ export function SwapForm({
               className={styles.tooltipContent}
               content={<Trans i18nKey="swap.minimumReceivedTooltip" />}
             >
-              {props => (
+              {(props) => (
                 <span className={styles.summaryLabelTooltip} {...props}>
                   <Trans i18nKey="swap.minimumReceived" />
                 </span>
@@ -519,10 +474,7 @@ export function SwapForm({
               <span className={styles.summaryValueText}>
                 {minReceived
                   .getTokens()
-                  .toFormat(
-                    toAsset.precision,
-                    BigNumber.ROUND_MODE.ROUND_FLOOR
-                  )}{' '}
+                  .toFormat(toAsset.precision, BigNumber.ROUND_MODE.ROUND_FLOOR)}{' '}
                 {toAsset.displayName}
               </span>
             )}
@@ -543,7 +495,7 @@ export function SwapForm({
                   className={styles.swapPriceDirectionBtn}
                   type="button"
                   onClick={() => {
-                    setIsPriceDirectionSwapped(prevState => !prevState);
+                    setIsPriceDirectionSwapped((prevState) => !prevState);
                   }}
                 >
                   <svg
@@ -560,15 +512,9 @@ export function SwapForm({
                 {isPriceDirectionSwapped ? (
                   <span>
                     1 {toAsset.displayName} ~{' '}
-                    {(fromAmountTokens.eq(0)
-                      ? new BigNumber(1)
-                      : fromAmountTokens
-                    )
+                    {(fromAmountTokens.eq(0) ? new BigNumber(1) : fromAmountTokens)
                       .div(exchangeInfo.toAmountTokens)
-                      .toFixed(
-                        fromAsset.precision,
-                        BigNumber.ROUND_MODE.ROUND_FLOOR
-                      )}{' '}
+                      .toFixed(fromAsset.precision, BigNumber.ROUND_MODE.ROUND_FLOOR)}{' '}
                     {fromAsset.displayName}
                   </span>
                 ) : (
@@ -576,10 +522,7 @@ export function SwapForm({
                     1 {fromAsset.displayName} ~{' '}
                     {exchangeInfo.toAmountTokens
                       .div(fromAmountTokens.eq(0) ? 1 : fromAmountTokens)
-                      .toFixed(
-                        toAsset.precision,
-                        BigNumber.ROUND_MODE.ROUND_FLOOR
-                      )}{' '}
+                      .toFixed(toAsset.precision, BigNumber.ROUND_MODE.ROUND_FLOOR)}{' '}
                     {toAsset.displayName}
                   </span>
                 )}
@@ -604,9 +547,7 @@ export function SwapForm({
       </Button>
 
       {(validationErrorMessage || swapErrorMessage) && (
-        <div className={styles.error}>
-          {validationErrorMessage || swapErrorMessage}
-        </div>
+        <div className={styles.error}>{validationErrorMessage || swapErrorMessage}</div>
       )}
 
       <div className={styles.summary}>
@@ -616,7 +557,7 @@ export function SwapForm({
               className={styles.tooltipContent}
               content={<Trans i18nKey="swap.routeTooltip" />}
             >
-              {props => (
+              {(props) => (
                 <span className={styles.summaryLabelTooltip} {...props}>
                   <Trans i18nKey="swap.route" />
                 </span>
@@ -625,8 +566,7 @@ export function SwapForm({
           </div>
 
           <div className={styles.summaryValue}>
-            {exchangeInfo == null ||
-            routeAssets.some(asset => asset == null) ? (
+            {exchangeInfo == null || routeAssets.some((asset) => asset == null) ? (
               <Loader />
             ) : (
               <div className={styles.route}>
@@ -638,9 +578,7 @@ export function SwapForm({
                       </svg>
                     )}
 
-                    <div className={styles.routeItemName}>
-                      {asset.displayName}
-                    </div>
+                    <div className={styles.routeItemName}>{asset.displayName}</div>
                   </React.Fragment>
                 ))}
               </div>
@@ -654,7 +592,7 @@ export function SwapForm({
               className={styles.tooltipContent}
               content={<Trans i18nKey="swap.priceImpactTooltip" />}
             >
-              {props => (
+              {(props) => (
                 <span className={styles.summaryLabelTooltip} {...props}>
                   <Trans i18nKey="swap.priceImpact" />
                 </span>
@@ -683,7 +621,7 @@ export function SwapForm({
               className={styles.tooltipContent}
               content={<Trans i18nKey="swap.transactionFeeTooltip" />}
             >
-              {props => (
+              {(props) => (
                 <span className={styles.summaryLabelTooltip} {...props}>
                   <Trans i18nKey="swap.transactionFee" />
                 </span>
@@ -696,58 +634,48 @@ export function SwapForm({
               <Select
                 listPlacement="top"
                 selected={feeAssetId}
-                selectList={sponsoredAssetBalanceEntries.map(
-                  ([assetId, assetBalance]) => ({
-                    id: assetId,
-                    text: formatSponsoredAssetBalanceEntry([
-                      assetId,
-                      assetBalance,
-                    ]),
-                    value: assetId,
-                  })
-                )}
+                selectList={sponsoredAssetBalanceEntries.map(([assetId, assetBalance]) => ({
+                  id: assetId,
+                  text: formatSponsoredAssetBalanceEntry([assetId, assetBalance]),
+                  value: assetId,
+                }))}
                 onSelectItem={(_id, value) => {
                   setFeeAssetId(value);
                 }}
               />
             ) : (
               <span className={styles.summaryValueText}>
-                {formatSponsoredAssetBalanceEntry(
-                  sponsoredAssetBalanceEntries[0]
-                )}
+                {formatSponsoredAssetBalanceEntry(sponsoredAssetBalanceEntries[0])}
               </span>
             )}
           </div>
         </div>
       </div>
 
-      <Modal
-        showModal={showSelectAsset != null}
-        animation={Modal.ANIMATION.FLASH}
-      >
+      <Modal showModal={showSelectAsset != null} animation={Modal.ANIMATION.FLASH}>
         <AssetSelectModal
           assetBalances={accountBalance.assets}
           assets={
             showSelectAsset === 'from'
-              ? swappableAssets.filter(asset => asset.id !== toAssetId)
+              ? swappableAssets.filter((asset) => asset.id !== toAssetId)
               : showSelectAsset === 'to'
-              ? swappableAssets.filter(asset => asset.id !== fromAssetId)
-              : []
+                ? swappableAssets.filter((asset) => asset.id !== fromAssetId)
+                : []
           }
           network={currentNetwork}
           onClose={() => {
             setShowSelectAsset(null);
           }}
-          onSelect={assetId => {
+          onSelect={(assetId) => {
             setShowSelectAsset(null);
 
             if (showSelectAsset === 'from') {
-              setAssetIds(prevState => ({
+              setAssetIds((prevState) => ({
                 ...prevState,
                 fromAssetId: assetId,
               }));
             } else {
-              setAssetIds(prevState => ({
+              setAssetIds((prevState) => ({
                 ...prevState,
                 toAssetId: assetId,
               }));

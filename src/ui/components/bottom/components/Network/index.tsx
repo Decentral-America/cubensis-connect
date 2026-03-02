@@ -2,32 +2,23 @@ import cn from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
-import {
-  loading,
-  setCustomCode,
-  setCustomMatcher,
-  setCustomNode,
-  setNetwork,
-} from 'ui/actions';
+import { loading, setCustomCode, setCustomMatcher, setCustomNode, setNetwork } from 'ui/actions';
 import { Modal } from 'ui/components/ui';
 import { NetworkSettings } from '../NetworkSettings';
 import * as styles from './network.styl';
 
-const key = key => `bottom.${key}`;
+const key = (key) => `bottom.${key}`;
 
 const Networks = ({ isShow, onSelect, selectedNet, networks }) => {
   const classNames = cn(styles.selectNetworks, { [styles.isShow]: isShow });
-  const nets = networks.reduce(
-    (acc, item) => ((acc[item.name] = item), acc),
-    Object.create(null)
-  );
-  const sortedNetworks = networks.filter(item => item.name !== selectedNet);
+  const nets = networks.reduce((acc, item) => ((acc[item.name] = item), acc), Object.create(null));
+  const sortedNetworks = networks.filter((item) => item.name !== selectedNet);
   if (nets[selectedNet]) {
     sortedNetworks.push(nets[selectedNet]);
   }
   return (
     <div className={classNames}>
-      {sortedNetworks.map(net => {
+      {sortedNetworks.map((net) => {
         const currentNetwork = net.name;
         const selected = selectedNet === currentNetwork;
         const className = cn(styles.chooseNetwork, {
@@ -36,7 +27,7 @@ const Networks = ({ isShow, onSelect, selectedNet, networks }) => {
 
         const onSelectNet = selected
           ? null
-          : ev => {
+          : (ev) => {
               ev.stopPropagation();
               onSelect(net);
             };
@@ -106,7 +97,7 @@ class NetworkComponent extends React.PureComponent<INetworkProps, IState> {
       net: this.state.networkHash[this.props.currentNetwork],
     });
 
-  setNewNetwork = net => {
+  setNewNetwork = (net) => {
     if (net) {
       this.props.loading(true);
       setTimeout(() => this.props.loading(false), 1000);
@@ -165,13 +156,7 @@ class NetworkComponent extends React.PureComponent<INetworkProps, IState> {
       [styles.disabledNet]: this.props.noChangeNetwork,
     });
 
-    const {
-      networkHash,
-      showSettings,
-      net: selectedNet,
-      showNetworks,
-      showEdit,
-    } = this.state;
+    const { networkHash, showSettings, net: selectedNet, showNetworks, showEdit } = this.state;
     const currentNetwork = this.props.currentNetwork || 'mainnet';
     const net = selectedNet ? networkHash[selectedNet.name] : null;
 

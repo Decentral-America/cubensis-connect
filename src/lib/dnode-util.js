@@ -12,7 +12,7 @@ export function setupDnode(connectionStream, api, name) {
 }
 
 export function transformMethods(transformation, obj, target = {}) {
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     if (typeof obj[key] === 'object') {
       target[key] = {};
       transformMethods(transformation, obj[key], target[key]);
@@ -53,7 +53,7 @@ export function promiseToCb(fn, context) {
       callback = noop;
     }
     fn.apply(context, args)
-      .then(result => setImmediate(callback, null, result))
-      .catch(error => setImmediate(callback, error));
+      .then((result) => setImmediate(callback, null, result))
+      .catch((error) => setImmediate(callback, error));
   };
 }

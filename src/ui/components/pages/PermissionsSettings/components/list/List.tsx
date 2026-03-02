@@ -12,9 +12,7 @@ export class List extends React.PureComponent<IProps> {
       return (
         <div className={styles.emptyBlock}>
           <div className={styles.icon}></div>
-          <div
-            className={`body3 margin-main-top basic500 center ${styles.emptyBlockDescription}`}
-          >
+          <div className={`body3 margin-main-top basic500 center ${styles.emptyBlockDescription}`}>
             <Trans i18nKey="permissionsSettings.empty">Nothing Here...</Trans>
           </div>
         </div>
@@ -23,7 +21,7 @@ export class List extends React.PureComponent<IProps> {
 
     return (
       <div className={styles.permissionList}>
-        {originsNames.map(name => (
+        {originsNames.map((name) => (
           <ListItem
             key={name}
             originName={name}
@@ -45,9 +43,7 @@ export class List extends React.PureComponent<IProps> {
       hasApproved = perms.includes('approved');
       hasAuto =
         hasApproved &&
-        perms.find(item =>
-          typeof item !== 'object' ? false : item.type === 'allowAutoSign'
-        );
+        perms.find((item) => (typeof item !== 'object' ? false : item.type === 'allowAutoSign'));
     }
 
     return (
@@ -59,9 +55,7 @@ export class List extends React.PureComponent<IProps> {
         )}
         {hasAuto ? (
           <span>
-            <Trans i18nKey="permissionsSettings.automaticOrigin">
-              + Automatic signing
-            </Trans>
+            <Trans i18nKey="permissionsSettings.automaticOrigin">+ Automatic signing</Trans>
           </span>
         ) : null}
       </React.Fragment>
@@ -71,16 +65,14 @@ export class List extends React.PureComponent<IProps> {
 
 const getFilteredOrigins = (origins: any, attr: TTabTypes) => {
   return Object.keys(origins)
-    .filter(name => {
+    .filter((name) => {
       const permissions = origins[name] || [];
 
       if (attr !== 'customList') {
         return permissions.includes(attr);
       }
 
-      return (
-        !permissions.includes('whiteList') && !permissions.includes('blackList')
-      );
+      return !permissions.includes('whiteList') && !permissions.includes('blackList');
     })
     .reduce((acc, name) => {
       acc[name] = origins[name] || [];

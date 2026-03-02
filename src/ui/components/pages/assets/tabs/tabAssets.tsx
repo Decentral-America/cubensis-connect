@@ -2,8 +2,8 @@ import * as styles from '../../styles/assets.styl';
 import { icontains } from '../helpers';
 import { Trans } from 'react-i18next';
 import { AssetItem } from '../assetItem';
-import { Asset, Money } from '@waves/data-entities';
-import { BigNumber } from '@waves/bignumber';
+import { Asset, Money } from '@decentralchain/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
 import * as React from 'react';
 import { SearchInput } from '../../Assets';
 import { useAppSelector } from '../../../../store';
@@ -11,7 +11,7 @@ import { TabPanel } from '../../../ui';
 import { CARD_FULL_HEIGHT, sortAssetEntries, useAssetFilter } from './helpers';
 import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { BalanceAssets } from '../../../../reducers/updateState';
+import { type BalanceAssets } from '../../../../reducers/updateState';
 import { Tooltip } from '../../../ui/tooltip';
 import cn from 'classnames';
 
@@ -21,10 +21,7 @@ const Row = ({ data, index, style }) => {
   return (
     <div style={style}>
       <AssetItem
-        balance={
-          assets[assetId] &&
-          new Money(new BigNumber(balance), new Asset(assets[assetId]))
-        }
+        balance={assets[assetId] && new Money(new BigNumber(balance), new Asset(assets[assetId]))}
         assetId={assetId}
         onInfoClick={onInfoClick}
         onSendClick={onSendClick}
@@ -34,16 +31,14 @@ const Row = ({ data, index, style }) => {
   );
 };
 
-const PLACEHOLDERS = [...Array(4).keys()].map<[number, BalanceAssets[string]]>(
-  key => [
-    key,
-    {
-      balance: '0',
-      sponsorBalance: '0',
-      minSponsoredAssetFee: '0',
-    },
-  ]
-);
+const PLACEHOLDERS = [...Array(4).keys()].map<[number, BalanceAssets[string]]>((key) => [
+  key,
+  {
+    balance: '0',
+    sponsorBalance: '0',
+    minSponsoredAssetFee: '0',
+  },
+]);
 
 interface Props {
   onInfoClick: (assetId: string) => void;
@@ -52,12 +47,10 @@ interface Props {
 }
 
 export function TabAssets({ onInfoClick, onSendClick, onSwapClick }: Props) {
-  const assets = useAppSelector(state => state.assets);
-  const showSuspiciousAssets = useAppSelector(
-    state => state.uiState?.showSuspiciousAssets
-  );
-  const address = useAppSelector(state => state.selectedAccount.address);
-  const myAssets = useAppSelector(state => state.balances[address]?.assets);
+  const assets = useAppSelector((state) => state.assets);
+  const showSuspiciousAssets = useAppSelector((state) => state.uiState?.showSuspiciousAssets);
+  const address = useAppSelector((state) => state.selectedAccount.address);
+  const myAssets = useAppSelector((state) => state.balances[address]?.assets);
 
   const {
     term: [term, setTerm],
@@ -72,12 +65,10 @@ export function TabAssets({ onInfoClick, onSendClick, onSwapClick }: Props) {
           ([assetId]) =>
             (!onlyFav || assets[assetId]?.isFavorite === onlyFav) &&
             (!onlyMy || assets[assetId]?.issuer === address) &&
-            (!term ||
-              assetId === term ||
-              icontains(assets[assetId]?.displayName, term))
+            (!term || assetId === term || icontains(assets[assetId]?.displayName, term)),
         ),
         assets,
-        showSuspiciousAssets
+        showSuspiciousAssets,
       )
     : PLACEHOLDERS;
 
@@ -86,22 +77,16 @@ export function TabAssets({ onInfoClick, onSendClick, onSwapClick }: Props) {
       <div className={styles.filterContainer}>
         <SearchInput
           value={term ?? ''}
-          onInput={e => setTerm(e.target.value)}
+          onInput={(e) => setTerm(e.target.value)}
           onClear={() => setTerm('')}
         />
         <Tooltip content={<Trans i18nKey="assets.onlyFavorites" />}>
-          {props => (
-            <div
-              className={styles.filterBtn}
-              onClick={() => setOnlyFav(!onlyFav)}
-              {...props}
-            >
+          {(props) => (
+            <div className={styles.filterBtn} onClick={() => setOnlyFav(!onlyFav)} {...props}>
               <svg
                 className={styles.filterBtnIcon}
                 fill={onlyFav ? 'var(--color-submit400)' : 'none'}
-                stroke={
-                  onlyFav ? 'var(--color-submit400)' : 'var(--color-basic500)'
-                }
+                stroke={onlyFav ? 'var(--color-submit400)' : 'var(--color-basic500)'}
                 width="18"
                 height="18"
                 viewBox="0 0 18 18"
@@ -113,12 +98,8 @@ export function TabAssets({ onInfoClick, onSendClick, onSwapClick }: Props) {
         </Tooltip>
 
         <Tooltip content={<Trans i18nKey="assets.onlyMyAssets" />}>
-          {props => (
-            <div
-              className={styles.filterBtn}
-              onClick={() => setOnlyMy(!onlyMy)}
-              {...props}
-            >
+          {(props) => (
+            <div className={styles.filterBtn} onClick={() => setOnlyMy(!onlyMy)} {...props}>
               <svg
                 className={styles.filterBtnIcon}
                 width="14"
@@ -136,9 +117,7 @@ export function TabAssets({ onInfoClick, onSendClick, onSwapClick }: Props) {
                   fillRule="evenodd"
                   clipRule="evenodd"
                   d="M7 5.6c1.534 0 2.778-1.254 2.778-2.8C9.778 1.254 8.534 0 7 0S4.222 1.254 4.222 2.8c0 1.546 1.244 2.8 2.778 2.8Zm-5 6.16c.003-2.782 2.24-5.037 5-5.04 2.76.003 4.997 2.258 5 5.04v1.68c0 .31-.249.56-.556.56H2.556A.558.558 0 0 1 2 13.44v-1.68Z"
-                  fill={
-                    onlyMy ? 'var(--color-submit400)' : 'var(--color-basic500)'
-                  }
+                  fill={onlyMy ? 'var(--color-submit400)' : 'var(--color-basic500)'}
                 />
               </svg>
             </div>

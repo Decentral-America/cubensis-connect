@@ -18,18 +18,13 @@ import * as styles from './styles/messageList.styl';
 import { Button, BUTTON_TYPE } from '../ui';
 
 const Messages = ({ messages, assets, onSelect }: IProps) => {
-  return messages.map(message => {
+  return messages.map((message) => {
     try {
       const config = getConfigByTransaction(message);
       const Card = config.card;
       return (
         <div key={message.id} onClick={() => onSelect(message)}>
-          <Card
-            className={styles.cardItem}
-            message={message}
-            assets={assets}
-            collapsed={true}
-          />
+          <Card className={styles.cardItem} message={message} assets={assets} collapsed={true} />
         </div>
       );
     } catch (e) {
@@ -46,7 +41,7 @@ interface IProps {
 }
 
 const Notifications = ({ notifications, onShow, onDelete }) => {
-  return notifications.map(items => {
+  return notifications.map((items) => {
     const group = [...items].reverse();
     try {
       return (
@@ -67,12 +62,12 @@ const Notifications = ({ notifications, onShow, onDelete }) => {
 
 class MessageListComponent extends React.Component {
   readonly state = { loading: true };
-  readonly props;
+  declare readonly props;
 
   static getDerivedStateFromProps(props) {
     const { messages, assets, notifications } = props;
     const needAssets = MessageListComponent.getAssets(messages, assets);
-    needAssets.forEach(id => props.getAsset(id));
+    needAssets.forEach((id) => props.getAsset(id));
 
     if (needAssets.length > 0) {
       return { loading: true };
@@ -87,7 +82,7 @@ class MessageListComponent extends React.Component {
       const tx = data.data || data;
       const config = getConfigByTransaction(message);
       const assetIds = config.getAssetsId(tx);
-      assetIds.forEach(item => {
+      assetIds.forEach((item) => {
         if (!assetsHash[item]) {
           acc[item] = null;
         }
@@ -98,11 +93,11 @@ class MessageListComponent extends React.Component {
     return Object.keys(assets);
   }
 
-  readonly selectMessageHandler = message => {
+  readonly selectMessageHandler = (message) => {
     this.props.setActiveMessage(message);
   };
 
-  readonly deleteNotifications = ids => {
+  readonly deleteNotifications = (ids) => {
     this.props.deleteNotifications(ids);
   };
 
@@ -113,7 +108,7 @@ class MessageListComponent extends React.Component {
     this.props.deleteNotifications(ids);
   };
 
-  readonly selectNotificationHandler = notification =>
+  readonly selectNotificationHandler = (notification) =>
     this.props.setActiveNotification(notification);
 
   render() {
@@ -139,11 +134,7 @@ class MessageListComponent extends React.Component {
         </div>
 
         <div className={styles.walletWrapper}>
-          <TransactionWallet
-            type="clean"
-            account={this.props.selectedAccount}
-            hideButton={true}
-          />
+          <TransactionWallet type="clean" account={this.props.selectedAccount} hideButton={true} />
         </div>
 
         <div className={styles.messageListScrollBox}>
@@ -159,9 +150,7 @@ class MessageListComponent extends React.Component {
                   onClick={this.deleteAll}
                   className={`${styles.clearAllBtn} body3 basic500`}
                 >
-                  <Trans i18nKey="messageList.clearAllMessages">
-                    Clear all
-                  </Trans>
+                  <Trans i18nKey="messageList.clearAllMessages">Clear all</Trans>
                 </Button>
               </div>
 
@@ -178,9 +167,7 @@ class MessageListComponent extends React.Component {
           {hasMessages && (
             <React.Fragment>
               <div className="basic500">
-                <Trans i18nKey="messageList.pendingConfirm">
-                  Pending confirmation
-                </Trans>
+                <Trans i18nKey="messageList.pendingConfirm">Pending confirmation</Trans>
               </div>
 
               <div className={'basic-500 margin1'}>
@@ -220,7 +207,4 @@ const actions = {
   reject,
 };
 
-export const MessageList = connect(
-  mapStateToProps,
-  actions
-)(MessageListComponent);
+export const MessageList = connect(mapStateToProps, actions)(MessageListComponent);

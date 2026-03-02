@@ -1,15 +1,10 @@
-module.exports = version => {
+module.exports = (version) => {
   const conf = {
     chrome: {
       manifest: {
         add: {
           'background.scripts': ['background.js'],
-          permissions: [
-            'storage',
-            'unlimitedStorage',
-            'clipboardWrite',
-            'idle',
-          ],
+          permissions: ['storage', 'unlimitedStorage', 'clipboardWrite', 'idle'],
         },
         remove: ['applications'],
       },
@@ -18,12 +13,7 @@ module.exports = version => {
       manifest: {
         add: {
           'background.scripts': ['background.js'],
-          permissions: [
-            'storage',
-            'unlimitedStorage',
-            'clipboardWrite',
-            'idle',
-          ],
+          permissions: ['storage', 'unlimitedStorage', 'clipboardWrite', 'idle'],
         },
         remove: [],
       },
@@ -32,12 +22,7 @@ module.exports = version => {
       manifest: {
         add: {
           background: { scripts: ['background.js'] },
-          permissions: [
-            'storage',
-            'unlimitedStorage',
-            'clipboardWrite',
-            'idle',
-          ],
+          permissions: ['storage', 'unlimitedStorage', 'clipboardWrite', 'idle'],
         },
         remove: [],
       },

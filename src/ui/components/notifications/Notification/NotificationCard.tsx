@@ -5,14 +5,14 @@ import { Button, BUTTON_TYPE } from '../../ui';
 import cn from 'classnames';
 
 export class NotificationCard extends React.PureComponent<INotification> {
-  deleteHandler = event => {
+  deleteHandler = (event) => {
     event.stopPropagation();
     event.preventDefault();
     const ids = this.props.notifications.map(({ id }) => id);
     this.props.deleteNotifications(ids);
   };
 
-  showHandler = event => {
+  showHandler = (event) => {
     event.stopPropagation();
     event.preventDefault();
     this.props.onShow && this.props.onShow(this.props.notifications);
@@ -24,8 +24,7 @@ export class NotificationCard extends React.PureComponent<INotification> {
     const isGroup = notifications.length > 1;
     const title = isGroup ? (
       <span>
-        {notifications.length}{' '}
-        <Trans i18nKey="notifications.messages">Messages</Trans>
+        {notifications.length} <Trans i18nKey="notifications.messages">Messages</Trans>
       </span>
     ) : (
       notifications[0].title
@@ -38,14 +37,10 @@ export class NotificationCard extends React.PureComponent<INotification> {
           <div className={styles.cardHeader} onClick={this.showHandler}>
             <div className={styles.messageTransactionIcon}></div>
             <div className="grow">
-              <div
-                className={`${styles.notififactionEllipsis} basic500 body3 margin-min`}
-              >
+              <div className={`${styles.notififactionEllipsis} basic500 body3 margin-min`}>
                 {notifications[0].origin}
               </div>
-              <h2 className={`${styles.notififactionEllipsis} headline`}>
-                {title}
-              </h2>
+              <h2 className={`${styles.notififactionEllipsis} headline`}>{title}</h2>
             </div>
             {collapsed && (
               <div>

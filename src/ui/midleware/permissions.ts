@@ -11,7 +11,7 @@ import background from '../services/Background';
 
 let _timer;
 
-const _permissionMW = (type, method, actionCb) => store => next => action => {
+const _permissionMW = (type, method, actionCb) => (store) => (next) => (action) => {
   if (action.type !== type) {
     return next(action);
   }
@@ -28,26 +28,22 @@ const _permissionMW = (type, method, actionCb) => store => next => action => {
     .catch(() => store.dispatch(pendingOrigin(false)));
 };
 
-export const allowOrigin = _permissionMW(
-  ACTION.PERMISSIONS.ALLOW,
-  'allowOrigin',
-  allowOriginDone
-);
+export const allowOrigin = _permissionMW(ACTION.PERMISSIONS.ALLOW, 'allowOrigin', allowOriginDone);
 
 export const setAutoOrigin = _permissionMW(
   ACTION.PERMISSIONS.SET_AUTO,
   'setAutoSign',
-  autoOriginDone
+  autoOriginDone,
 );
 
 export const disAllowOrigin = _permissionMW(
   ACTION.PERMISSIONS.DISALLOW,
   'disableOrigin',
-  disallowOriginDone
+  disallowOriginDone,
 );
 
 export const deleteOrigin = _permissionMW(
   ACTION.PERMISSIONS.DELETE,
   'deleteOrigin',
-  deleteOriginDone
+  deleteOriginDone,
 );

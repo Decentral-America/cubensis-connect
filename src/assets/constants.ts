@@ -55,7 +55,7 @@ export const swappableAssetIds = {
     'WEST',
     'WX',
     'XMR',
-  ].map(assetName => assetIds.mainnet[assetName]),
+  ].map((assetName) => assetIds.mainnet[assetName]),
 };
 
 const logosByName = {
@@ -72,8 +72,6 @@ export const assetLogosByNetwork: Partial<{
 }> = Object.fromEntries(
   Object.entries(assetIds).map(([network, nameToIdMap]) => [
     network,
-    Object.fromEntries(
-      Object.entries(nameToIdMap).map(([name, id]) => [id, logosByName[name]])
-    ),
-  ])
+    Object.fromEntries(Object.entries(nameToIdMap).map(([name, id]) => [id, logosByName[name]])),
+  ]),
 );

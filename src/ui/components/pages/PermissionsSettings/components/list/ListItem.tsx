@@ -21,7 +21,7 @@ export const ListItem: React.FunctionComponent<IParams> = ({
     <div>
       <ItemButton
         permissions={permissions}
-        onClick={enable => toggleApprove(originName, enable)}
+        onClick={(enable) => toggleApprove(originName, enable)}
       />
       <SettingsButton onClick={() => showSettings(originName)} />
     </div>
@@ -46,7 +46,7 @@ const ItemButton: React.FunctionComponent<any> = ({ permissions, onClick }) => {
 
 const Icon = () => <div className={cn(styles.icon, styles.button)} />;
 
-const SettingsButton: React.FunctionComponent<any> = props => {
+const SettingsButton: React.FunctionComponent<any> = (props) => {
   return (
     <Button
       type={BUTTON_TYPE.TRANSPARENT}

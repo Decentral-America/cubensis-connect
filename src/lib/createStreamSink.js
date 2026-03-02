@@ -29,7 +29,7 @@ function promiseToCallback(promise) {
       },
       function (err) {
         setImmediate(cb, err);
-      }
+      },
     );
   };
 }

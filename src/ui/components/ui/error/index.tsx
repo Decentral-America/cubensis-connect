@@ -19,7 +19,7 @@ const Errors = ({ errors, show }) => {
 };
 
 export class Error extends React.PureComponent {
-  props: IProps;
+  declare props: IProps;
   state = { showed: false };
 
   static getDerivedStateFromProps(props, state) {
@@ -33,7 +33,7 @@ export class Error extends React.PureComponent {
     return null;
   }
 
-  onClick = e => this._onClick(e);
+  onClick = (e) => this._onClick(e);
 
   render() {
     const { showed } = this.state;

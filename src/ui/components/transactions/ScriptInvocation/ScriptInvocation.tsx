@@ -10,9 +10,7 @@ export function ScriptInvocation(props) {
     <div className={styles.transaction}>
       <TxHeader {...props} />
 
-      <div
-        className={`${styles.scriptInvocationTxScrollBox} transactionContent`}
-      >
+      <div className={`${styles.scriptInvocationTxScrollBox} transactionContent`}>
         <div className="margin-main">
           <ScriptInvocationCard {...props} />
         </div>

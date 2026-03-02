@@ -16,13 +16,9 @@ interface IProps {
 
 export class SponsorshipCard extends React.PureComponent<IProps> {
   render() {
-    const className = cn(
-      styles.sponsorshipTransactionCard,
-      this.props.className,
-      {
-        [styles.sponsorshipCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.sponsorshipTransactionCard, this.props.className, {
+      [styles.sponsorshipCard_collapsed]: this.props.collapsed,
+    });
 
     const { message, assets, collapsed } = this.props;
     const { data = {} } = message;
@@ -35,19 +31,13 @@ export class SponsorshipCard extends React.PureComponent<IProps> {
         <div className={className}>
           <div className={styles.cardHeader}>
             <div className={styles.sponsorshipTxIcon}>
-              <TxIcon
-                txType={
-                  isSetSponsored ? SPONSOR_MODE.enable : SPONSOR_MODE.disable
-                }
-              />
+              <TxIcon txType={isSetSponsored ? SPONSOR_MODE.enable : SPONSOR_MODE.disable} />
             </div>
             <div>
               <div className="basic500 body3 margin-min">
                 <Trans
                   i18nKey={
-                    isSetSponsored
-                      ? 'transactions.setSponsored'
-                      : 'transactions.clearSponsored'
+                    isSetSponsored ? 'transactions.setSponsored' : 'transactions.clearSponsored'
                   }
                 />
               </div>

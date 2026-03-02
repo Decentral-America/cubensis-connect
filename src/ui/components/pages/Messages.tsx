@@ -13,26 +13,19 @@ import {
   setShowNotification,
 } from '../../actions';
 import { PAGES } from '../../pageConfig';
-import { Money } from '@waves/data-entities';
+import { Money } from '@decentralchain/data-entities';
 import { Intro } from './Intro';
 import { FinalTransaction, getConfigByTransaction } from '../transactions';
-import { BalanceAssets } from '../transactions/BaseTransaction';
+import { type BalanceAssets } from '../transactions/BaseTransaction';
 import { DEFAULT_FEE_CONFIG } from '../../../constants';
 
 class MessagesComponent extends React.Component {
   readonly state = {} as any;
-  readonly props;
+  declare readonly props;
   hasApproved: boolean;
 
   static getDerivedStateFromProps(props, state) {
-    const {
-      balance,
-      selectedAccount,
-      assets,
-      activeMessage,
-      messages,
-      notifications,
-    } = props;
+    const { balance, selectedAccount, assets, activeMessage, messages, notifications } = props;
     let loading = true;
 
     if (!assets || !assets['DCC'] || !balance) {
@@ -44,21 +37,16 @@ class MessagesComponent extends React.Component {
       Object.entries({
         DCC: {
           balance: balance.available,
-          minSponsoredAssetFee:
-            DEFAULT_FEE_CONFIG.calculate_fee_rules.default.fee,
+          minSponsoredAssetFee: DEFAULT_FEE_CONFIG.calculate_fee_rules.default.fee,
           sponsorBalance: balance.available,
         },
         ...balance.assets,
-      } as BalanceAssets).filter(
-        ([, assetBalance]) => assetBalance.minSponsoredAssetFee != null
-      )
+      } as BalanceAssets).filter(([, assetBalance]) => assetBalance.minSponsoredAssetFee != null),
     );
 
     const { transactionStatus } = props;
     const isExistMsg =
-      activeMessage &&
-      state.activeMessage &&
-      activeMessage.id === state.activeMessage.id;
+      activeMessage && state.activeMessage && activeMessage.id === state.activeMessage.id;
 
     if (isExistMsg) {
       loading = false;
@@ -75,9 +63,7 @@ class MessagesComponent extends React.Component {
     const sourceSignData = activeMessage.data || {};
     const parsedData = MessagesComponent.getAssetsAndMoneys(sourceSignData);
 
-    const needGetAssets = new Set(
-      Object.keys(parsedData.assets).filter(id => !assets[id])
-    );
+    const needGetAssets = new Set(Object.keys(parsedData.assets).filter((id) => !assets[id]));
 
     const nextAssetId = needGetAssets.values().next().value;
     if (nextAssetId) {
@@ -155,20 +141,20 @@ class MessagesComponent extends React.Component {
     return { assets, moneys };
   }
 
-  rejectHandler = e => this.reject(e);
+  rejectHandler = (e) => this.reject(e);
 
-  rejectForeverHandler = e => this.rejectForever(e);
+  rejectForeverHandler = (e) => this.rejectForever(e);
 
   approveHandler = (e, params) => this.approve(e, params);
 
-  closeHandler = e => {
+  closeHandler = (e) => {
     this.updateActiveMessages(e);
     this.props.closeNotificationWindow();
   };
 
-  toListHandler = e => this.updateActiveMessages(e);
+  toListHandler = (e) => this.updateActiveMessages(e);
 
-  nextHandler = e => this.updateActiveMessages(e, true);
+  nextHandler = (e) => this.updateActiveMessages(e, true);
 
   selectAccountHandler = () => this.props.setTab(PAGES.CHANGE_TX_ACCOUNT);
 
@@ -200,14 +186,8 @@ class MessagesComponent extends React.Component {
       );
     }
 
-    const {
-      activeMessage,
-      assets,
-      approvePending,
-      txHash,
-      sponsoredBalance,
-      selectedAccount,
-    } = this.state;
+    const { activeMessage, assets, approvePending, txHash, sponsoredBalance, selectedAccount } =
+      this.state;
     const conf = getConfigByTransaction(activeMessage);
     const { message: Component, type } = conf;
 

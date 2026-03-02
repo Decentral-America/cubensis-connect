@@ -1,6 +1,6 @@
 import { ERRORS } from '../lib/KeeperError';
 
-const emptyTxConverter = tx => {
+const emptyTxConverter = (tx) => {
   return { ...tx };
 };
 

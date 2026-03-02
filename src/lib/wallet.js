@@ -1,11 +1,10 @@
 import { getAdapterByType } from '@decentralchain/signature-adapter';
 import { libs as transactionsLibs } from '@decentralchain/waves-transactions';
-import { waves } from '../controllers/wavesTransactionsController';
-import { BigNumber } from '@waves/bignumber';
+import { waves } from '../controller./transactionsController';
+import { BigNumber } from '@decentralchain/bignumber';
 import create from 'parse-json-bignumber';
 
-const { messageEncrypt, messageDecrypt, sharedKey, base58Encode } =
-  transactionsLibs.crypto;
+const { messageEncrypt, messageDecrypt, sharedKey, base58Encode } = transactionsLibs.crypto;
 const { stringify } = create({ BigNumber });
 
 export class Wallet {
@@ -49,7 +48,7 @@ export class Wallet {
   }
 
   getAccount() {
-    let account = Object.assign({}, this.user);
+    const account = Object.assign({}, this.user);
     delete account['id'];
     delete account['seed'];
     return account;
@@ -95,11 +94,11 @@ export class Wallet {
 
     // This workaround will not be needed once money-like-to-node starts
     // converting lists of integers here.
-    // See https://github.com/wavesplatform/money-like-to-node/blob/939dbd5bfa132e6f77b4acbe9a08888cae642f4f/src/converters/index.ts#L127-L138
+    // See: money-like-to-node/src/converters/index.ts for context
     if (data.type === 16 && data.call && data.call.args) {
-      data.call.args.forEach(arg => {
+      data.call.args.forEach((arg) => {
         if (arg.type === 'list') {
-          arg.value.forEach(item => {
+          arg.value.forEach((item) => {
             if (item.type === 'integer') {
               item.value = new BigNumber(item.value);
             }

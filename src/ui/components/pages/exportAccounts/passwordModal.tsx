@@ -26,7 +26,7 @@ export function ExportAccountsPasswordModal({ onClose, onSubmit }: Props) {
       <div className="modal cover">
         <form
           className="modal-form"
-          onSubmit={async event => {
+          onSubmit={async (event) => {
             event.preventDefault();
             setPasswordError(false);
 
@@ -55,7 +55,7 @@ export function ExportAccountsPasswordModal({ onClose, onSubmit }: Props) {
               ref={passwordInputRef}
               type="password"
               value={password}
-              onChange={event => {
+              onChange={(event) => {
                 setPassword(event.currentTarget.value);
               }}
             />
@@ -74,12 +74,7 @@ export function ExportAccountsPasswordModal({ onClose, onSubmit }: Props) {
             />
           </p>
 
-          <Button
-            data-testid="verifyButton"
-            disabled={!password}
-            className="margin1"
-            type="submit"
-          >
+          <Button data-testid="verifyButton" disabled={!password} className="margin1" type="submit">
             <Trans i18nKey="exportKeystore.verifyBtn" />
           </Button>
 
@@ -87,11 +82,7 @@ export function ExportAccountsPasswordModal({ onClose, onSubmit }: Props) {
             <Trans i18nKey="exportKeystore.cancelBtn" />
           </Button>
 
-          <Button
-            className="modal-close"
-            onClick={onClose}
-            type="transparent"
-          />
+          <Button className="modal-close" onClick={onClose} type="transparent" />
         </form>
       </div>
     </Modal>

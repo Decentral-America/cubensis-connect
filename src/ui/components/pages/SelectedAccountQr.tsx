@@ -5,9 +5,9 @@ import * as styles from './styles/selectedAccountQr.styl';
 import { Button, QRCode } from '../ui';
 
 class QRCodeSelectedAccountComponent extends React.PureComponent {
-  readonly props;
+  declare readonly props;
   qrCode: QRCode;
-  getQrRef = qr => (this.qrCode = qr);
+  getQrRef = (qr) => (this.qrCode = qr);
   downloadHandler = () => this._download();
 
   render() {
@@ -15,6 +15,7 @@ class QRCodeSelectedAccountComponent extends React.PureComponent {
     const name = this.props.selectedAccount.name;
     const isEdge =
       window.navigator &&
+      // @ts-expect-error legacy IE API
       typeof window.navigator.msSaveOrOpenBlob === 'function';
     return (
       <div className={`center ${styles.content}`}>
@@ -70,14 +71,10 @@ const mapStateToProps = function (store: any) {
   const selected = store.localState.assets.account
     ? store.localState.assets.account.address
     : activeAccount;
-  const selectedAccount = store.accounts.find(
-    ({ address }) => address === selected
-  );
+  const selectedAccount = store.accounts.find(({ address }) => address === selected);
   return {
     selectedAccount,
   };
 };
 
-export const QRCodeSelectedAccount = connect(mapStateToProps)(
-  QRCodeSelectedAccountComponent
-);
+export const QRCodeSelectedAccount = connect(mapStateToProps)(QRCodeSelectedAccountComponent);

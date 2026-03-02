@@ -17,10 +17,7 @@ const Lang = ({ id, name, onSelect, selected }) => {
 
   return (
     <div className={className}>
-      <div
-        className={`${styles.selectButton} fullwidth body1 left`}
-        onClick={onSelect}
-      >
+      <div className={`${styles.selectButton} fullwidth body1 left`} onClick={onSelect}>
         <Trans i18nKey={`langsSettings.${id}`}>{name}</Trans>
       </div>
       <div className={iconClass}></div>
@@ -29,7 +26,7 @@ const Lang = ({ id, name, onSelect, selected }) => {
 };
 
 class LangsSettingsComponent extends React.PureComponent {
-  readonly props;
+  declare readonly props;
   confirmHandler = () => {
     this.props.setUiState({ selectedLangs: true });
   };
@@ -90,7 +87,4 @@ const actions = {
   setLocale,
 };
 
-export const LangsSettings = connect(
-  mapStateToProps,
-  actions
-)(LangsSettingsComponent);
+export const LangsSettings = connect(mapStateToProps, actions)(LangsSettingsComponent);

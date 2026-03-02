@@ -68,12 +68,7 @@ function ForgotPasswordComponent({ onBack, deleteAccount }) {
         <Button id="resetCancel" onClick={onBack}>
           <Trans i18nKey="forgotPassword.resetCancel" />
         </Button>
-        <Button
-          id="resetConfirm"
-          type="warning"
-          disabled={hasError}
-          onClick={deleteAccount}
-        >
+        <Button id="resetConfirm" type="warning" disabled={hasError} onClick={deleteAccount}>
           <Trans i18nKey="forgotPassword.resetConfirm" />
         </Button>
       </div>
@@ -89,7 +84,4 @@ const mapStateToProps = function () {
   return {};
 };
 
-export const ForgotPassword = connect(
-  mapStateToProps,
-  actions
-)(ForgotPasswordComponent);
+export const ForgotPassword = connect(mapStateToProps, actions)(ForgotPasswordComponent);

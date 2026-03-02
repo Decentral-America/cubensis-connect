@@ -12,11 +12,11 @@ export class Package extends SignClass {
   container: HTMLDivElement;
   needScroll: false;
 
-  getContainerRef = ref => {
+  getContainerRef = (ref) => {
     this.container = ref;
   };
 
-  autoScrollHandler = isShow => {
+  autoScrollHandler = (isShow) => {
     this.setState({ needScroll: isShow });
   };
 
@@ -41,10 +41,7 @@ export class Package extends SignClass {
       <div className={styles.transaction}>
         <TxHeader {...this.props} />
 
-        <div
-          className={`${styles.dataTxScrollBox} transactionContent`}
-          ref={this.getContainerRef}
-        >
+        <div className={`${styles.dataTxScrollBox} transactionContent`} ref={this.getContainerRef}>
           <div className={`margin-main`}>
             <PackageCard {...this.props} />
           </div>
@@ -55,11 +52,7 @@ export class Package extends SignClass {
 
           <div className={styles.packageInfo}>
             {/* expandable container */}
-            <PackageInfo
-              message={message}
-              assets={assets}
-              onToggle={this.autoScrollHandler}
-            />
+            <PackageInfo message={message} assets={assets} onToggle={this.autoScrollHandler} />
           </div>
         </div>
 

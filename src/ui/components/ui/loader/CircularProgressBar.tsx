@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CircleProgressBar } from './circle-progress-bar';
 
 export class CircularProgressbar extends React.PureComponent {
-  readonly props: IProps;
+  declare readonly props: IProps;
   drawer: CircleProgressBar;
   canvas: HTMLCanvasElement;
 

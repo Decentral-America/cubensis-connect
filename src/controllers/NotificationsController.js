@@ -42,11 +42,7 @@ export class NotificationsController extends EventEmitter {
    */
   validateNotification(data) {
     const config = this.getMessagesConfig();
-    const {
-      notification_title_max,
-      notification_message_max,
-      notification_interval_min,
-    } = config;
+    const { notification_title_max, notification_message_max, notification_interval_min } = config;
 
     if (!data || !data.origin) {
       throw ERRORS.NOTIFICATION_DATA_ERROR();
@@ -60,13 +56,13 @@ export class NotificationsController extends EventEmitter {
 
     if (title && title.length > notification_title_max) {
       throw ERRORS.NOTIFICATION_DATA_ERROR(
-        `title has more than ${notification_title_max} characters`
+        `title has more than ${notification_title_max} characters`,
       );
     }
 
     if (message && message.length > notification_message_max) {
       throw ERRORS.NOTIFICATION_DATA_ERROR(
-        `message has more than ${notification_message_max} characters`
+        `message has more than ${notification_message_max} characters`,
       );
     }
 
@@ -92,12 +88,9 @@ export class NotificationsController extends EventEmitter {
 
     const notification = this._generateMessage(data);
 
-    let notifications = this.store.getState().notifications;
+    const notifications = this.store.getState().notifications;
 
-    this._deleteNotificationsByLimit(
-      notifications,
-      this.getMessagesConfig().max_messages
-    );
+    this._deleteNotificationsByLimit(notifications, this.getMessagesConfig().max_messages);
 
     log.debug(`Generated notification ${JSON.stringify(notification)}`);
 
@@ -123,7 +116,7 @@ export class NotificationsController extends EventEmitter {
       return [];
     }
     return this.notifications.notifications.filter(
-      notification => notification.address === account.address
+      (notification) => notification.address === account.address,
     );
   }
 
@@ -144,7 +137,7 @@ export class NotificationsController extends EventEmitter {
 
         return acc;
       },
-      { items: [], hash: {} }
+      { items: [], hash: {} },
     ).items;
   }
 
@@ -172,7 +165,7 @@ export class NotificationsController extends EventEmitter {
    */
   setMessageStatus(id, status) {
     const { notifications } = this.store.getState();
-    const index = notifications.findIndex(msg => msg.id === id);
+    const index = notifications.findIndex((msg) => msg.id === id);
     if (index > -1) {
       notifications.splice(index, 1, { ...notifications[index], status });
       this._updateStore(notifications);
@@ -216,9 +209,7 @@ export class NotificationsController extends EventEmitter {
    */
   _deleteMessages(ids) {
     const { notifications } = this.store.getState();
-    const newNotifications = notifications.filter(
-      ({ id }) => !ids.includes(id)
-    );
+    const newNotifications = notifications.filter(({ id }) => !ids.includes(id));
     if (newNotifications.length !== notifications.length) {
       this._updateStore(newNotifications);
     }
@@ -257,9 +248,6 @@ export class NotificationsController extends EventEmitter {
   _updateMessagesByTimeout() {
     clearTimeout(this._updateTimer);
     const { update_messages_ms } = this.getMessagesConfig();
-    this._updateTimer = setTimeout(
-      () => this.deleteAllByTime(),
-      update_messages_ms
-    );
+    this._updateTimer = setTimeout(() => this.deleteAllByTime(), update_messages_ms);
   }
 }

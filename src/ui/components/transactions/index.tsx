@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
-import { IMoneyLike } from 'ui/utils/converters';
+import { type ComponentType } from 'react';
+import { type IMoneyLike } from 'ui/utils/converters';
 import auth from './Auth';
 import alias from './Alias';
 import originAuth from './OriginAuth';
@@ -23,7 +23,7 @@ import unknown from './Unknown';
 import customData from './CustomData';
 import updateAssetInfo from './UpdateAssetInfo';
 import wavesAuth from './WavesAuth';
-import { Money } from '@waves/data-entities';
+import { type Money } from '@decentralchain/data-entities';
 
 interface Message {
   card: ComponentType<{
@@ -65,10 +65,11 @@ const MESSAGES: Message[] = [
   customData,
   updateAssetInfo,
   wavesAuth,
-];
+] as any;
 
 export { FinalTransaction } from './FinalTransaction';
 
 export function getConfigByTransaction({ data: tx, type = null }): Message {
-  return MESSAGES.find(config => config.isMe(tx, type)) || unknown;
+  // @ts-expect-error legacy type mismatch
+  return MESSAGES.find((config) => config.isMe(tx, type)) || unknown;
 }

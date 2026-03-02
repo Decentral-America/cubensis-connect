@@ -54,17 +54,17 @@ export class WalletController {
   removeWallet(address, network) {
     if (this.store.getState().locked) throw new Error('App is locked');
     const wallet = this.getWalletsByNetwork(network).find(
-      wallet => wallet.getAccount().address === address
+      (wallet) => wallet.getAccount().address === address,
     );
     this._walletToTrash(wallet);
-    this.wallets = this.wallets.filter(w => {
+    this.wallets = this.wallets.filter((w) => {
       return w !== wallet;
     });
     this._saveWallets();
   }
 
   getAccounts() {
-    return this.wallets.map(wallet => wallet.getAccount());
+    return this.wallets.map((wallet) => wallet.getAccount());
   }
 
   lock() {
@@ -90,7 +90,7 @@ export class WalletController {
     if (!password || typeof password !== 'string') {
       throw new Error('Password is needed to init vault');
     }
-    (this.wallets || []).forEach(wallet => this._walletToTrash(wallet));
+    (this.wallets || []).forEach((wallet) => this._walletToTrash(wallet));
     this.password = password;
     this.wallets = [];
     this._saveWallets();
@@ -98,7 +98,7 @@ export class WalletController {
   }
 
   deleteVault() {
-    (this.wallets || []).forEach(wallet => this._walletToTrash(wallet));
+    (this.wallets || []).forEach((wallet) => this._walletToTrash(wallet));
     this.password = null;
     this.wallets = [];
     this.store.updateState({
@@ -133,17 +133,15 @@ export class WalletController {
     this._restoreWallets(password);
 
     const wallet = this.getWalletsByNetwork(network).find(
-      wallet => wallet.getAccount().address === address
+      (wallet) => wallet.getAccount().address === address,
     );
-    if (!wallet)
-      throw new Error(`Wallet not found for address: ${address} in ${network}`);
+    if (!wallet) throw new Error(`Wallet not found for address: ${address} in ${network}`);
     return wallet.getSecret();
   }
 
   exportSeed(address, network) {
     const wallet = this._findWallet(address, network);
-    if (!wallet)
-      throw new Error(`Wallet not found for address: ${address} in ${network}`);
+    if (!wallet) throw new Error(`Wallet not found for address: ${address} in ${network}`);
     const seed = new Seed(wallet.user.seed);
     return seed.encrypt(this.password, 5000);
   }
@@ -162,7 +160,7 @@ export class WalletController {
   updateNetworkCode(network, code) {
     code = code || this.getNetworkCode(network);
     const wallets = this.getWalletsByNetwork(network);
-    wallets.forEach(wallet => {
+    wallets.forEach((wallet) => {
       if (wallet.user.networkCode !== code) {
         const seed = new Seed(wallet.user.seed, code);
         wallet.user.network = network;
@@ -177,16 +175,14 @@ export class WalletController {
   }
 
   getWalletsByNetwork(network) {
-    return this.wallets.filter(wallet => wallet.isMyNetwork(network));
+    return this.wallets.filter((wallet) => wallet.isMyNetwork(network));
   }
 
   _walletToTrash(wallet) {
     const walletsData = wallet && wallet.serialize && wallet.serialize();
     if (walletsData) {
       const saveData = {
-        walletsData: this.password
-          ? encrypt(walletsData, this.password)
-          : walletsData,
+        walletsData: this.password ? encrypt(walletsData, this.password) : walletsData,
         address: wallet.address,
       };
       this.trashControl.addData(saveData);
@@ -199,13 +195,13 @@ export class WalletController {
       return acc;
     }, Object.create(null));
 
-    const wallets = this.wallets.map(wallet => wallet.serialize());
+    const wallets = this.wallets.map((wallet) => wallet.serialize());
 
-    if (!wallets.find(item => !item.network)) {
+    if (!wallets.find((item) => !item.network)) {
       return null;
     }
 
-    const walletsData = this.wallets.map(wallet => {
+    const walletsData = this.wallets.map((wallet) => {
       const data = wallet.serialize();
       if (!data.network) {
         data.network = networks[data.networkCode];
@@ -214,7 +210,7 @@ export class WalletController {
       return data;
     });
 
-    this.wallets = walletsData.map(user => new Wallet(user));
+    this.wallets = walletsData.map((user) => new Wallet(user));
     this._saveWallets();
   }
 
@@ -296,29 +292,25 @@ export class WalletController {
 
   // Private
   _checkForDuplicate(address, network) {
-    if (
-      this.getWalletsByNetwork(network).find(
-        account => account.address === address
-      )
-    ) {
+    if (this.getWalletsByNetwork(network).find((account) => account.address === address)) {
       throw new Error(`Account with address ${address} already exists`);
     }
   }
 
   _saveWallets() {
-    const walletsData = this.wallets.map(wallet => wallet.serialize());
+    const walletsData = this.wallets.map((wallet) => wallet.serialize());
     this.store.updateState({ vault: encrypt(walletsData, this.password) });
   }
 
   _restoreWallets(password) {
     const decryptedData = decrypt(this.store.getState().vault, password);
-    this.wallets = decryptedData.map(user => new Wallet(user));
+    this.wallets = decryptedData.map((user) => new Wallet(user));
   }
 
   _findWallet(address, network) {
     if (this.store.getState().locked) throw new Error('App is locked');
     const wallet = this.getWalletsByNetwork(network).find(
-      wallet => wallet.getAccount().address === address
+      (wallet) => wallet.getAccount().address === address,
     );
     if (!wallet) throw new Error(`Wallet not found for address ${address}`);
     return wallet;

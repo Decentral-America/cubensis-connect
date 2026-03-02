@@ -1,15 +1,10 @@
-import { BigNumber } from '@waves/bignumber';
-import { Asset, Money } from '@waves/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
+import { Asset, Money } from '@decentralchain/data-entities';
 import { SIGN_TYPE } from '@decentralchain/signature-adapter';
 import { SWAP_DAPP_ADDRESS } from '../constants';
 
 export class SwapController {
-  constructor({
-    assetInfoController,
-    networkController,
-    preferencesController,
-    walletController,
-  }) {
+  constructor({ assetInfoController, networkController, preferencesController, walletController }) {
     this.assetInfoController = assetInfoController;
     this.networkController = networkController;
     this.preferencesController = preferencesController;
@@ -36,29 +31,27 @@ export class SwapController {
         timestamp: Date.now(),
         dApp: SWAP_DAPP_ADDRESS,
         fee: new Money(new BigNumber(feeCoins), new Asset(feeAssetInfo)),
-        payment: [
-          new Money(new BigNumber(fromCoins), new Asset(fromAssetInfo)),
-        ],
+        payment: [new Money(new BigNumber(fromCoins), new Asset(fromAssetInfo))],
         call: {
           function: 'swap',
           args: [
             {
               type: 'list',
-              value: route.map(pool => ({
+              value: route.map((pool) => ({
                 type: 'string',
                 value: pool.dApp,
               })),
             },
             {
               type: 'list',
-              value: route.map(pool => ({
+              value: route.map((pool) => ({
                 type: 'string',
                 value: pool.toAssetId,
               })),
             },
             {
               type: 'list',
-              value: route.map(pool => ({
+              value: route.map((pool) => ({
                 type: 'integer',
                 value: pool.type === 'flat' ? pool.estimatedAmount : 0,
               })),
@@ -79,11 +72,7 @@ export class SwapController {
     const network = this.networkController.getNetwork();
     const selectedAccount = this.preferencesController.getSelectedAccount();
 
-    const signedTx = await this.walletController.signTx(
-      selectedAccount.address,
-      tx,
-      network
-    );
+    const signedTx = await this.walletController.signTx(selectedAccount.address, tx, network);
 
     const text = await this.networkController.broadcast({
       type: 'transaction',

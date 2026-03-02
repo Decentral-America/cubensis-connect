@@ -37,7 +37,7 @@ export const activePopup = (store = null, { type, payload }) => {
         store,
         payload.messages,
         payload.allMessages,
-        payload.notifications
+        payload.notifications,
       );
     case ACTION.MESSAGES.UPDATE_ACTIVE:
       return payload;
@@ -50,17 +50,12 @@ export const activePopup = (store = null, { type, payload }) => {
   return store;
 };
 
-const getActiveFromState = (
-  state,
-  messages = [],
-  allMessages = [],
-  notifications = []
-) => {
+const getActiveFromState = (state, messages = [], allMessages = [], notifications = []) => {
   // Can activeMessage
   if (state != null && (state.msg || state.notify)) {
     // Update from messages
     if (state.msg) {
-      const msgItem = allMessages.find(item => item.id === state.msg.id);
+      const msgItem = allMessages.find((item) => item.id === state.msg.id);
       state.msg = msgItem || state.msg;
     }
 

@@ -23,9 +23,7 @@ const NotificationItem = ({ notification }) => (
           <h2 className="">{notification && notification.title}</h2>
         </div>
       </div>
-      <div className={styles.messageText}>
-        {notification && notification.message}
-      </div>
+      <div className={styles.messageText}>{notification && notification.message}</div>
     </div>
     <div className={styles.timestamp}>
       <div className="basic500 margin-min">
@@ -38,7 +36,7 @@ const NotificationItem = ({ notification }) => (
 
 class NotificationsComponent extends React.Component {
   readonly state = {} as any;
-  readonly props;
+  declare readonly props;
 
   static getDerivedStateFromProps(props) {
     const { origins, activeNotification, messages, notifications } = props;
@@ -49,17 +47,13 @@ class NotificationsComponent extends React.Component {
 
     const origin = activeNotification[0].origin;
     const perms = origins[origin];
-    const useNotifications = perms.find(
-      item => item && item.type === 'useNotifications'
-    );
+    const useNotifications = perms.find((item) => item && item.type === 'useNotifications');
     const inWhiteList = (origins[origin] || []).includes('whiteList');
     const useNotify = useNotifications && useNotifications.canUse;
     const canShowNotify = useNotify || (useNotify == null && inWhiteList);
     const hasMessages = messages.length > 0;
-    const hasNotifications =
-      notifications.filter(([item]) => item.origin !== origin).length > 0;
-    const showToList =
-      hasMessages || (hasNotifications && notifications.length > 2);
+    const hasNotifications = notifications.filter(([item]) => item.origin !== origin).length > 0;
+    const showToList = hasMessages || (hasNotifications && notifications.length > 2);
 
     return {
       canShowNotify,
@@ -81,19 +75,17 @@ class NotificationsComponent extends React.Component {
   };
 
   toListHandler = () => {
-    this._deleteMessages(null).then(() =>
-      this.props.setTab(PAGES.MESSAGES_LIST)
-    );
+    this._deleteMessages(null).then(() => this.props.setTab(PAGES.MESSAGES_LIST));
   };
 
-  toggleCanShowHandler = e => {
+  toggleCanShowHandler = (e) => {
     const canUse = e.target.checked;
     this.props.setShowNotification({ origin: this.state.origin, canUse });
   };
 
   nextHandler = () => {
     const nextNotification = this.state.notifications.filter(
-      ([item]) => item.origin !== this.state.origin
+      ([item]) => item.origin !== this.state.origin,
     )[0];
     this._deleteMessages(nextNotification || null);
   };
@@ -105,13 +97,7 @@ class NotificationsComponent extends React.Component {
   }
 
   render() {
-    const {
-      activeNotification,
-      showToList,
-      hasNotifications,
-      showClose,
-      loading,
-    } = this.state;
+    const { activeNotification, showToList, hasNotifications, showClose, loading } = this.state;
 
     if (loading) {
       return <Intro />;
@@ -129,16 +115,11 @@ class NotificationsComponent extends React.Component {
         </div>
 
         <div className={styles.messageListScrollBox}>
-          {activeNotification.map(notification => (
-            <NotificationItem
-              notification={notification}
-              key={notification.id}
-            />
+          {activeNotification.map((notification) => (
+            <NotificationItem notification={notification} key={notification.id} />
           ))}
 
-          <div
-            className={`margin-main-big margin-main-big-top flex ${styles.allowNotification}`}
-          >
+          <div className={`margin-main-big margin-main-big-top flex ${styles.allowNotification}`}>
             <Input
               id="checkbox_noshow"
               type={'checkbox'}
@@ -146,9 +127,7 @@ class NotificationsComponent extends React.Component {
               onChange={this.toggleCanShowHandler}
             />
             <label htmlFor="checkbox_noshow">
-              <Trans i18nKey="notifications.allowSending">
-                Allow sending messages
-              </Trans>
+              <Trans i18nKey="notifications.allowSending">Allow sending messages</Trans>
             </label>
           </div>
         </div>
@@ -160,9 +139,7 @@ class NotificationsComponent extends React.Component {
             </Button>
           )}
 
-          {hasNotifications && showToList && (
-            <div className={styles.buttonsSeparator} />
-          )}
+          {hasNotifications && showToList && <div className={styles.buttonsSeparator} />}
 
           {hasNotifications && (
             <Button type={BUTTON_TYPE.GENERAL} onClick={this.nextHandler}>
@@ -209,7 +186,4 @@ const actions = {
   deleteNotifications,
 };
 
-export const Notifications = connect(
-  mapStateToProps,
-  actions
-)(NotificationsComponent);
+export const Notifications = connect(mapStateToProps, actions)(NotificationsComponent);

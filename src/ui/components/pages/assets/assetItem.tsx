@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as styles from './assetItem.module.css';
 import { Balance, Loader } from '../../ui';
-import { Money } from '@waves/data-entities';
+import { type Money } from '@decentralchain/data-entities';
 import cn from 'classnames';
 import { AssetLogo } from './assetLogo';
 import { Trans } from 'react-i18next';
@@ -29,8 +29,8 @@ export function AssetItem({
   onSwapClick,
 }: Props) {
   const dispatch = useAppDispatch();
-  const assets = useAppSelector(state => state.assets);
-  const currentNetwork = useAppSelector(state => state.currentNetwork);
+  const assets = useAppSelector((state) => state.assets);
+  const currentNetwork = useAppSelector((state) => state.currentNetwork);
   const asset = assets[assetId];
 
   const displayName = asset?.displayName;
@@ -38,10 +38,7 @@ export function AssetItem({
   const isLoading = !asset;
 
   return (
-    <div
-      className={cn(styles.assetCard, className, 'flex', 'relative')}
-      data-testid={assetId}
-    >
+    <div className={cn(styles.assetCard, className, 'flex', 'relative')} data-testid={assetId}>
       <AssetLogo
         className={cn(styles.assetIcon, isLoading && 'skeleton-glow')}
         assetId={assetId}
@@ -57,9 +54,7 @@ export function AssetItem({
             <svg
               className={styles.assetStatusIcon}
               fill={isFavorite ? 'var(--color-submit400)' : 'none'}
-              stroke={
-                isFavorite ? 'var(--color-submit400)' : 'var(--color-submit200)'
-              }
+              stroke={isFavorite ? 'var(--color-submit400)' : 'var(--color-submit200)'}
               width="18"
               height="18"
               viewBox="0 0 18 18"
@@ -94,7 +89,7 @@ export function AssetItem({
         <MoreActions>
           {assetId !== 'DCC' && (
             <Tooltip content={<Trans i18nKey="assetInfo.infoTooltip" />}>
-              {props => (
+              {(props) => (
                 <button
                   className={styles.infoBtn}
                   type="button"
@@ -112,15 +107,11 @@ export function AssetItem({
           <Tooltip
             content={
               <Trans
-                i18nKey={
-                  isFavorite
-                    ? 'assetInfo.favRemoveTooltip'
-                    : 'assetInfo.favAddTooltip'
-                }
+                i18nKey={isFavorite ? 'assetInfo.favRemoveTooltip' : 'assetInfo.favAddTooltip'}
               />
             }
           >
-            {props => (
+            {(props) => (
               <button
                 className={styles.favBtn}
                 type="button"
@@ -130,11 +121,7 @@ export function AssetItem({
                 <svg
                   className={styles.favIcon}
                   fill={isFavorite ? 'var(--color-submit400)' : 'none'}
-                  stroke={
-                    isFavorite
-                      ? 'var(--color-submit400)'
-                      : 'var(--color-basic200)'
-                  }
+                  stroke={isFavorite ? 'var(--color-submit400)' : 'var(--color-basic200)'}
                   width="26"
                   height="26"
                   viewBox="0 0 18 18"
@@ -146,7 +133,7 @@ export function AssetItem({
           </Tooltip>
 
           <Tooltip content={<Trans i18nKey={'assetInfo.sendAssetTooltip'} />}>
-            {props => (
+            {(props) => (
               <button
                 className={styles.sendBtn}
                 type="button"
@@ -154,40 +141,29 @@ export function AssetItem({
                 {...props}
                 data-testid="sendBtn"
               >
-                <svg
-                  className={styles.sendIcon}
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
+                <svg className={styles.sendIcon} width="24" height="24" viewBox="0 0 24 24">
                   <path d="M15.19 7.77178L4.08117 18.8806L5.46862 20.2681L16.5774 9.15923L18.6586 11.2404L19.5743 4.77489L13.1088 5.69061L15.19 7.77178Z" />
                 </svg>
               </button>
             )}
           </Tooltip>
 
-          {currentNetwork === 'mainnet' &&
-            isSwappableAsset(currentNetwork, assetId) && (
-              <Tooltip content={<Trans i18nKey="assetInfo.swapAssetTooltip" />}>
-                {props => (
-                  <button
-                    className={styles.swapBtn}
-                    type="button"
-                    onClick={() => onSwapClick(assetId)}
-                    {...props}
-                  >
-                    <svg
-                      className={styles.swapIcon}
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                    >
-                      <path d="m11.56 4.01-1.266-1.268a.6.6 0 0 1 .848-.848l2.291 2.29a.6.6 0 0 1 0 .85l-2.29 2.29a.6.6 0 1 1-.85-.848l1.268-1.267H4.99a.6.6 0 0 1 0-1.2h6.57ZM2.44 9.99l1.266 1.268a.6.6 0 1 1-.848.848L.567 9.816a.6.6 0 0 1 0-.85l2.29-2.29a.6.6 0 1 1 .849.848L2.439 8.791h6.57a.6.6 0 0 1 0 1.2h-6.57Z" />
-                    </svg>
-                  </button>
-                )}
-              </Tooltip>
-            )}
+          {currentNetwork === 'mainnet' && isSwappableAsset(currentNetwork, assetId) && (
+            <Tooltip content={<Trans i18nKey="assetInfo.swapAssetTooltip" />}>
+              {(props) => (
+                <button
+                  className={styles.swapBtn}
+                  type="button"
+                  onClick={() => onSwapClick(assetId)}
+                  {...props}
+                >
+                  <svg className={styles.swapIcon} width="14" height="14" viewBox="0 0 14 14">
+                    <path d="m11.56 4.01-1.266-1.268a.6.6 0 0 1 .848-.848l2.291 2.29a.6.6 0 0 1 0 .85l-2.29 2.29a.6.6 0 1 1-.85-.848l1.268-1.267H4.99a.6.6 0 0 1 0-1.2h6.57ZM2.44 9.99l1.266 1.268a.6.6 0 1 1-.848.848L.567 9.816a.6.6 0 0 1 0-.85l2.29-2.29a.6.6 0 1 1 .849.848L2.439 8.791h6.57a.6.6 0 0 1 0 1.2h-6.57Z" />
+                  </svg>
+                </button>
+              )}
+            </Tooltip>
+          )}
         </MoreActions>
       )}
     </div>

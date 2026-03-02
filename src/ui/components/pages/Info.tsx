@@ -11,9 +11,9 @@ export class Info extends React.Component {
 
         <div className="margin-main basic500">
           <Trans i18nKey="info.keepUp">
-            Cubensis Connect — is the safest way to interact with third-party web
-            resources with DCC-integrated functionality or DApps. Using Cubensis Connect, you can sign transactions and remain safe from malicious
-            sites.
+            Cubensis Connect — is the safest way to interact with third-party web resources with
+            DCC-integrated functionality or DApps. Using Cubensis Connect, you can sign transactions
+            and remain safe from malicious sites.
           </Trans>
         </div>
 
@@ -39,11 +39,7 @@ export class Info extends React.Component {
               ></a>
             </li>
             <li className={styles.telegram}>
-              <a
-                rel="noopener noreferrer"
-                target="_blank"
-                href="https://t.me/decentralchain"
-              ></a>
+              <a rel="noopener noreferrer" target="_blank" href="https://t.me/decentralchain"></a>
             </li>
             <li className={styles.twitter}>
               <a

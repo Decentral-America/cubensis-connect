@@ -3,12 +3,11 @@ import * as styles from './copy.styl';
 import * as copy from 'copy-to-clipboard';
 import cn from 'classnames';
 
-const DEFAULT_HIDDEN_CONTENT =
-  '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••';
+const DEFAULT_HIDDEN_CONTENT = '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••';
 
 export class CopyText extends React.PureComponent {
   readonly state = { showText: false };
-  readonly props: IProps;
+  declare readonly props: IProps;
 
   showTextHandler = () => {
     this.setState({
@@ -16,7 +15,7 @@ export class CopyText extends React.PureComponent {
     });
   };
 
-  onCopyHandler = event => this._copyText(event);
+  onCopyHandler = (event) => this._copyText(event);
 
   render() {
     const iconClass = cn(styles.firstIcon, {
@@ -26,9 +25,7 @@ export class CopyText extends React.PureComponent {
     const copyIcon = cn(styles.lastIcon, 'copy-icon');
 
     const toggleHandler = this.props.toggleText ? this.showTextHandler : null;
-    const showText = this.props.toggleText
-      ? this.state.showText
-      : this.props.showText;
+    const showText = this.props.toggleText ? this.state.showText : this.props.showText;
 
     return (
       <div onClick={toggleHandler}>
@@ -37,9 +34,7 @@ export class CopyText extends React.PureComponent {
           <div className={styles.copyTextOverflow}>
             {showText ? this.props.text : DEFAULT_HIDDEN_CONTENT}
           </div>
-          {this.props.showCopy ? (
-            <div className={copyIcon} onClick={this.onCopyHandler} />
-          ) : null}
+          {this.props.showCopy ? <div className={copyIcon} onClick={this.onCopyHandler} /> : null}
           {this.props.showConfirmed ? <div>Confirm</div> : null}
           {this.props.showNotAccess ? <div>N/A</div> : null}
         </div>
@@ -54,7 +49,7 @@ export class CopyText extends React.PureComponent {
     }
 
     if (this.props.getText) {
-      this.props.getText(text => this.copy(text));
+      this.props.getText((text) => this.copy(text));
       return null;
     }
 
@@ -63,6 +58,7 @@ export class CopyText extends React.PureComponent {
   }
 
   private copy(text) {
+    // @ts-expect-error legacy module import
     const result = copy(text, this.props.copyOptions);
     if (this.props.onCopy) {
       this.props.onCopy(text, result);

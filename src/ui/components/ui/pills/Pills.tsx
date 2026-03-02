@@ -5,8 +5,8 @@ import cn from 'classnames';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 export class Pills extends React.PureComponent {
-  props;
-  onSelect = item => this._onSelect(item);
+  declare props;
+  onSelect = (item) => this._onSelect(item);
 
   render() {
     const { className, onSelect, animated, list, ...props } = this.props;
@@ -14,7 +14,7 @@ export class Pills extends React.PureComponent {
     return (
       <div className={myClassName}>
         <TransitionGroup>
-          {list.map(item => (
+          {list.map((item) => (
             <CSSTransition key={item.id} classNames="animated" timeout={200}>
               <Pill
                 onSelect={this.onSelect.bind(null, item)}

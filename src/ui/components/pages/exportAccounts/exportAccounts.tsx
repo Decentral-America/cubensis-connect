@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import background from '../../../services/Background';
-import {
-  ExportKeystoreChooseAccounts,
-  ExportKeystoreAccount,
-} from './chooseAccounts';
+import { ExportKeystoreChooseAccounts, type ExportKeystoreAccount } from './chooseAccounts';
 import { ExportAccountsPasswordModal } from './passwordModal';
 import { seedUtils } from '@decentralchain/waves-transactions';
 
@@ -21,15 +18,15 @@ export const ExportAccounts = connect(mapStateToProps)(function ExportAccounts({
   allNetworksAccounts,
   onBack,
 }: Props) {
-  const [accountsToExport, setAccountsToExport] = React.useState<
-    ExportKeystoreAccount[] | null
-  >(null);
+  const [accountsToExport, setAccountsToExport] = React.useState<ExportKeystoreAccount[] | null>(
+    null,
+  );
 
   return (
     <>
       <ExportKeystoreChooseAccounts
         accounts={allNetworksAccounts}
-        onSubmit={selectedAccounts => {
+        onSubmit={(selectedAccounts) => {
           setAccountsToExport(selectedAccounts);
         }}
       />
@@ -39,19 +36,15 @@ export const ExportAccounts = connect(mapStateToProps)(function ExportAccounts({
           onClose={() => {
             setAccountsToExport(null);
           }}
-          onSubmit={async password => {
+          onSubmit={async (password) => {
             const accounts = await Promise.all(
-              accountsToExport.map(async acc => ({
+              accountsToExport.map(async (acc) => ({
                 address: acc.address,
                 name: acc.name,
                 network: acc.network,
                 networkCode: acc.networkCode,
-                seed: await background.exportAccount(
-                  acc.address,
-                  password,
-                  acc.network
-                ),
-              }))
+                seed: await background.exportAccount(acc.address, password, acc.network),
+              })),
             );
 
             const profiles = accounts.reduce<
@@ -82,33 +75,25 @@ export const ExportAccounts = connect(mapStateToProps)(function ExportAccounts({
                 mainnet: { accounts: [] },
                 stagenet: { accounts: [] },
                 testnet: { accounts: [] },
-              }
+              },
             );
 
             const now = new Date();
-            const pad = (zeroes: number, value: number) =>
-              value.toString().padStart(zeroes, '0');
+            const pad = (zeroes: number, value: number) => value.toString().padStart(zeroes, '0');
             const nowStr = `${pad(2, now.getFullYear() % 100)}${pad(
               2,
-              now.getMonth() + 1
-            )}${pad(2, now.getDate())}${pad(2, now.getHours())}${pad(
-              2,
-              now.getMinutes()
-            )}`;
+              now.getMonth() + 1,
+            )}${pad(2, now.getDate())}${pad(2, now.getHours())}${pad(2, now.getMinutes())}`;
 
             const filename = `keystore-wkeeper-${nowStr}.json`;
 
             const json = JSON.stringify({
-              profiles: btoa(
-                seedUtils.encryptSeed(JSON.stringify(profiles), password)
-              ),
+              profiles: btoa(seedUtils.encryptSeed(JSON.stringify(profiles), password)),
             });
 
             const anchorEl = document.createElement('a');
             anchorEl.download = filename;
-            anchorEl.href = URL.createObjectURL(
-              new Blob([json], { type: 'application/json' })
-            );
+            anchorEl.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
             anchorEl.click();
             onBack();
           }}

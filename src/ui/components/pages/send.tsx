@@ -1,5 +1,5 @@
-import { BigNumber } from '@waves/bignumber';
-import { Asset, Money } from '@waves/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
+import { Asset, Money } from '@decentralchain/data-entities';
 import { validators } from '@decentralchain/waves-transactions';
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -15,14 +15,10 @@ import { AssetAmountInput } from '../../../assets/amountInput';
 export function Send() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const chainId = useAppSelector(state =>
-    state.selectedAccount.networkCode.charCodeAt(0)
-  );
-  const accountBalance = useAppSelector(
-    state => state.balances[state.selectedAccount.address]
-  );
+  const chainId = useAppSelector((state) => state.selectedAccount.networkCode.charCodeAt(0));
+  const accountBalance = useAppSelector((state) => state.balances[state.selectedAccount.address]);
   const assetBalances = accountBalance?.assets;
-  const currentAsset = useAppSelector(state => state.uiState?.currentAsset);
+  const currentAsset = useAppSelector((state) => state.uiState?.currentAsset);
   const isNft =
     currentAsset &&
     currentAsset.precision === 0 &&
@@ -37,7 +33,7 @@ export function Send() {
 
   const currentBalance = Money.fromCoins(
     !isNft ? assetBalances[currentAsset.id || 'DCC']?.balance : 1,
-    new Asset(currentAsset)
+    new Asset(currentAsset),
   );
 
   const [isTriedToSubmit, setIsTriedToSubmit] = React.useState(false);
@@ -46,11 +42,11 @@ export function Send() {
   const recipientError = !recipientValue
     ? t('send.recipientRequiredError')
     : !(
-        validators.isValidAddress(recipientValue, chainId) ||
-        validators.isValidAliasName(recipientValue)
-      )
-    ? t('send.recipientInvalidError')
-    : null;
+          validators.isValidAddress(recipientValue, chainId) ||
+          validators.isValidAliasName(recipientValue)
+        )
+      ? t('send.recipientInvalidError')
+      : null;
   const showRecipientError = isTriedToSubmit && recipientError != null;
 
   const [amountValue, setAmountValue] = React.useState(isNft ? '1' : '');
@@ -58,14 +54,13 @@ export function Send() {
     !amountValue || Number(amountValue) == 0
       ? t('send.amountRequiredError')
       : !currentBalance.getTokens().gte(amountValue)
-      ? t('send.insufficientFundsError')
-      : null;
+        ? t('send.insufficientFundsError')
+        : null;
   const showAmountError = isTriedToSubmit && amountError != null;
 
   const [attachmentValue, setAttachmentValue] = React.useState('');
   const attachmentByteCount = new TextEncoder().encode(attachmentValue).length;
-  const attachmentError =
-    attachmentByteCount > 140 ? t('send.attachmentMaxLengthError') : null;
+  const attachmentError = attachmentByteCount > 140 ? t('send.attachmentMaxLengthError') : null;
   const showAttachmentError = isTriedToSubmit && attachmentError != null;
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -73,7 +68,7 @@ export function Send() {
   return (
     <form
       className={styles.root}
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
 
         setIsTriedToSubmit(true);
@@ -95,17 +90,14 @@ export function Send() {
               recipient: recipientValue,
               attachment: attachmentValue,
             },
-          })
+          }),
         );
       }}
     >
       <div className={styles.wrapper}>
         <header className={styles.header}>
           <h1 className={styles.title}>
-            <Trans
-              i18nKey="send.title"
-              values={{ name: currentAsset?.displayName }}
-            />
+            <Trans i18nKey="send.title" values={{ name: currentAsset?.displayName }} />
           </h1>
         </header>
 
@@ -122,7 +114,7 @@ export function Send() {
               error={showRecipientError}
               spellCheck={false}
               value={recipientValue}
-              onChange={event => {
+              onChange={(event) => {
                 setRecipientValue(event.currentTarget.value);
               }}
             />
@@ -139,7 +131,7 @@ export function Send() {
                   (() => {
                     const balance = new Money(
                       new BigNumber(assetBalances[currentAsset.id].balance),
-                      new Asset(currentAsset)
+                      new Asset(currentAsset),
                     );
 
                     return (
@@ -150,7 +142,7 @@ export function Send() {
                             asset: currentAsset.displayName,
                           })}
                           value={amountValue}
-                          onChange={value => {
+                          onChange={(value) => {
                             setAmountValue(value);
                           }}
                           onMaxClick={() => {
@@ -184,7 +176,7 @@ export function Send() {
               multiLine
               rows={4}
               value={attachmentValue}
-              onChange={event => {
+              onChange={(event) => {
                 setAttachmentValue(event.currentTarget.value);
               }}
             />

@@ -40,10 +40,8 @@ export class PreferencesController extends EventEmitter {
         { name: `Account ${i + 1}` },
         account,
         oldAccounts.find(
-          oldAcc =>
-            oldAcc.address === account.address &&
-            oldAcc.network === account.network
-        )
+          (oldAcc) => oldAcc.address === account.address && oldAcc.network === account.network,
+        ),
       );
     });
     this.store.updateState({ accounts });
@@ -54,26 +52,22 @@ export class PreferencesController extends EventEmitter {
   syncCurrentNetworkAccounts() {
     const network = this.getNetwork();
     const { accounts, selectedAccount } = this.store.getState();
-    const currentNetworkAccounts = accounts.filter(
-      account => account.network === network
-    );
+    const currentNetworkAccounts = accounts.filter((account) => account.network === network);
     this.store.updateState({ currentNetworkAccounts });
 
     // Ensure we have selected account from current network
     if (
       !selectedAccount ||
       !currentNetworkAccounts.some(
-        account =>
+        (account) =>
           account.address === selectedAccount.address &&
-          account.network === selectedAccount.network
+          account.network === selectedAccount.network,
       )
     ) {
       let addressToSelect;
 
       if (currentNetworkAccounts.length > 0) {
-        const sortedAccounts = currentNetworkAccounts.sort(
-          compareAccountsByLastUsed
-        );
+        const sortedAccounts = currentNetworkAccounts.sort(compareAccountsByLastUsed);
 
         addressToSelect = sortedAccounts[0].address;
       }
@@ -85,12 +79,10 @@ export class PreferencesController extends EventEmitter {
   addLabel(address, label, network) {
     const accounts = this.store.getState().accounts;
     const index = accounts.findIndex(
-      current => current.address === address && current.network === network
+      (current) => current.address === address && current.network === network,
     );
     if (index === -1) {
-      throw new Error(
-        `Account with address "${address}" in ${network} not found`
-      );
+      throw new Error(`Account with address "${address}" in ${network} not found`);
     }
     accounts[index].name = label;
     this.store.updateState({ accounts });
@@ -112,7 +104,7 @@ export class PreferencesController extends EventEmitter {
       });
 
       if (selectedAccount) {
-        accounts.forEach(acc => {
+        accounts.forEach((acc) => {
           if (acc.address === selectedAccount.address) {
             acc.lastUsed = Date.now();
           }
@@ -122,7 +114,7 @@ export class PreferencesController extends EventEmitter {
       this.store.updateState({
         accounts,
         selectedAccount: accounts.find(
-          account => account.address === address && account.network === network
+          (account) => account.address === address && account.network === network,
         ),
       });
 

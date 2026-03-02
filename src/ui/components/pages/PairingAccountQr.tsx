@@ -16,7 +16,7 @@ const SIZE = {
 
 class PairingAccountQrComponent extends React.PureComponent {
   readonly state = { setBig: false };
-  readonly props;
+  declare readonly props;
 
   selectAccountHandler = () => this.selectAccount();
 
@@ -54,16 +54,11 @@ class PairingAccountQrComponent extends React.PureComponent {
         </div>
 
         <div className={styles.pairingWrapper}>
-          <h2
-            className={cn('title1', 'margin3', 'margin-main-big', styles.title)}
-          >
+          <h2 className={cn('title1', 'margin3', 'margin-main-big', styles.title)}>
             <Trans i18nKey="pairing.scanPairing">Scan Pairing Code</Trans>
           </h2>
 
-          <div
-            className={`${styles.qrCode} margin-main-big`}
-            onClick={this.clickHandler}
-          >
+          <div className={`${styles.qrCode} margin-main-big`} onClick={this.clickHandler}>
             <QRCode
               width={size}
               height={size}
@@ -78,14 +73,11 @@ class PairingAccountQrComponent extends React.PureComponent {
           <div className={`fixed ${styles.pairingFooter}`}>
             <div className="margin-main-big body1 basic500">
               <Trans i18nKey="pairing.scanInfo">
-                Scan the code below with your iPhone or Android device to pair
-                it with your account.
+                Scan the code below with your iPhone or Android device to pair it with your account.
               </Trans>
             </div>
             <div className="margin-main body1 basic500">
-              <Trans i18nKey="pairing.appInfo">
-                Download our mobile applications below:
-              </Trans>
+              <Trans i18nKey="pairing.appInfo">Download our mobile applications below:</Trans>
             </div>
 
             <div className="buttons-wrapper margin-main-large">
@@ -119,9 +111,7 @@ const mapStateToProps = function (store: any) {
   const selected = store.localState.assets.account
     ? store.localState.assets.account.address
     : activeAccount;
-  const selectedAccount = store.accounts.find(
-    ({ address }) => address === selected
-  );
+  const selectedAccount = store.accounts.find(({ address }) => address === selected);
   const { pairing } = store.localState;
   return {
     selectedAccount,
@@ -135,7 +125,4 @@ const actions = {
   pairingGetData,
 };
 
-export const PairingAccountQr = connect(
-  mapStateToProps,
-  actions
-)(PairingAccountQrComponent);
+export const PairingAccountQr = connect(mapStateToProps, actions)(PairingAccountQrComponent);

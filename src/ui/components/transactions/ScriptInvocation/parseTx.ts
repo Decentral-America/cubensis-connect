@@ -1,6 +1,6 @@
 import { SIGN_TYPE } from '@decentralchain/signature-adapter';
-import { BigNumber } from '@waves/bignumber';
-import { IMoneyLike } from 'ui/utils/converters';
+import { BigNumber } from '@decentralchain/bignumber';
+import { type IMoneyLike } from 'ui/utils/converters';
 
 export const messageType = 'script_invocation';
 export const txType = 'transaction';
@@ -15,9 +15,8 @@ export function getTransferAmount(amount, assetId) {
 }
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
-  const amountAssetId = (tx.payment || []).map(item => {
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const amountAssetId = (tx.payment || []).map((item) => {
     switch (typeof item) {
       case 'string':
         return 'DCC';
@@ -36,7 +35,7 @@ export { getFee } from '../BaseTransaction/parseTx';
 export function getAmounts(tx) {
   const amounts: IMoneyLike[] = [];
 
-  (tx.payment || []).forEach(item => {
+  (tx.payment || []).forEach((item) => {
     let tokens = new BigNumber(0);
     let coins = new BigNumber(0);
     if (item && item.tokens) {

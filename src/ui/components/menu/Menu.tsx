@@ -16,14 +16,11 @@ const Settings = ({ hasSettings, leftClick, rightClick }) => {
   );
 };
 
-const Buttons = props => {
+const Buttons = (props) => {
   return (
     <div>
       {!props.deleteAccount ? null : (
-        <div
-          className={`${styles.deleteIcon} delete-icon`}
-          onClick={props.onDelete}
-        ></div>
+        <div className={`${styles.deleteIcon} delete-icon`} onClick={props.onDelete}></div>
       )}
     </div>
   );
@@ -31,10 +28,7 @@ const Buttons = props => {
 
 const Back = ({ hasBack, onClick }) => {
   return hasBack ? (
-    <div
-      className={`${styles.arrowBackIcon} arrow-back-icon`}
-      onClick={onClick}
-    ></div>
+    <div className={`${styles.arrowBackIcon} arrow-back-icon`} onClick={onClick}></div>
   ) : null;
 };
 

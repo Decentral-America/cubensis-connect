@@ -9,7 +9,7 @@ export const CircleProgressBar = function (canvas, options) {
   /**
    * @type {CircleProgressBar}
    */
-  var self = this;
+  const self = this;
 
   /**
    * Current value
@@ -83,7 +83,7 @@ export const CircleProgressBar = function (canvas, options) {
    * @param options
    */
   this.setOptions = function (options) {
-    var currentOptions = self._options ? self._options : self._defaultOptions;
+    const currentOptions = self._options ? self._options : self._defaultOptions;
     self._options = self.extend(currentOptions, options, true);
   };
 
@@ -133,7 +133,7 @@ export const CircleProgressBar = function (canvas, options) {
    * @param {Object} data
    */
   this.sendEvent = function (eventName, data) {
-    var event = new CustomEvent('circleProgressBar.' + eventName, {
+    const event = new CustomEvent('circleProgressBar.' + eventName, {
       detail: data,
     });
     self._canvas.dispatchEvent(event);
@@ -171,8 +171,8 @@ export const CircleProgressBar = function (canvas, options) {
    * @returns {Array}
    */
   this.getColors = function () {
-    var colors = self.clone(self._options.colors);
-    var value = self.getValue();
+    let colors = self.clone(self._options.colors);
+    const value = self.getValue();
     // for work properly colors count must be more 2
     // one color
     if (!self.isArray(colors)) {
@@ -180,11 +180,11 @@ export const CircleProgressBar = function (canvas, options) {
     }
 
     // cut spare colors
-    var colorsCountByValue = self._options.maxColorsCountByValue;
-    var maxColors = null;
+    const colorsCountByValue = self._options.maxColorsCountByValue;
+    let maxColors = null;
     if (colorsCountByValue) {
       Object.keys(colorsCountByValue).map(function (objectKey, index) {
-        var maxColorsValue = colorsCountByValue[objectKey];
+        const maxColorsValue = colorsCountByValue[objectKey];
         if (!maxColors && value <= objectKey) {
           maxColors = maxColorsValue;
         }
@@ -213,41 +213,40 @@ export const CircleProgressBar = function (canvas, options) {
    * Draw progress bar for current value and options
    */
   this.draw = function () {
-    var context = self._context;
-    var startColor = null,
+    const context = self._context;
+    let startColor = null,
       endColor = null;
 
-    var colors = self.getColors();
+    const colors = self.getColors();
 
-    var currentPartLength = self._currentPartLength;
+    let currentPartLength = self._currentPartLength;
 
-    var value = self.getValue();
+    const value = self.getValue();
 
     if (self._colorsCount > 0) {
-      currentPartLength =
-        currentPartLength * (self._colorsCount / colors.length);
+      currentPartLength = currentPartLength * (self._colorsCount / colors.length);
     }
 
     self._colorsCount = colors.length;
-    var partLength = ((2 * Math.PI) / (colors.length - 1)) * value;
+    let partLength = ((2 * Math.PI) / (colors.length - 1)) * value;
 
     if (partLength <= 0) {
       partLength = 0.03;
     }
 
-    var partLengthStep = self._options.frameStep / colors.length;
-    var lineWidth = self._options.lineWidth;
-    var trackLineColor = self._options.trackLineColor;
-    var startPosition = self._options.startPosition;
+    let partLengthStep = self._options.frameStep / colors.length;
+    const lineWidth = self._options.lineWidth;
+    const trackLineColor = self._options.trackLineColor;
+    const startPosition = self._options.startPosition;
 
-    var gradient = null;
+    let gradient = null;
 
-    var x = self._options.x,
+    const x = self._options.x,
       y = self._options.y,
       radius = self._options.radius;
 
     var acrInterval = setInterval(function () {
-      var start = startPosition;
+      let start = startPosition;
 
       if (currentPartLength === partLength) {
         clearInterval(acrInterval);
@@ -257,7 +256,7 @@ export const CircleProgressBar = function (canvas, options) {
         return false;
       }
 
-      var partLengthDelta = Math.abs(currentPartLength - partLength);
+      const partLengthDelta = Math.abs(currentPartLength - partLength);
       if (partLengthDelta < partLengthStep) {
         partLengthStep = partLengthDelta;
       }
@@ -280,34 +279,26 @@ export const CircleProgressBar = function (canvas, options) {
           (Math.PI / 180) * 270,
           (Math.PI / 180) * (270 + 360),
           trackLineColor,
-          lineWidth
+          lineWidth,
         );
       }
 
-      for (var i = 0; i < colors.length - 1; i++) {
+      for (let i = 0; i < colors.length - 1; i++) {
         startColor = colors[i];
         endColor = colors[i + 1];
 
         // x start / end of the next arc to draw
-        var xStart = x + Math.cos(start) * radius;
-        var xEnd = x + Math.cos(start + currentPartLength) * radius;
+        const xStart = x + Math.cos(start) * radius;
+        const xEnd = x + Math.cos(start + currentPartLength) * radius;
         // y start / end of the next arc to draw
-        var yStart = y + Math.sin(start) * radius;
-        var yEnd = y + Math.sin(start + currentPartLength) * radius;
+        const yStart = y + Math.sin(start) * radius;
+        const yEnd = y + Math.sin(start + currentPartLength) * radius;
 
         gradient = context.createLinearGradient(xStart, yStart, xEnd, yEnd);
         gradient.addColorStop(0, startColor);
         gradient.addColorStop(1, endColor);
 
-        self.drawArc(
-          x,
-          y,
-          radius,
-          start,
-          start + currentPartLength,
-          gradient,
-          lineWidth
-        );
+        self.drawArc(x, y, radius, start, start + currentPartLength, gradient, lineWidth);
 
         start += currentPartLength;
       }
@@ -344,15 +335,10 @@ export const CircleProgressBar = function (canvas, options) {
    * Clear rect with progress bar
    */
   this.clear = function () {
-    var outerRadius = self._options.radius + self._options.lineWidth;
-    var x = self._options.x,
+    const outerRadius = self._options.radius + self._options.lineWidth;
+    const x = self._options.x,
       y = self._options.y;
-    self._context.clearRect(
-      x - outerRadius,
-      y - outerRadius,
-      x + outerRadius,
-      y + outerRadius
-    );
+    self._context.clearRect(x - outerRadius, y - outerRadius, x + outerRadius, y + outerRadius);
   };
 
   /**
@@ -374,7 +360,7 @@ export const CircleProgressBar = function (canvas, options) {
       return false;
     }
 
-    var type = typeof obj;
+    const type = typeof obj;
     return type === 'object' && !!obj;
   };
 
@@ -388,13 +374,13 @@ export const CircleProgressBar = function (canvas, options) {
     if (!self.isArray(array)) {
       return false;
     }
-    var length = array.length;
+    const length = array.length;
     if (length <= maxLength) {
       return array;
     }
 
-    var delta = length - maxLength;
-    var result = [];
+    const delta = length - maxLength;
+    const result = [];
     array.forEach(function (element, index, array) {
       if (index == 0 || delta < index) {
         result.push(element);
@@ -417,10 +403,10 @@ export const CircleProgressBar = function (canvas, options) {
     source = source || {};
     recursive = recursive || false;
 
-    for (var attrName in source) {
+    for (const attrName in source) {
       if (source.hasOwnProperty(attrName)) {
-        var destVal = destination[attrName];
-        var sourceVal = source[attrName];
+        const destVal = destination[attrName];
+        const sourceVal = source[attrName];
         if (recursive && self.isObject(destVal) && self.isObject(sourceVal)) {
           destination[attrName] = self.extend(destVal, sourceVal, recursive);
         } else {

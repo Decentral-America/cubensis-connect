@@ -1,9 +1,5 @@
 import { combineReducers } from 'redux';
-import {
-  ACTION,
-  setSwapScreenInitialState,
-  resetSwapScreenInitialState,
-} from '../actions';
+import { ACTION, type setSwapScreenInitialState, type resetSwapScreenInitialState } from '../actions';
 import { pairing } from './pairing';
 
 function newUser(state = {}, action) {
@@ -35,10 +31,7 @@ function login(state = {}, action) {
   return state;
 }
 
-function newAccount(
-  state = { name: '', address: '', type: 'seed', seed: '' },
-  action
-) {
+function newAccount(state = { name: '', address: '', type: 'seed', seed: '' }, action) {
   switch (action.type) {
     case ACTION.NEW_ACCOUNT_NAME:
       const name = action.payload != null ? action.payload : state.name;
@@ -50,10 +43,7 @@ function newAccount(
   return state;
 }
 
-function addNewAccount(
-  state = { pending: false, error: false },
-  { type, payload }
-) {
+function addNewAccount(state = { pending: false, error: false }, { type, payload }) {
   switch (type) {
     case ACTION.SAVE_NEW_ACCOUNT_SEND:
     case ACTION.SAVE_NEW_ACCOUNT_RECEIVE:
@@ -90,7 +80,7 @@ interface NotificationsState {
 
 function notifications(
   state: NotificationsState = {},
-  { type, payload }: { type: string; payload: boolean }
+  { type, payload }: { type: string; payload: boolean },
 ): NotificationsState {
   switch (type) {
     case ACTION.NOTIFICATION_ACCOUNT_CREATION_SUCCESS:
@@ -135,7 +125,7 @@ function swapScreenInitialState(
   state: SwapScreenInitialState = swapScreenInitialStateDefault,
   action:
     | ReturnType<typeof setSwapScreenInitialState>
-    | ReturnType<typeof resetSwapScreenInitialState>
+    | ReturnType<typeof resetSwapScreenInitialState>,
 ): SwapScreenInitialState {
   switch (action.type) {
     case ACTION.SET_SWAP_SCREEN_INITIAL_STATE:

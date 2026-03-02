@@ -16,18 +16,15 @@ describe('Messages', function () {
   const sendMessage = () => {
     const done = arguments[arguments.length - 1];
     // @ts-ignore
-    CubensisConnect.initialPromise.then(api => {
-      api
-        .notification({ title: 'Hello!', message: 'World!' })
-        .then(done)
-        .catch(done);
+    CubensisConnect.initialPromise.then((api) => {
+      api.notification({ title: 'Hello!', message: 'World!' }).then(done).catch(done);
     });
   };
 
   async function sendMessageFromOrigin(
     origin: string,
     isWhitelisted: boolean = true,
-    reload: boolean = true
+    reload: boolean = true,
   ) {
     if (reload) {
       await this.driver.get(`https://${origin}`);
@@ -45,7 +42,7 @@ describe('Messages', function () {
     await CreateNewAccount.importAccount.call(
       this,
       'rich',
-      'decentralchain private node seed with dcc tokens'
+      'decentralchain private node seed with dcc tokens',
     );
     await Settings.setMaxSessionTimeout.call(this);
   });
@@ -64,14 +61,10 @@ describe('Messages', function () {
       expect(
         await this.driver
           .wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-messageList-messageList')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-messageList-messageList')]")),
+            this.wait,
           )
-          .findElements(
-            By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")
-          )
+          .findElements(By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")),
       ).not.to.be.empty;
 
       await this.driver.findElement(By.css('button#closeNotification')).click();
@@ -85,11 +78,9 @@ describe('Messages', function () {
     // permission request is shown
     expect(
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-originAuth-transaction')]")
-        ),
-        this.wait
-      )
+        until.elementLocated(By.xpath("//div[contains(@class, '-originAuth-transaction')]")),
+        this.wait,
+      ),
     ).not.to.be.throw;
   });
 
@@ -98,17 +89,15 @@ describe('Messages', function () {
     await this.driver
       .findElement(
         By.xpath(
-          "//div[contains(@class, '-originAuth-collapsed')]//div[contains(@class, '-index-title')]"
-        )
+          "//div[contains(@class, '-originAuth-collapsed')]//div[contains(@class, '-index-title')]",
+        ),
       )
       .click();
 
     await this.driver
       .wait(
-        until.elementIsVisible(
-          this.driver.findElement(By.css('input#checkbox_noshow'))
-        ),
-        this.wait
+        until.elementIsVisible(this.driver.findElement(By.css('input#checkbox_noshow'))),
+        this.wait,
       )
       .click();
 
@@ -117,14 +106,10 @@ describe('Messages', function () {
     expect(
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-messageList-messageList')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-messageList-messageList')]")),
+          this.wait,
         )
-        .findElements(
-          By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")
-        )
+        .findElements(By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")),
     ).not.to.be.empty;
 
     await this.driver.findElement(By.css('button#closeNotification')).click();
@@ -137,27 +122,18 @@ describe('Messages', function () {
     await App.open.call(this);
     // permission request is shown
     await this.driver.wait(
-      until.elementLocated(
-        By.xpath("//div[contains(@class, '-originAuth-transaction')]")
-      ),
-      this.wait
+      until.elementLocated(By.xpath("//div[contains(@class, '-originAuth-transaction')]")),
+      this.wait,
     );
     await this.driver
-      .wait(
-        until.elementIsEnabled(
-          this.driver.findElement(By.css('button#approve'))
-        ),
-        this.wait
-      )
+      .wait(until.elementIsEnabled(this.driver.findElement(By.css('button#approve'))), this.wait)
       .click();
 
     expect(
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-final-transaction')]")
-        ),
-        this.wait
-      )
+        until.elementLocated(By.xpath("//div[contains(@class, '-final-transaction')]")),
+        this.wait,
+      ),
     ).not.to.be.throw;
   });
 
@@ -166,18 +142,13 @@ describe('Messages', function () {
 
     await this.driver
       .wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+        this.wait,
       )
       .click();
 
     await this.driver
-      .wait(
-        until.elementLocated(By.css('button#settingsPermission')),
-        this.wait
-      )
+      .wait(until.elementLocated(By.css('button#settingsPermission')), this.wait)
       .click();
 
     await this.driver
@@ -185,10 +156,10 @@ describe('Messages', function () {
         until.elementLocated(
           By.xpath(
             "//div[contains(@class, '-list-permissionItem')][last()]" +
-              "//button[contains(@class, '-list-settings')]"
-          )
+              "//button[contains(@class, '-list-settings')]",
+          ),
         ),
-        this.wait
+        this.wait,
       )
       .click();
     await this.driver
@@ -204,14 +175,10 @@ describe('Messages', function () {
     expect(
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-messageList-messageList')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-messageList-messageList')]")),
+          this.wait,
         )
-        .findElements(
-          By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")
-        )
+        .findElements(By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")),
     ).not.to.be.empty;
     await this.driver.findElement(By.css('button#closeNotification')).click();
   });
@@ -223,12 +190,7 @@ describe('Messages', function () {
 
     while (success < 2) {
       await this.driver.sleep(NOTIFICATION_POLL_INTERVAL);
-      callback = await sendMessageFromOrigin.call(
-        this,
-        WHITELIST[3],
-        true,
-        !runs++
-      );
+      callback = await sendMessageFromOrigin.call(this, WHITELIST[3], true, !runs++);
       success += (callback?.code !== '18' && 1) || 0;
     }
 
@@ -236,14 +198,10 @@ describe('Messages', function () {
     expect(
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-messageList-messageList')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-messageList-messageList')]")),
+          this.wait,
         )
-        .findElements(
-          By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")
-        )
+        .findElements(By.xpath("//div[contains(@class, '-messageList-messageItemInner')]")),
     ).length(2);
     // do not clear messages for next test
   });
@@ -255,14 +213,10 @@ describe('Messages', function () {
     expect(
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-messageList-messageList')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-messageList-messageList')]")),
+          this.wait,
         )
-        .findElements(
-          By.xpath("//div[contains(@class, '-messageList-cardItem')]")
-        )
+        .findElements(By.xpath("//div[contains(@class, '-messageList-cardItem')]")),
     ).length(2);
     // do not clear messages for next test
   });
@@ -275,16 +229,14 @@ describe('Messages', function () {
       await this.driver.findElements(
         By.xpath(
           "//div[contains(@class, '-messageList-messageList')]" +
-            "//div[contains(@class, '-messageList-cardItem')]"
-        )
-      )
+            "//div[contains(@class, '-messageList-cardItem')]",
+        ),
+      ),
     ).to.be.empty;
   });
 
   // TODO looks like these units need to be checked in unittests
-  it(
-    'You cannot send messages from one resource more often than once every 30 seconds'
-  );
+  it('You cannot send messages from one resource more often than once every 30 seconds');
   it('The message title cannot be longer than 20 characters');
   it('The message text cannot be longer than 250 characters');
   it('Title is a required field');

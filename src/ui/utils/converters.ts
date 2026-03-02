@@ -1,5 +1,5 @@
-import { Money } from '@waves/data-entities';
-import { BigNumber } from '@waves/bignumber';
+import { Money } from '@decentralchain/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
 
 export const moneyLikeToMoney = (amount: IMoneyLike, assets): Money => {
   if (amount) {
@@ -10,19 +10,14 @@ export const moneyLikeToMoney = (amount: IMoneyLike, assets): Money => {
     }
 
     if ('coins' in amount) {
-      amountResult = amountResult.add(
-        amountResult.cloneWithCoins(amount.coins || 0)
-      );
+      amountResult = amountResult.add(amountResult.cloneWithCoins(amount.coins || 0));
     }
 
     return amountResult;
   }
 };
 
-export const getMoney = (
-  amount: IMoneyLike | BigNumber | Money | string | number,
-  assets
-) => {
+export const getMoney = (amount: IMoneyLike | BigNumber | Money | string | number, assets) => {
   if (amount instanceof Money) {
     return amount;
   }
@@ -38,7 +33,7 @@ export const getMoney = (
 
     return new Money(
       (amount as { amount?: number | string }).amount || 0,
-      assets[amount.assetId || 'DCC']
+      assets[amount.assetId || 'DCC'],
     );
   }
 

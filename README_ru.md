@@ -40,9 +40,9 @@
 Пример:
 
 ```js
-CubensisConnect.initialPromise.then(keeperApi => {
+CubensisConnect.initialPromise.then((keeperApi) => {
   /*...инициализация работы приложения с CubensisConnect*/
-  keeperApi.publicState().then(state => startApp(state));
+  keeperApi.publicState().then((state) => startApp(state));
 });
 ```
 
@@ -65,11 +65,11 @@ CubensisConnect.initialPromise.then(keeperApi => {
 
 ```js
 CubensisConnect.publicState()
-  .then(state => {
+  .then((state) => {
     console.log(state); //вывод в консоль результата
     /*...обработка данных */
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error); //вывод в консоль результата
     /*...обработка ошибок */
   });
@@ -150,8 +150,8 @@ CubensisConnect.encryptMessage(`текст для шифрования`, `пуб
 CubensisConnect.encryptMessage(
   'My message',
   '416z9d8DQDy5MPTqDhvReRBaPb19gEyVRWvHcewpP6Nc',
-  'для меня'
-).then(encryptedMessage => {
+  'для меня',
+).then((encryptedMessage) => {
   console.log(encryptedMessage);
 });
 ```
@@ -172,7 +172,7 @@ CubensisConnect.encryptMessage(
 CubensisConnect.decryptMessage(
   `зашифрованный текст`,
   `публичный ключ в кодировке base58`,
-  `префикс строкой уникальный для каждого приложения`
+  `префикс строкой уникальный для каждого приложения`,
 );
 ```
 
@@ -181,8 +181,8 @@ Example:
 ```js
 CubensisConnect.decryptMessage(
   '**encrypted msg**',
-  '416z9d8DQDy5MPTqDhvReRBaPb19gEyVRWvHcewpP6Nc'
-).then(message => {
+  '416z9d8DQDy5MPTqDhvReRBaPb19gEyVRWvHcewpP6Nc',
+).then((message) => {
   console.log(message);
 });
 ```
@@ -206,7 +206,7 @@ CubensisConnect.decryptMessage(
 Пример:
 
 ```js
-CubensisConnect.on('update', state => {
+CubensisConnect.on('update', (state) => {
   //state бъект как из CubensisConnect.publicState
 });
 ```
@@ -250,11 +250,11 @@ CubensisConnect.notification({
 ```js
 const authData = { data: 'Auth on my site' };
 CubensisConnect.auth(authData)
-  .then(auth => {
+  .then((auth) => {
     console.log(auth); //вывод в консоль результата
     /*...обработка данных */
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error); //вывод в консоль результата
     /*...обработка ошибок */
   });
@@ -263,7 +263,7 @@ CubensisConnect.auth(authData)
 или
 
 ```js
-const getAuthData = async authData => {
+const getAuthData = async (authData) => {
   try {
     const state = await CubensisConnect.auth(authData);
     console.log(state); //вывод в консоль результата
@@ -298,12 +298,12 @@ const authData = {
 };
 
 CubensisConnect.auth(authData)
-  .then(data => {
+  .then((data) => {
     //data - данные от кипера
     //проверка подписи и сохранение адреса...
     console.log(data);
   })
-  .catch(error => {
+  .catch((error) => {
     //обработка ошибки
   });
 ```
@@ -346,10 +346,10 @@ const txData = {
   },
 };
 CubensisConnect.signTransaction(txData)
-  .then(data => {
+  .then((data) => {
     //data - строка готовая для отсылки на ноду(сервер) сети Waves
   })
-  .catch(error => {
+  .catch((error) => {
     //Обработка ошибок
   });
 ```
@@ -407,10 +407,10 @@ const txData = {
 };
 
 CubensisConnect.signAndPublishTransaction(txData)
-  .then(data => {
+  .then((data) => {
     //data - строка готовая для отсылки на ноду(сервер) сети Waves
   })
-  .catch(error => {
+  .catch((error) => {
     //Обработка ошибок
   });
 ```
@@ -562,10 +562,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я создал свой ассет!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -593,10 +593,10 @@ CubensisConnect.signAndPublishTransaction({
     recipient: 'merry',
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я смог отправить Waves!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -625,10 +625,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я довыпустил ассет!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -658,10 +658,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я сжег лишнее!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -690,10 +690,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я смог передать в лизинг!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -720,10 +720,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я отменил лизинг!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -750,10 +750,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я теперь с алиасом!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -787,10 +787,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я друзьям отправил приветов!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -825,10 +825,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я сохранил данные!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -858,10 +858,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я отменил скрипт!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -881,10 +881,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я поставил скрипт!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -914,10 +914,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я стал спонсором!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -949,10 +949,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я переставил скрипт на ассете!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -995,10 +995,10 @@ CubensisConnect.signAndPublishTransaction({
     payment: [{ assetId: 'DCC', tokens: 2 }],
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я выполнил скрипт!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -1057,10 +1057,10 @@ CubensisConnect.signOrder({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я подписал ордер!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -1143,7 +1143,7 @@ CubensisConnect.signAndPublishCancelOrder({
   .then(() => {
     console.log('Ура! Я отменил ордер');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -1300,7 +1300,7 @@ CubensisConnect.verifyCustomData({
   data: [{ type: 'string', key: 'name', value: 'Mr. First' }],
   signature: 'wrong signature',
   publicKey: '7kPFrHDiGw1rCm7LPszuECwWYL3dMf6iMifLRDJQZMzy',
-}).then(result => {
+}).then((result) => {
   console.log(result);
 }); //true/false
 ```
@@ -1312,7 +1312,7 @@ CubensisConnect.verifyCustomData({
 Пример:
 
 ```js
-CubensisConnect.resourceIsApproved().then(result => {
+CubensisConnect.resourceIsApproved().then((result) => {
   console.log(result);
 });
 ```
@@ -1326,7 +1326,7 @@ CubensisConnect.resourceIsApproved().then(result => {
 Пример:
 
 ```js
-CubensisConnect.resourceIsBlocked().then(result => {
+CubensisConnect.resourceIsBlocked().then((result) => {
   console.log(result);
 });
 ```

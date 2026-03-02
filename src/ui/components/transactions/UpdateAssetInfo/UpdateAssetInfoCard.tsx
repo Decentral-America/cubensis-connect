@@ -15,13 +15,9 @@ interface IProps {
 
 export class UpdateAssetInfoCard extends React.PureComponent<IProps> {
   render() {
-    const className = cn(
-      styles.updateAssetInfoTransactionCard,
-      this.props.className,
-      {
-        [styles.updateAssetInfoCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.updateAssetInfoTransactionCard, this.props.className, {
+      [styles.updateAssetInfoCard_collapsed]: this.props.collapsed,
+    });
 
     const { message } = this.props;
     const { data = {} } = message;

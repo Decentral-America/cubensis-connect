@@ -30,7 +30,7 @@ const extendValues = (defaultValues, newValues) => {
       }
       return acc;
     },
-    { ...newValues }
+    { ...newValues },
   );
 };
 
@@ -88,7 +88,7 @@ export class RemoteConfigController {
       const { blacklist } = this.store.getState();
 
       if (Array.isArray(blacklist)) {
-        return blacklist.filter(item => typeof item === 'string');
+        return blacklist.filter((item) => typeof item === 'string');
       }
 
       return [];
@@ -102,7 +102,7 @@ export class RemoteConfigController {
       const { whitelist } = this.store.getState();
 
       if (Array.isArray(whitelist)) {
-        return whitelist.filter(item => typeof item === 'string');
+        return whitelist.filter((item) => typeof item === 'string');
       }
 
       return [];
@@ -131,8 +131,8 @@ export class RemoteConfigController {
 
   fetchConfig() {
     return fetch(CONFIG_URL)
-      .then(resp => resp.text())
-      .then(txt => JSON.parse(txt));
+      .then((resp) => resp.text())
+      .then((txt) => JSON.parse(txt));
   }
 
   updateState(state = {}) {
@@ -170,38 +170,24 @@ export class RemoteConfigController {
 
     clearTimeout(this._timer);
 
-    this._timer = setTimeout(
-      () => this._getConfig(),
-      DEFAULT_CONFIG.CONFIG.update_ms
-    );
+    this._timer = setTimeout(() => this._getConfig(), DEFAULT_CONFIG.CONFIG.update_ms);
   }
 
   async _getIgnoreErrorsConfig() {
     const { ignoreErrorsConfig } = this.store.getState();
 
     try {
-      const ignoreErrorsConfigResponse = await fetch(
-        IGNORE_ERRORS_CONFIG_URL
-      ).then(resp =>
-        resp.ok
-          ? resp.json()
-          : resp.text().then(text => Promise.reject(new Error(text)))
+      const ignoreErrorsConfigResponse = await fetch(IGNORE_ERRORS_CONFIG_URL).then((resp) =>
+        resp.ok ? resp.json() : resp.text().then((text) => Promise.reject(new Error(text))),
       );
 
       this.store.updateState({
-        ignoreErrorsConfig: Object.assign(
-          {},
-          ignoreErrorsConfig,
-          ignoreErrorsConfigResponse
-        ),
+        ignoreErrorsConfig: Object.assign({}, ignoreErrorsConfig, ignoreErrorsConfigResponse),
       });
     } catch (err) {
       // ignore
     } finally {
-      setTimeout(
-        () => this._getIgnoreErrorsConfig(),
-        IGNORE_ERRORS_CONFIG_UPDATE_INTERVAL
-      );
+      setTimeout(() => this._getIgnoreErrorsConfig(), IGNORE_ERRORS_CONFIG_UPDATE_INTERVAL);
     }
   }
 
@@ -210,7 +196,7 @@ export class RemoteConfigController {
 
     return (
       ignoreErrorsConfig.ignoreAll ||
-      ignoreErrorsConfig[context].some(str => {
+      ignoreErrorsConfig[context].some((str) => {
         const re = new RegExp(str);
 
         return re.test(message);

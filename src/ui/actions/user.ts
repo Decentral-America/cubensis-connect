@@ -1,5 +1,5 @@
 import { ACTION } from './constants';
-import { WalletTypes } from '../services/Background';
+import { type WalletTypes } from '../services/Background';
 
 export const deleteAccount = () => ({ type: ACTION.DELETE_ACCOUNT });
 
@@ -40,7 +40,7 @@ export function batchAddAccounts(
     seed: string;
     type: string;
   }>,
-  type: WalletTypes
+  type: WalletTypes,
 ) {
   return {
     type: ACTION.BATCH_ADD_ACCOUNTS,
@@ -51,7 +51,7 @@ export function batchAddAccounts(
 
 export const lock = () => ({ type: ACTION.LOCK });
 
-export const setLocale = locale => ({
+export const setLocale = (locale) => ({
   type: ACTION.CHANGE_LNG,
   payload: locale,
 });

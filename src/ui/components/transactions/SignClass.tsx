@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TransactionWallet } from '../wallets/TransactionWallet';
 
 export class SignClass extends React.PureComponent {
-  readonly props;
+  declare readonly props;
   readonly state = Object.create(null);
 
   render() {

@@ -17,11 +17,10 @@ import { Intro } from './Intro';
 
 class SelectTxAccountComponent extends React.PureComponent {
   readonly state = { loading: false };
-  readonly props;
+  declare readonly props;
 
   static getDerivedStateFromProps(props, state) {
-    const { activeMessage, messages, activeNotification, notifications } =
-      props;
+    const { activeMessage, messages, activeNotification, notifications } = props;
 
     if (
       !activeMessage &&
@@ -69,15 +68,13 @@ class SelectTxAccountComponent extends React.PureComponent {
         </TransactionWallet>
         <div className={styles.wrapper}>
           <div className="title1 margin-main-big">
-            <Trans i18nKey="sign.changeAccount">
-              Do you want to change your account?
-            </Trans>
+            <Trans i18nKey="sign.changeAccount">Do you want to change your account?</Trans>
           </div>
 
           <div className="margin-main-large body1">
             <Trans i18nKey="sign.changeAccountInfo">
-              If you change account, we will cancel the current transaction.
-              After selecting a new active account, repeat the operation.
+              If you change account, we will cancel the current transaction. After selecting a new
+              active account, repeat the operation.
             </Trans>
           </div>
 
@@ -90,7 +87,7 @@ class SelectTxAccountComponent extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     selectAccount: state.selectedAccount,
     messages: state.messages,
@@ -109,7 +106,4 @@ const actions = {
   reject,
 };
 
-export const SelectTxAccount = connect(
-  mapStateToProps,
-  actions
-)(SelectTxAccountComponent);
+export const SelectTxAccount = connect(mapStateToProps, actions)(SelectTxAccountComponent);

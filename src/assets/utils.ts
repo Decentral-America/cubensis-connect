@@ -1,19 +1,19 @@
-import BigNumber from '@waves/bignumber';
-import { Asset, Money } from '@waves/data-entities';
-import { AssetBalance } from 'ui/reducers/updateState';
+import BigNumber from '@decentralchain/bignumber';
+import { type Asset, Money } from '@decentralchain/data-entities';
+import { type AssetBalance } from 'ui/reducers/updateState';
 import { DEFAULT_FEE_CONFIG } from '../constants';
 import { assetIds, assetLogosByNetwork, swappableAssetIds } from './constants';
 
 export function convertToSponsoredAssetFee(
   wavesFeeCoins: BigNumber,
   asset: Asset,
-  assetBalance: AssetBalance
+  assetBalance: AssetBalance,
 ) {
   return new Money(
     new BigNumber(assetBalance.minSponsoredAssetFee)
       .mul(wavesFeeCoins)
       .div(DEFAULT_FEE_CONFIG.calculate_fee_rules.default.fee),
-    asset
+    asset,
   );
 }
 
@@ -21,10 +21,7 @@ export function getAssetLogo(network: string, assetId: string) {
   return assetLogosByNetwork[network]?.[assetId];
 }
 
-export function getAssetIdByName(
-  network: string,
-  assetName: string
-): string | undefined {
+export function getAssetIdByName(network: string, assetName: string): string | undefined {
   return assetIds[network]?.[assetName];
 }
 

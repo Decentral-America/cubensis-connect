@@ -1,15 +1,13 @@
 import { DEFAULT_FEE_CONFIG, DEFAULT_FEE_CONFIG_URL } from '../constants';
 import { SIGN_TYPE } from '@decentralchain/signature-adapter';
 import { libs } from '@decentralchain/waves-transactions';
-import { BigNumber } from '@waves/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 
 const CONFIG_EXPIRATION_TIME = 60 * 60 * 1000;
 
-const FEE_TYPES = [
-  2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1002,
-];
+const FEE_TYPES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1002];
 
-const promiseCache = (delta, defaultValue) => cb => {
+const promiseCache = (delta, defaultValue) => (cb) => {
   const defaultConfig = Promise.resolve(defaultValue);
   let time = null;
   let promise = null;
@@ -32,9 +30,7 @@ const promiseCache = (delta, defaultValue) => cb => {
 
 const isAccountHasExtraFee = async (address, node) => {
   try {
-    const response = await fetch(
-      new URL(`/addresses/scriptInfo/${address}`, node).toString()
-    );
+    const response = await fetch(new URL(`/addresses/scriptInfo/${address}`, node).toString());
     const result = await response.json();
     return result.extraFee;
   } catch (e) {
@@ -47,10 +43,7 @@ const getConfig = async function () {
   return await response.json();
 };
 
-const getCachingFeeConfig = promiseCache(
-  CONFIG_EXPIRATION_TIME,
-  DEFAULT_FEE_CONFIG
-)(getConfig);
+const getCachingFeeConfig = promiseCache(CONFIG_EXPIRATION_TIME, DEFAULT_FEE_CONFIG)(getConfig);
 
 export async function getMinimumFee(txType) {
   const feeConfig = await getCachingFeeConfig();
@@ -60,9 +53,9 @@ export async function getMinimumFee(txType) {
 }
 
 export async function getExtraFee(address, node) {
-  const json = await fetch(
-    new URL(`/addresses/scriptInfo/${address}`, node).toString()
-  ).then(res => res.json());
+  const json = await fetch(new URL(`/addresses/scriptInfo/${address}`, node).toString()).then(
+    (res) => res.json(),
+  );
 
   return json.extraFee;
 }
@@ -80,26 +73,17 @@ export const calculateFeeFabric =
     const signable = adapter.makeSignable(signData);
     const address = await adapter.getAddress();
     const assetIds = await signable.getAssetIds();
-    const assets = await Promise.all(
-      assetIds.map(id => assetInfoController.assetInfo(id))
-    );
-    const smartAssets = assets
-      .filter(asset => asset.hasScript)
-      .map(asset => asset.id);
+    const assets = await Promise.all(assetIds.map((id) => assetInfoController.assetInfo(id)));
+    const smartAssets = assets.filter((asset) => asset.hasScript).map((asset) => asset.id);
 
     if (type === SIGN_TYPE.CREATE_ORDER) {
       const minOrderFee = new BigNumber(300000);
       const matcherAddress = libs.crypto.address(
         { public: signData.data.matcherPublicKey },
-        adapter.getNetworkByte()
+        adapter.getNetworkByte(),
       );
       const extraFee = await isAccountHasExtraFee(matcherAddress, node);
-      return signable.getOrderFee(
-        feeConfig,
-        minOrderFee,
-        extraFee,
-        smartAssets
-      );
+      return signable.getOrderFee(feeConfig, minOrderFee, extraFee, smartAssets);
     }
 
     const extraFee = await isAccountHasExtraFee(address, node);

@@ -5,7 +5,7 @@ import * as styles from './index.styl';
 export class Select<T> extends React.PureComponent<IProps<T>, IState<T>> {
   private element: HTMLDivElement;
 
-  getRef = element => {
+  getRef = (element) => {
     this.props.forwardRef && (this.props.forwardRef.current = element);
     this.element = element;
   };
@@ -28,7 +28,7 @@ export class Select<T> extends React.PureComponent<IProps<T>, IState<T>> {
     this.setState({ showList: !showList });
   };
 
-  clickOutHandler = e => {
+  clickOutHandler = (e) => {
     let el = e.target;
 
     while (el) {
@@ -76,8 +76,7 @@ export class Select<T> extends React.PureComponent<IProps<T>, IState<T>> {
       ...restProps
     } = this.props;
 
-    const { text } =
-      selectList.find(({ id }) => id === selected) || selectList[0];
+    const { text } = selectList.find(({ id }) => id === selected) || selectList[0];
 
     return (
       <div className={cn(styles.select, className)} ref={this.getRef}>
@@ -123,15 +122,11 @@ function List<T>({
           {
             bottom: styles.list_placement_bottom,
             top: styles.list_placement_top,
-          }[placement]
+          }[placement],
         )}
       >
-        {list.map(item => (
-          <div
-            key={item.id}
-            className={styles.listItem}
-            onClick={() => onSelect(item)}
-          >
+        {list.map((item) => (
+          <div key={item.id} className={styles.listItem} onClick={() => onSelect(item)}>
             {item.text}
           </div>
         ))}

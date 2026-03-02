@@ -40,9 +40,9 @@ You can use `CubensisConnect.initialPromise` for waiting end initializing api.
 Example:
 
 ```js
-CubensisConnect.initialPromise.then(keeperApi => {
+CubensisConnect.initialPromise.then((keeperApi) => {
   /*...init app*/
-  keeperApi.publicState().then(state => startApp(state));
+  keeperApi.publicState().then((state) => startApp(state));
 });
 ```
 
@@ -58,11 +58,11 @@ Example:
 
 ```js
 CubensisConnect.publicState()
-  .then(state => {
+  .then((state) => {
     console.log(state); //displaying the result in the console
     /*...processing data */
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error); // displaying the result in the console
     /*...processing errors */
   });
@@ -172,8 +172,8 @@ Example:
 CubensisConnect.encryptMessage(
   'My message',
   '416z9d8DQDy5MPTqDhvReRBaPb19gEyVRWvHcewpP6Nc',
-  'my app'
-).then(encryptedMessage => {
+  'my app',
+).then((encryptedMessage) => {
   console.log(encryptedMessage);
 });
 ```
@@ -198,8 +198,8 @@ Example:
 CubensisConnect.decryptMessage(
   '**encrypted msg**',
   '416z9d8DQDy5MPTqDhvReRBaPb19gEyVRWvHcewpP6Nc',
-  'my app'
-).then(message => {
+  'my app',
+).then((message) => {
   console.log(message);
 });
 ```
@@ -222,7 +222,7 @@ Supports events:
 Example:
 
 ```js
-CubensisConnect.on('update', state => {
+CubensisConnect.on('update', (state) => {
   //state object as from CubensisConnect.publicState
 });
 ```
@@ -238,11 +238,11 @@ Example:
 ```js
 const authData = { data: 'Auth on my site' };
 CubensisConnect.auth(authData)
-  .then(auth => {
+  .then((auth) => {
     console.log(auth); //displaying the result on the console
     /*...processing data */
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error); // displaying the result on the console
     /*...processing errors */
   });
@@ -251,7 +251,7 @@ CubensisConnect.auth(authData)
 or
 
 ```js
-const getAuthData = async authData => {
+const getAuthData = async (authData) => {
   try {
     const state = await CubensisConnect.auth(authData);
     console.log(state); // displaying the result on the console
@@ -286,12 +286,12 @@ const authData = {
 };
 
 CubensisConnect.auth(authData)
-  .then(data => {
+  .then((data) => {
     //data – data from Cubensis Connect
     //verifying signature and saving the address...
     console.log(data);
   })
-  .catch(error => {
+  .catch((error) => {
     //processing the error
   });
 ```
@@ -334,10 +334,10 @@ const txData = {
   },
 };
 CubensisConnect.signTransaction(txData)
-  .then(data => {
+  .then((data) => {
     //data – a line ready for sending to Waves network's node (server)
   })
-  .catch(error => {
+  .catch((error) => {
     //Processing errors
   });
 ```
@@ -395,10 +395,10 @@ const txData = {
 };
 
 CubensisConnect.signAndPublishTransaction(txData)
-  .then(data => {
+  .then((data) => {
     //data - a line ready for sending to Waves network's node (server)
   })
-  .catch(error => {
+  .catch((error) => {
     //processing errors
   });
 ```
@@ -545,10 +545,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've created my asset!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -575,10 +575,10 @@ CubensisConnect.signAndPublishTransaction({
     recipient: 'merry',
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've been able to send DCC!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -607,10 +607,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've reissued my asset!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -639,10 +639,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've burned unneeded tokens!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -671,10 +671,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've been able to lease tokens!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -701,10 +701,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've cancelled leasing!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong ', error);
   });
 ```
@@ -731,10 +731,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Hurray! Now I have an alias!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -768,10 +768,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've sent hi to my friends!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -814,10 +814,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've saved data!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -846,10 +846,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've cancelled a script!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -870,10 +870,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've added a script!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -903,10 +903,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've become a sponsor!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -937,10 +937,10 @@ CubensisConnect.signAndPublishTransaction({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Hurray! I have reset a script to the asset!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -983,10 +983,10 @@ CubensisConnect.signAndPublishTransaction({
     payment: [{ assetId: 'DCC', tokens: 2 }],
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log('Ура! Я выполнил скрипт!!!');
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
@@ -1043,10 +1043,10 @@ CubensisConnect.signOrder({
     },
   },
 })
-  .then(tx => {
+  .then((tx) => {
     console.log("Hurray! I've signed an order!!!");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -1124,7 +1124,7 @@ CubensisConnect.signAndPublishCancelOrder({
   .then(() => {
     console.log("Hurray! I've cancelled an order");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Something went wrong', error);
   });
 ```
@@ -1282,7 +1282,7 @@ CubensisConnect.verifyCustomData({
   publicKey: '3BvAsKuGZe2LbSwKr9SA7eSXcNDKnRqN1j2K2bZaTn5X',
   signature:
     '2bLJYR68pwWrUUoatGbySz2vfY76VtzR8TScg1tt5f9DVDsFDCdecWrUiR4x6gFBnwF4Y51uszpouAwtSrg7EcGg',
-}).then(result => {
+}).then((result) => {
   console.log(result);
 });
 ```
@@ -1299,7 +1299,7 @@ Check allow API status for your origin
 Example:
 
 ```js
-CubensisConnect.resourceIsApproved().then(result => {
+CubensisConnect.resourceIsApproved().then((result) => {
   console.log(result);
 });
 ```
@@ -1313,7 +1313,7 @@ Check block API status for your origin
 Example:
 
 ```js
-CubensisConnect.resourceIsBlocked().then(result => {
+CubensisConnect.resourceIsBlocked().then((result) => {
   console.log(result);
 });
 ```

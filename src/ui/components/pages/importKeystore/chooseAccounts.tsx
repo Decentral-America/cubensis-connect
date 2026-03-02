@@ -18,22 +18,13 @@ export interface ImportKeystoreAccount {
   seed: string;
 }
 
-export type ImportKeystoreNetwork =
-  | 'mainnet'
-  | 'testnet'
-  | 'stagenet'
-  | 'custom';
+export type ImportKeystoreNetwork = 'mainnet' | 'testnet' | 'stagenet' | 'custom';
 export type ImportKeystoreProfiles = Record<
   ImportKeystoreNetwork,
   { accounts: ImportKeystoreAccount[] }
 >;
 
-const allNetworks: ImportKeystoreNetwork[] = [
-  'mainnet',
-  'testnet',
-  'stagenet',
-  'custom',
-];
+const allNetworks: ImportKeystoreNetwork[] = ['mainnet', 'testnet', 'stagenet', 'custom'];
 
 const networkLabels: Record<ImportKeystoreNetwork, string> = {
   custom: 'Custom',
@@ -55,7 +46,7 @@ export function ImportKeystoreChooseAccounts({
   onSkip,
   onSubmit,
 }: Props) {
-  const existingAccounts = new Set(allNetworksAccounts.map(acc => acc.address));
+  const existingAccounts = new Set(allNetworksAccounts.map((acc) => acc.address));
 
   const [selected, setSelected] = React.useState(
     () =>
@@ -63,21 +54,18 @@ export function ImportKeystoreChooseAccounts({
         Object.values(profiles)
           .reduce(
             (accounts, profile) => accounts.concat(profile.accounts),
-            [] as ImportKeystoreAccount[]
+            [] as ImportKeystoreAccount[],
           )
           .filter(({ address }) => !existingAccounts.has(address))
-          .map(({ address }) => address)
-      )
+          .map(({ address }) => address),
+      ),
   );
 
-  function toggleSelected(
-    accounts: ImportKeystoreAccount[],
-    isSelected: boolean
-  ) {
-    setSelected(prevSelected => {
+  function toggleSelected(accounts: ImportKeystoreAccount[], isSelected: boolean) {
+    setSelected((prevSelected) => {
       const newSelected = new Set(prevSelected);
 
-      accounts.forEach(acc => {
+      accounts.forEach((acc) => {
         if (isSelected) {
           newSelected.add(acc.address);
         } else {
@@ -92,16 +80,16 @@ export function ImportKeystoreChooseAccounts({
   return (
     <form
       className={styles.root}
-      onSubmit={event => {
+      onSubmit={(event) => {
         event.preventDefault();
 
         onSubmit(
           Object.values(profiles)
             .reduce(
               (accounts, profile) => accounts.concat(profile.accounts),
-              [] as ImportKeystoreAccount[]
+              [] as ImportKeystoreAccount[],
             )
-            .filter(({ address }) => selected.has(address))
+            .filter(({ address }) => selected.has(address)),
         );
       }}
     >
@@ -115,42 +103,29 @@ export function ImportKeystoreChooseAccounts({
 
       <div className={styles.accounts}>
         {allNetworks
-          .map(network => [network, profiles[network].accounts] as const)
+          .map((network) => [network, profiles[network].accounts] as const)
           .filter(([_, accounts]) => accounts.length !== 0)
           .map(([network, accounts]) => {
-            const newAccounts = accounts.filter(
-              acc => !existingAccounts.has(acc.address)
-            );
+            const newAccounts = accounts.filter((acc) => !existingAccounts.has(acc.address));
 
             return (
-              <div
-                key={network}
-                className={styles.accountsGroup}
-                data-testid="accountsGroup"
-              >
+              <div key={network} className={styles.accountsGroup} data-testid="accountsGroup">
                 <header className={styles.accountsGroupHeader}>
                   <i className={cn(styles.accountsGroupIcon, 'networkIcon')} />
 
-                  <h2
-                    className={styles.accountsGroupLabel}
-                    data-testid="accountsGroupLabel"
-                  >
+                  <h2 className={styles.accountsGroupLabel} data-testid="accountsGroupLabel">
                     {networkLabels[network]}
                   </h2>
 
                   {newAccounts.length !== 0 && (
                     <input
-                      checked={newAccounts.every(acc =>
-                        selected.has(acc.address)
-                      )}
+                      checked={newAccounts.every((acc) => selected.has(acc.address))}
                       className={styles.checkbox}
                       type="checkbox"
-                      onChange={event => {
+                      onChange={(event) => {
                         toggleSelected(
-                          accounts.filter(
-                            acc => !existingAccounts.has(acc.address)
-                          ),
-                          event.currentTarget.checked
+                          accounts.filter((acc) => !existingAccounts.has(acc.address)),
+                          event.currentTarget.checked,
                         );
                       }}
                     />
@@ -158,9 +133,9 @@ export function ImportKeystoreChooseAccounts({
                 </header>
 
                 <ul className={styles.accountList}>
-                  {accounts.map(account => {
+                  {accounts.map((account) => {
                     const existingAccount = allNetworksAccounts.find(
-                      acc => acc.address === account.address
+                      (acc) => acc.address === account.address,
                     );
 
                     return (
@@ -174,21 +149,12 @@ export function ImportKeystoreChooseAccounts({
                           <Avatar size={40} address={account.address} />
 
                           <div className={styles.accountInfoText}>
-                            <div
-                              className={styles.accountName}
-                              data-testid="accountName"
-                            >
+                            <div className={styles.accountName} data-testid="accountName">
                               {account.name}
                             </div>
 
                             {existingAccount && (
-                              <div
-                                className={cn(
-                                  styles.accountName,
-                                  'body3',
-                                  'disabled500'
-                                )}
-                              >
+                              <div className={cn(styles.accountName, 'body3', 'disabled500')}>
                                 <Trans
                                   i18nKey="importKeystore.chooseAccountsExistingAccountNote"
                                   values={{
@@ -207,11 +173,8 @@ export function ImportKeystoreChooseAccounts({
                             name="selected"
                             type="checkbox"
                             value={account.address}
-                            onChange={event => {
-                              toggleSelected(
-                                [account],
-                                event.currentTarget.checked
-                              );
+                            onChange={(event) => {
+                              toggleSelected([account], event.currentTarget.checked);
                             }}
                           />
                         )}
@@ -237,10 +200,7 @@ export function ImportKeystoreChooseAccounts({
           </Button>
         ) : (
           <Button data-testid="submitButton" type="submit">
-            <Trans
-              i18nKey="importKeystore.chooseAccountsImportBtn"
-              count={selected.size}
-            />
+            <Trans i18nKey="importKeystore.chooseAccountsImportBtn" count={selected.size} />
           </Button>
         )}
       </div>

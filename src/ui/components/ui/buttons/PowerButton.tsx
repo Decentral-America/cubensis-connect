@@ -3,13 +3,7 @@ import * as styles from './buttons.styl';
 import * as myStyles from './powerBtn.styl';
 import cn from 'classnames';
 
-export function PowerButton({
-  className,
-  onClick,
-  enabled,
-  children,
-  ...props
-}: IProps) {
+export function PowerButton({ className, onClick, enabled, children, ...props }: IProps) {
   const btnClassName = cn(className, myStyles.powerBtn, {
     [myStyles.powerBtnOn]: enabled,
   });

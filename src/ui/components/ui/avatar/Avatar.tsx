@@ -8,7 +8,7 @@ const TYPE = 'seed';
 
 export class Avatar extends React.Component {
   state: { address?: string; src?: string } = {};
-  props: {
+  declare props: {
     size?: number;
     address: string;
     type?: string;

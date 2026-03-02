@@ -52,18 +52,14 @@ class ExtendedPermissionsComponent extends React.PureComponent<IProps, IState> {
     return autoSign;
   }
 
-  static getDerivedStateFromProps(
-    props: IProps,
-    state: IState
-  ): Partial<IState> {
+  static getDerivedStateFromProps(props: IProps, state: IState): Partial<IState> {
     const { originName, autoSign, showNotify } = props;
 
     if (originName === state.origin) {
       return {};
     }
 
-    const { interval = null, totalAmount } =
-      ExtendedPermissionsComponent._getAutoSign(autoSign);
+    const { interval = null, totalAmount } = ExtendedPermissionsComponent._getAutoSign(autoSign);
 
     const selected = CONFIG.list.find(({ value }) => value === interval).id;
     return {
@@ -88,19 +84,19 @@ class ExtendedPermissionsComponent extends React.PureComponent<IProps, IState> {
     });
   };
 
-  changeShowNotifyHandler = event => {
+  changeShowNotifyHandler = (event) => {
     const showNotify = event.target.checked;
     this.setState({ showNotify });
     this.changeHandler(this.state.interval, this.state.totalAmount, showNotify);
   };
 
-  selectTimeHandler = time => {
+  selectTimeHandler = (time) => {
     const { value } = CONFIG.list.find(({ id }) => id === time);
     this.setState({ interval: value, selected: time });
     this.changeHandler(value, this.state.totalAmount, this.state.showNotify);
   };
 
-  amountHandler = event => {
+  amountHandler = (event) => {
     const { value } = event.target;
     const parsedValue = value
       .replace(/[^0-9.]/g, '')
@@ -117,7 +113,7 @@ class ExtendedPermissionsComponent extends React.PureComponent<IProps, IState> {
   };
 
   render(): React.ReactNode {
-    const timeList = CONFIG.list.map(item => {
+    const timeList = CONFIG.list.map((item) => {
       return {
         id: item.id,
         value: item.value,
@@ -136,8 +132,7 @@ class ExtendedPermissionsComponent extends React.PureComponent<IProps, IState> {
       <div className={className}>
         <div className={styles.description}>
           <Trans i18nKey="permissionSettings.modal.description">
-            This allows {{ originName }} to automatically sign transactions on
-            your behalf.
+            This allows {{ originName }} to automatically sign transactions on your behalf.
           </Trans>
         </div>
 
@@ -145,19 +140,13 @@ class ExtendedPermissionsComponent extends React.PureComponent<IProps, IState> {
           className={cn(styles.selectTime, styles.margin12)}
           selectList={timeList}
           selected={this.state.selected}
-          description={
-            <Trans i18nKey="permissionSettings.modal.time">
-              Resolution time
-            </Trans>
-          }
+          description={<Trans i18nKey="permissionSettings.modal.time">Resolution time</Trans>}
           onSelectItem={this.selectTimeHandler}
         />
 
         <div className={cn(styles.amount, styles.margin12)}>
           <div className="left input-title basic500 tag1">
-            <Trans i18nKey="permissionSettings.modal.amount">
-              Spending limit
-            </Trans>
+            <Trans i18nKey="permissionSettings.modal.amount">Spending limit</Trans>
           </div>
           <Input
             disabled={!this.state.interval}
@@ -177,9 +166,7 @@ class ExtendedPermissionsComponent extends React.PureComponent<IProps, IState> {
             onChange={this.changeShowNotifyHandler}
           />
           <label htmlFor="checkbox_noshow">
-            <Trans i18nKey="notifications.allowSending">
-              Allow sending messages
-            </Trans>
+            <Trans i18nKey="notifications.allowSending">Allow sending messages</Trans>
           </label>
         </div>
       </div>

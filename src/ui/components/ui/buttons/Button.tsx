@@ -14,15 +14,7 @@ export const BUTTON_TYPE = {
   CUSTOM: 'custom',
 };
 
-export function Button({
-  id,
-  className,
-  loading,
-  type,
-  withIcon,
-  children,
-  ...props
-}: IProps) {
+export function Button({ id, className, loading, type, withIcon, children, ...props }: IProps) {
   const btnClassName = cn(className, styles.button, {
     [styles.button_loading]: loading,
     [styles.submit]: type === BUTTON_TYPE.SUBMIT,

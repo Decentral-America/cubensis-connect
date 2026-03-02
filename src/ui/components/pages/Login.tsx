@@ -14,7 +14,7 @@ class LoginComponent extends React.Component {
     password: '',
   };
 
-  readonly props;
+  declare readonly props;
 
   static getDerivedStateFromProps(props, state) {
     const { passwordError } = state;
@@ -27,11 +27,11 @@ class LoginComponent extends React.Component {
     return null;
   }
 
-  onChange = e => this._onChange(e);
+  onChange = (e) => this._onChange(e);
 
-  onSubmit = e => this._onSubmit(e);
+  onSubmit = (e) => this._onSubmit(e);
 
-  getRef = input => (this.inputEl = input);
+  getRef = (input) => (this.inputEl = input);
 
   forgotHandler = () => this.props.setTab(PAGES.FORGOT);
 
@@ -63,12 +63,7 @@ class LoginComponent extends React.Component {
               <Trans i18nKey="login.passwordError">Wrong password</Trans>
             </Error>
           </div>
-          <Button
-            id="loginEnter"
-            type="submit"
-            className="margin4"
-            disabled={!this.state.password}
-          >
+          <Button id="loginEnter" type="submit" className="margin4" disabled={!this.state.password}>
             <Trans i18nKey="login.enter">Enter</Trans>
           </Button>
         </form>

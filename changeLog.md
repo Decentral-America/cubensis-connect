@@ -1,3 +1,57 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [3.0.0] - 2026-03-02
+
+### Changed — BULLETPROOF Phase
+
+- Added Husky v9 pre-commit hook enforcing format → lint → typecheck → test pipeline
+- Added lint-staged for staged-file-only Prettier + ESLint on commit
+- Created ESLint flat config (`eslint.config.mjs`) with React, Hooks, TypeScript, and security rules
+- Updated Prettier to v3 with standardized config (semi, trailing commas, 100 print width)
+- Added `.editorconfig` for consistent editor settings
+- Upgraded TypeScript from 3.x to 5.x with strict mode enabled
+- Replaced Mocha/Chai test runner with Vitest + `@vitest/coverage-v8`
+- Added coverage thresholds (30% initial — migrated project baseline)
+
+### Changed — MODERNIZE Phase
+
+- **Webpack 4 → Webpack 5**: Replaced `extract-text-webpack-plugin` with `mini-css-extract-plugin`, `awesome-typescript-loader` with `babel-loader + @babel/preset-typescript`, `url-loader`/`file-loader` with Webpack 5 asset modules
+- **Babel 6 → Babel 7+**: Removed all Babel 6 packages. Created modern `babel.config.json` with `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`
+- **All `@waves/*` imports replaced** with `@decentralchain/*` across 60+ files (using npm aliases until packages are published)
+- Updated `engines.node` from `^10.24.1` to `>=22`
+- Updated `.nvmrc` from `10` to `22`
+- Updated manifest.json author from `support@waves.tech` to `DecentralChain`
+- Updated LICENSE copyright to `DecentralChain`
+- Removed `wavesplatform` and `waves.exchange` references from `inpage.js`
+- Created modern CI workflow with Node 22/24 matrix
+- Added Dependabot configuration for weekly dependency updates
+- Added governance docs: `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`
+
+### Fixed — FINAL_AUDIT Phase
+
+- **Security**: Replaced `Math.random()` with `crypto.getRandomValues()` in `Statistics.js` and `ConfirmBackup.tsx`
+- Renamed `WavesTransactionConverter.js` → `TransactionConverter.js`
+- Renamed `wavesTransactionsController.js` → `transactionsController.js`
+- Removed dead/legacy dependencies
+- Added `KNOWN_ISSUES.md` documenting npm aliases and remaining tech debt
+
+### Removed
+
+- `.babelrc` (Babel 6 config)
+- All Babel 6 packages from devDependencies
+- `awesome-typescript-loader`, `extract-text-webpack-plugin`, `url-loader`, `file-loader`
+- `mocha`, `chai`, Selenium test tooling
+- `request` (deprecated HTTP client)
+
+---
+
+## Legacy Changelog
+
 ## Cubensis Connect
 
 #### version 1.1.12

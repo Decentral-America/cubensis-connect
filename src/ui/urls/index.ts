@@ -6,9 +6,7 @@ const explorerUrls = new Map([
 ]);
 
 export function getAccountLink(networkCode: string, address: string) {
-  const explorer = explorerUrls.get(
-    explorerUrls.has(networkCode) ? networkCode : 'custom'
-  );
+  const explorer = explorerUrls.get(explorerUrls.has(networkCode) ? networkCode : 'custom');
   return `https://${explorer}/address/${address}`;
 }
 
@@ -17,18 +15,11 @@ export function getTxHistoryLink(networkCode: string, address: string): string {
 }
 
 export function getTxDetailLink(networkCode: string, txId: string): string {
-  const explorer = explorerUrls.get(
-    explorerUrls.has(networkCode) ? networkCode : 'custom'
-  );
+  const explorer = explorerUrls.get(explorerUrls.has(networkCode) ? networkCode : 'custom');
   return `https://${explorer}/tx/${txId}`;
 }
 
-export function getAssetDetailLink(
-  networkCode: string,
-  assetId: string
-): string {
-  const explorer = explorerUrls.get(
-    explorerUrls.has(networkCode) ? networkCode : 'custom'
-  );
+export function getAssetDetailLink(networkCode: string, assetId: string): string {
+  const explorer = explorerUrls.get(explorerUrls.has(networkCode) ? networkCode : 'custom');
   return `https://${explorer}/assets/${assetId}`;
 }

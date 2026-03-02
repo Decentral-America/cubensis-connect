@@ -50,24 +50,22 @@ if (fs.existsSync(`${DIST_PATH}/_locales/index.json`)) {
 
 try {
   execSync(
-    `${distUtil} -s ${NAME} -d ${ROOT_PATH} -l debug -p edgeextension -f edgeextension -m ${DIST_PATH}/manifest.json`
+    `${distUtil} -s ${NAME} -d ${ROOT_PATH} -l debug -p edgeextension -f edgeextension -m ${DIST_PATH}/manifest.json`,
   );
 
-  const packDir = path.resolve(
-    path.join(ROOT_PATH, NAME, '/edgeextension/manifest')
-  );
+  const packDir = path.resolve(path.join(ROOT_PATH, NAME, '/edgeextension/manifest'));
 
   const manifestXML = fs.readFileSync(`${packDir}/appxmanifest.xml`);
   const manifestReady = Object.entries(REPLACE_PATTERN).reduce(
     (acc, [key, replacer]) => replaceAll(acc, key, replacer),
-    manifestXML.toString()
+    manifestXML.toString(),
   );
   fs.writeFileSync(`${packDir}/appxmanifest.xml`, manifestReady);
 
   const manifestJson = fs.readFileSync(`${packDir}/Extension/manifest.json`);
   const manifestJsonReady = Object.entries(REPLACE_PATTERN).reduce(
     (acc, [key, replacer]) => replaceAll(acc, key, replacer),
-    manifestJson.toString()
+    manifestJson.toString(),
   );
 
   fs.writeFileSync(`${packDir}/Extension/manifest.json`, manifestJsonReady);
@@ -78,17 +76,13 @@ try {
     fs.copyFileSync(from, to);
   });
 
-  execSync(
-    `${distUtil} -s ${NAME} -d ${ROOT_PATH} -l debug -p edgeextension package ${packDir}`
-  );
+  execSync(`${distUtil} -s ${NAME} -d ${ROOT_PATH} -l debug -p edgeextension package ${packDir}`);
 
-  const appXpath = path.resolve(
-    path.join(ROOT_PATH, NAME, '/edgeextension/package')
-  );
+  const appXpath = path.resolve(path.join(ROOT_PATH, NAME, '/edgeextension/package'));
 
   fs.copyFileSync(
     path.join(appXpath, 'edgeExtension.appx'),
-    path.join(ROOT_PATH, 'edgeExtension.appx')
+    path.join(ROOT_PATH, 'edgeExtension.appx'),
   );
 
   execSync(`rm -rf ${path.join(ROOT_PATH, NAME)}`);

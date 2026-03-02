@@ -1,13 +1,7 @@
 import * as Sentry from '@sentry/react';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import {
-  addBackTab,
-  loading,
-  removeBackTab,
-  setTab,
-  setUiState,
-} from '../actions';
+import { addBackTab, loading, removeBackTab, setTab, setUiState } from '../actions';
 import { Menu } from './menu';
 import { Bottom } from './bottom';
 import { PAGES, PAGES_CONF } from '../pageConfig';
@@ -16,7 +10,7 @@ const NO_USER_START_PAGE = PAGES.WELCOME;
 const USER_START_PAGE = PAGES.LOGIN;
 
 class RootComponent extends React.Component {
-  props: IProps;
+  declare props: IProps;
   state = { tab: null, loading: true };
 
   constructor(props: IProps) {
@@ -54,11 +48,7 @@ class RootComponent extends React.Component {
      */
     const { messages, notifications, activePopup, accounts } = nextProps;
 
-    if (
-      !nextProps.locked &&
-      tab !== PAGES.CHANGE_TX_ACCOUNT &&
-      accounts.length
-    ) {
+    if (!nextProps.locked && tab !== PAGES.CHANGE_TX_ACCOUNT && accounts.length) {
       if (activePopup && activePopup.msg) {
         tab = PAGES.MESSAGES;
       } else if (activePopup && activePopup.notify) {
@@ -83,7 +73,7 @@ class RootComponent extends React.Component {
       Sentry.addBreadcrumb({
         type: 'navigation',
         category: 'navigation',
-        level: Sentry.Severity.Info,
+        level: 'info',
         data: {
           from: state.tab,
           to: tab,
@@ -104,7 +94,7 @@ class RootComponent extends React.Component {
         Sentry.addBreadcrumb({
           type: 'debug',
           category: 'message',
-          level: Sentry.Severity.Info,
+          level: 'info',
           data,
         });
       }
@@ -145,8 +135,7 @@ class RootComponent extends React.Component {
     const tab = this.state.tab || PAGES.INTRO;
     const pageConf = PAGES_CONF[tab];
     const Component = pageConf.component;
-    const backTabFromConf =
-      typeof pageConf.menu.back === 'string' ? pageConf.menu.back : null;
+    const backTabFromConf = typeof pageConf.menu.back === 'string' ? pageConf.menu.back : null;
     const currentTab = this.state.tab;
     const { backTabs } = this.props;
     const menuProps = {
@@ -159,14 +148,13 @@ class RootComponent extends React.Component {
         (typeof pageConf.menu.back === 'string' || !!pageConf.menu.back),
     };
 
-    const setTab = tab => {
+    const setTab = (tab) => {
       this.props.addBackTab(currentTab);
       this.props.setTab(tab);
     };
 
     const onBack = () => {
-      const tab =
-        backTabFromConf || backTabs[backTabs.length - 1] || PAGES.ROOT;
+      const tab = backTabFromConf || backTabs[backTabs.length - 1] || PAGES.ROOT;
       this.props.removeBackTab();
       this.props.setTab(tab);
     };
@@ -179,12 +167,8 @@ class RootComponent extends React.Component {
 
     return (
       <div className="height">
-        <Menu
-          {...menuProps}
-          setTab={setTab}
-          onBack={onBack}
-          onDelete={onDelete}
-        />
+        <Menu {...menuProps} setTab={setTab} onBack={onBack} onDelete={onDelete} />
+        {/* @ts-expect-error union too complex */}
         <Component {...pageProps} key={tab} />
         <Bottom {...pageConf.bottom} />
       </div>

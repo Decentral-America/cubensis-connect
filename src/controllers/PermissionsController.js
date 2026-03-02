@@ -1,5 +1,5 @@
 import ObservableStore from 'obs-store';
-import { BigNumber } from '@waves/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 import { uniq } from 'ramda';
 import { allowMatcher } from '../constants';
 import { ERRORS } from '../lib/KeeperError';
@@ -14,7 +14,7 @@ export const PERMISSIONS = {
   GET_MESSAGES: 'allowMessages',
 };
 
-const findPermissionFabric = permission => item => {
+const findPermissionFabric = (permission) => (item) => {
   if (typeof item === 'string') {
     return item === permission;
   }
@@ -62,8 +62,7 @@ export class PermissionsController {
 
   getPermission(origin, permission) {
     const permissions = this.getPermissions(origin);
-    const permissionType =
-      typeof permission === 'string' ? permission : permission.type;
+    const permissionType = typeof permission === 'string' ? permission : permission.type;
     const findPermission = findPermissionFabric(permissionType);
     return permissions.find(findPermission);
   }
@@ -79,10 +78,7 @@ export class PermissionsController {
       return permission === PERMISSIONS.REJECTED;
     }
 
-    if (
-      permissions.includes(PERMISSIONS.ALL) ||
-      permissions.includes(permission)
-    ) {
+    if (permissions.includes(PERMISSIONS.ALL) || permissions.includes(permission)) {
       return true;
     }
 
@@ -120,12 +116,9 @@ export class PermissionsController {
   }
 
   deletePermission(origin, permission) {
-    const permissionType =
-      typeof permission === 'string' ? permission : permission.type;
+    const permissionType = typeof permission === 'string' ? permission : permission.type;
     const findPermission = findPermissionFabric(permissionType);
-    const permissions = this.getPermissions(origin).filter(
-      item => !findPermission(item)
-    );
+    const permissions = this.getPermissions(origin).filter((item) => !findPermission(item));
     this.setPermissions(origin, permissions);
   }
 
@@ -161,7 +154,7 @@ export class PermissionsController {
   }
 
   matcherOrdersAllow(origin, tx) {
-    if (!allowMatcher.filter(item => origin.includes(item)).length) {
+    if (!allowMatcher.filter((item) => origin.includes(item)).length) {
       return false;
     }
 
@@ -187,9 +180,7 @@ export class PermissionsController {
 
     if (waitTime > 0) {
       throw ERRORS.NOTIFICATION_ERROR({
-        msg: `Min notification interval ${minInterval / 1000}s. Wait ${
-          waitTime / 1000
-        }s.`,
+        msg: `Min notification interval ${minInterval / 1000}s. Wait ${waitTime / 1000}s.`,
       });
     }
 
@@ -219,7 +210,7 @@ export class PermissionsController {
     const total = new BigNumber(totalAmount);
     const amount = approved.reduce(
       (acc, { amount }) => acc.add(new BigNumber(amount)),
-      new BigNumber(0)
+      new BigNumber(0),
     );
 
     if (amount.add(txAmount).gt(total)) {
@@ -234,23 +225,19 @@ export class PermissionsController {
   updatePermission(origin, permission) {
     const findPermission = findPermissionFabric(permission.type || permission);
     const permissions = [
-      ...this.getPermissions(origin).filter(item => !findPermission(item)),
+      ...this.getPermissions(origin).filter((item) => !findPermission(item)),
       permission,
     ];
     this.setPermissions(origin, permissions);
   }
 
   updateState(state) {
-    const {
-      origins: oldOrigins,
-      inPending: oldInPending,
-      ...oldState
-    } = this.store.getState();
+    const { origins: oldOrigins, inPending: oldInPending, ...oldState } = this.store.getState();
     const origins = { ...oldOrigins, ...(state.origins || {}) };
     const whitelist = state.whitelist || oldState.whitelist;
     const blacklist = state.blacklist || oldState.blacklist;
     const inPending = { ...oldInPending, ...(state.inPending || {}) };
-    Object.keys(origins).forEach(key => {
+    Object.keys(origins).forEach((key) => {
       origins[key] = uniq(origins[key] || []);
     });
     const newState = {
@@ -285,7 +272,7 @@ export class PermissionsController {
         acc[origin] = permissions;
         return acc;
       },
-      { ...origins }
+      { ...origins },
     );
 
     this.updateState({ origins: newOrigins });
@@ -301,7 +288,7 @@ export class PermissionsController {
   }
 }
 
-const getTxAmount = tx => {
+const getTxAmount = (tx) => {
   let result = {
     fee: { amount: null, assetId: null },
     amount: { amount: null, assetId: null },
@@ -317,19 +304,16 @@ const getTxAmount = tx => {
     result = getTxDataAmount(tx);
   }
 
-  if (
-    result.fee.assetId === result.amount.assetId &&
-    result.fee.assetId === 'DCC'
-  ) {
+  if (result.fee.assetId === result.amount.assetId && result.fee.assetId === 'DCC') {
     return result.fee.amount.add(result.amount.amount);
   }
 
   return null;
 };
 
-const getTxReceiveAmount = tx => {
-  let fee = { amount: null, assetId: null };
-  let amount = { amount: null, assetId: null };
+const getTxReceiveAmount = (tx) => {
+  const fee = { amount: null, assetId: null };
+  const amount = { amount: null, assetId: null };
 
   if (tx.data.fee) {
     fee.amount = moneyLikeToBigNumber(tx.data.fee, 8);
@@ -344,9 +328,9 @@ const getTxReceiveAmount = tx => {
   return { amount, fee };
 };
 
-const getTxMassReceiveAmount = tx => {
-  let fee = { amount: null, assetId: null };
-  let amount = { amount: null, assetId: null };
+const getTxMassReceiveAmount = (tx) => {
+  const fee = { amount: null, assetId: null };
+  const amount = { amount: null, assetId: null };
 
   if (tx.data.fee) {
     fee.amount = moneyLikeToBigNumber(tx.data.fee, 8);
@@ -361,9 +345,9 @@ const getTxMassReceiveAmount = tx => {
   return { amount, fee };
 };
 
-const getTxDataAmount = tx => {
-  let fee = { amount: null, assetId: null };
-  let amount = { amount: new BigNumber(0), assetId: 'DCC' };
+const getTxDataAmount = (tx) => {
+  const fee = { amount: null, assetId: null };
+  const amount = { amount: new BigNumber(0), assetId: 'DCC' };
 
   if (tx.data.fee) {
     fee.amount = moneyLikeToBigNumber(tx.data.fee, 8);
@@ -373,7 +357,7 @@ const getTxDataAmount = tx => {
   return { amount, fee };
 };
 
-const getPackAmount = txs => {
+const getPackAmount = (txs) => {
   const fee = { amount: new BigNumber(0), assetId: 'DCC' };
   const amount = { amount: new BigNumber(0), assetId: null };
 
@@ -388,10 +372,7 @@ const getPackAmount = txs => {
       result = getTxDataAmount(tx);
     }
 
-    if (
-      (result && result.fee.assetId !== result.amount.assetId) ||
-      result.fee.assetId !== 'DCC'
-    ) {
+    if ((result && result.fee.assetId !== result.amount.assetId) || result.fee.assetId !== 'DCC') {
       return { amount, fee: { assetId: null, amount: null } };
     }
 

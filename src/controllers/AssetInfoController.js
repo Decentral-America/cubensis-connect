@@ -109,7 +109,7 @@ function binarySearch(sortedArray, key) {
   let end = sortedArray.length - 1;
 
   while (start <= end) {
-    let middle = Math.floor((start + end) / 2);
+    const middle = Math.floor((start + end) / 2);
 
     if (sortedArray[middle] === key) {
       return middle;
@@ -146,16 +146,14 @@ export class AssetInfoController {
 
     this.getNode = options.getNode;
     this.getNetwork = options.getNetwork;
-    this.store = new ObservableStore(
-      Object.assign({}, defaults, options.initState)
-    );
+    this.store = new ObservableStore(Object.assign({}, defaults, options.initState));
     this.updateSuspiciousAssets();
   }
 
   addTickersForExistingAssets() {
     const { assets } = this.store.getState();
 
-    const assetIdsToUpdate = Object.keys(assetTickers).filter(assetId => {
+    const assetIdsToUpdate = Object.keys(assetTickers).filter((assetId) => {
       const asset = assets.mainnet[assetId];
       const ticker = assetTickers[assetId];
 
@@ -163,7 +161,7 @@ export class AssetInfoController {
     });
 
     if (assetIdsToUpdate.length !== 0) {
-      assetIdsToUpdate.forEach(assetId => {
+      assetIdsToUpdate.forEach((assetId) => {
         const asset = assets.mainnet[assetId];
         const ticker = assetTickers[assetId];
 
@@ -200,8 +198,7 @@ export class AssetInfoController {
     await this.updateSuspiciousAssets();
 
     const { assets } = this.store.getState();
-    if (assetId === '' || assetId == null || assetId.toUpperCase() === 'DCC')
-      return DCC;
+    if (assetId === '' || assetId == null || assetId.toUpperCase() === 'DCC') return DCC;
 
     const network = this.getNetwork();
     const API_BASE = this.getNode();
@@ -209,15 +206,13 @@ export class AssetInfoController {
 
     const asset = assets[network] && assets[network][assetId];
     if (!asset || this.isMaxAgeExceeded(asset.lastUpdated)) {
-      let resp = await fetch(url);
+      const resp = await fetch(url);
       switch (resp.status) {
         case 200:
-          let assetInfo = await resp
+          const assetInfo = await resp
             .text()
-            .then(text =>
-              JSON.parse(
-                text.replace(/(".+?"[ \t\n]*:[ \t\n]*)(\d{15,})/gm, '$1"$2"')
-              )
+            .then((text) =>
+              JSON.parse(text.replace(/(".+?"[ \t\n]*:[ \t\n]*)(\d{15,})/gm, '$1"$2"')),
             );
           const mapped = {
             quantity: assetInfo.quantity,
@@ -244,9 +239,7 @@ export class AssetInfoController {
           break;
         case 400:
           const error = await resp.json();
-          throw new Error(
-            `Could not find info for asset with id: ${assetId}. ${error.message}`
-          );
+          throw new Error(`Could not find info for asset with id: ${assetId}. ${error.message}`);
         default:
           throw new Error(await resp.text());
       }
@@ -283,24 +276,21 @@ export class AssetInfoController {
       return;
     }
 
-    let resp = await fetch(
-      new URL(`assets/details`, this.getNode()).toString(),
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json;large-significand-format=string',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ids: assetIds }),
-      }
-    );
+    const resp = await fetch(new URL(`assets/details`, this.getNode()).toString(), {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json;large-significand-format=string',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids: assetIds }),
+    });
 
     switch (resp.status) {
       case 200:
-        let assetInfos = await resp.json();
+        const assetInfos = await resp.json();
         const lastUpdated = new Date().getTime();
 
-        assetInfos.forEach(assetInfo => {
+        assetInfos.forEach((assetInfo) => {
           if (!assetInfo.error) {
             assets[network][assetInfo.assetId] = {
               ...assets[network][assetInfo.assetId],
@@ -333,13 +323,12 @@ export class AssetInfoController {
   }
 
   async updateSuspiciousAssets() {
-    let { assets } = this.store.getState();
+    const { assets } = this.store.getState();
     const network = this.getNetwork();
 
     if (
       !this.suspiciousAssets ||
-      (network === 'mainnet' &&
-        new Date() - new Date(this.suspiciousLastUpdated) > MAX_AGE)
+      (network === 'mainnet' && new Date() - new Date(this.suspiciousLastUpdated) > MAX_AGE)
     ) {
       const resp = await fetch(new URL(SUSPICIOUS_LIST_URL));
       switch (resp.status) {
@@ -354,9 +343,9 @@ export class AssetInfoController {
 
     if (this.suspiciousAssets) {
       Object.keys(assets[network]).forEach(
-        assetId =>
+        (assetId) =>
           (assets[network][assetId].isSuspicious =
-            binarySearch(this.suspiciousAssets, assetId) > -1)
+            binarySearch(this.suspiciousAssets, assetId) > -1),
       );
     }
 

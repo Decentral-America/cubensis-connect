@@ -1,12 +1,4 @@
-import {
-  Highlight,
-  PlateCollapsable,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from '../../ui';
+import { Highlight, PlateCollapsable, Tab, TabList, TabPanel, TabPanels, Tabs } from '../../ui';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
@@ -20,7 +12,7 @@ interface Props {
 
 export const TxDetailTabs = connect(
   (store: any) => ({ message: store.activePopup?.msg }),
-  null
+  null,
 )(function TxDetailTabs({ message, children }: Props) {
   return (
     <Tabs>

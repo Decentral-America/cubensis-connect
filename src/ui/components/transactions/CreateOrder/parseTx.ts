@@ -7,17 +7,10 @@ export const txType = 'order';
 export function getAssetsId(tx): Array<string> {
   const assets = {};
   const feeAssetId =
-    tx.matcherFee && tx.matcherFee.assetId
-      ? tx.matcherFee.assetId
-      : tx.feeAssetId || 'DCC';
+    tx.matcherFee && tx.matcherFee.assetId ? tx.matcherFee.assetId : tx.feeAssetId || 'DCC';
   const amountAssetId =
-    tx.amount && tx.amount.assetId
-      ? tx.amount.assetId
-      : tx.amountAssetId || 'DCC';
-  const priceAssetId =
-    tx.price && tx.price.assetId
-      ? tx.price.assetId
-      : tx.priceAssetId || 'DCC';
+    tx.amount && tx.amount.assetId ? tx.amount.assetId : tx.amountAssetId || 'DCC';
+  const priceAssetId = tx.price && tx.price.assetId ? tx.price.assetId : tx.priceAssetId || 'DCC';
 
   assets[feeAssetId] = null;
   assets[amountAssetId] = null;
@@ -33,9 +26,7 @@ export function getFee(tx) {
 }
 
 export function getAmount(tx = null) {
-  return typeof tx.amount === 'object'
-    ? tx.amount
-    : { coins: tx.amount, assetId: 'DCC' };
+  return typeof tx.amount === 'object' ? tx.amount : { coins: tx.amount, assetId: 'DCC' };
 }
 
 export function getAmountSign(tx) {
@@ -43,9 +34,7 @@ export function getAmountSign(tx) {
 }
 
 export function getPrice(tx = null) {
-  return typeof tx.price === 'object'
-    ? tx.price
-    : { coins: tx.price, assetId: 'DCC' };
+  return typeof tx.price === 'object' ? tx.price : { coins: tx.price, assetId: 'DCC' };
 }
 
 export function getPriceSign(tx) {

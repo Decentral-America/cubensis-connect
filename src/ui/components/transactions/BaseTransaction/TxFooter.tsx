@@ -3,23 +3,12 @@ import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { ApproveBtn, Button, BUTTON_TYPE } from '../../ui';
 
-export function TxFooter({
-  message,
-  approve,
-  reject,
-  hideApprove,
-  autoClickProtection,
-}) {
+export function TxFooter({ message, approve, reject, hideApprove, autoClickProtection }) {
   const isSend = message.broadcast;
 
   return (
     <div className={`${styles.txButtonsWrapper} buttons-wrapper`}>
-      <Button
-        data-testid="rejectButton"
-        id="reject"
-        onClick={reject}
-        type={BUTTON_TYPE.WARNING}
-      >
+      <Button data-testid="rejectButton" id="reject" onClick={reject} type={BUTTON_TYPE.WARNING}>
         <Trans i18nKey="sign.reject" />
       </Button>
 

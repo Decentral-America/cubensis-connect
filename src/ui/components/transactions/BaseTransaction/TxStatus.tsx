@@ -11,11 +11,7 @@ export function TxStatus({ isApprove, isReject, isSend, messages }: IProps) {
   };
 
   if (isApprove) {
-    return (
-      <div className="headline2 center">
-        {isSend ? messages.send : messages?.approve}
-      </div>
-    );
+    return <div className="headline2 center">{isSend ? messages.send : messages?.approve}</div>;
   }
 
   if (isReject) {

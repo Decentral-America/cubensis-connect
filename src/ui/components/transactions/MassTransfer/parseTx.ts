@@ -1,5 +1,5 @@
 import { SIGN_TYPE } from '@decentralchain/signature-adapter';
-import { BigNumber } from '@waves/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 
 export const messageType = 'mass_transfer';
 export const txType = 'transaction';
@@ -14,12 +14,9 @@ export function getTransferAmount(amount, assetId) {
 }
 
 export function getAssetsId(tx): Array<string> {
-  const feeAssetId =
-    tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
+  const feeAssetId = tx.fee && tx.fee.assetId ? tx.fee.assetId : tx.feeAssetId || 'DCC';
   const amountAssetId =
-    tx.totalAmount && tx.totalAmount.assetId
-      ? tx.totalAmount.assetId
-      : tx.assetId || 'DCC';
+    tx.totalAmount && tx.totalAmount.assetId ? tx.totalAmount.assetId : tx.assetId || 'DCC';
 
   if (feeAssetId === amountAssetId) {
     return [amountAssetId];
@@ -32,9 +29,7 @@ export { getFee } from '../BaseTransaction/parseTx';
 
 export function getAmount(tx) {
   const assetId =
-    tx.totalAmount && tx.totalAmount.assetId
-      ? tx.totalAmount.assetId
-      : tx.assetId || 'DCC';
+    tx.totalAmount && tx.totalAmount.assetId ? tx.totalAmount.assetId : tx.assetId || 'DCC';
   let tokens = new BigNumber(0);
   let coins = new BigNumber(0);
 

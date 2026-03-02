@@ -10,9 +10,7 @@ import { TxHeader } from '../BaseTransaction';
 const Error = ({ approveError }) => {
   return (
     <div className={`plate ${styles.finalTxPlate} ${styles.finalTxPlateError}`}>
-      <div
-        className={`headline2Bold margin-main-big error-icon ${styles.finalTxTitle}`}
-      >
+      <div className={`headline2Bold margin-main-big error-icon ${styles.finalTxTitle}`}>
         <Trans i18nKey="sign.someError" />
       </div>
       <div className={`body3 ${styles.finalTxPlate}`}>
@@ -23,7 +21,7 @@ const Error = ({ approveError }) => {
 };
 
 export class FinalTransaction extends React.PureComponent {
-  readonly props: any;
+  declare readonly props: any;
 
   render() {
     const {
@@ -38,9 +36,7 @@ export class FinalTransaction extends React.PureComponent {
       assets,
     } = this.props;
 
-    const newMessages = messages
-      .map(item => item.id)
-      .filter(id => id !== message.id).length;
+    const newMessages = messages.map((item) => item.id).filter((id) => id !== message.id).length;
     const msgCount = newMessages + notifications.length;
     const isSend = message.broadcast;
     const isApprove = !!transactionStatus.approveOk;
@@ -61,9 +57,7 @@ export class FinalTransaction extends React.PureComponent {
       ['S', 'stagenet.decentralscan.com'],
       ['custom', 'decentralscan.com/custom'],
     ]);
-    const explorer = explorerUrls.get(
-      explorerUrls.has(network) ? network : 'custom'
-    );
+    const explorer = explorerUrls.get(explorerUrls.has(network) ? network : 'custom');
     const txLink = `https://${explorer}/tx/${message.messageHash}`;
 
     if (config.type === oauth.type && !isShowClose) {
@@ -72,8 +66,7 @@ export class FinalTransaction extends React.PureComponent {
       return null;
     }
 
-    const showExtraButton =
-      (isShowList && isShowClose) || (isShowNext && isShowList);
+    const showExtraButton = (isShowList && isShowClose) || (isShowNext && isShowList);
 
     return (
       <div className={styles.transaction}>
@@ -112,12 +105,7 @@ export class FinalTransaction extends React.PureComponent {
 
           {isSend && isApprove && isNotOrder && (
             <div className="center margin-main-big-top">
-              <a
-                rel="noopener noreferrer"
-                className="link black"
-                href={txLink}
-                target="_blank"
-              >
+              <a rel="noopener noreferrer" className="link black" href={txLink} target="_blank">
                 <Trans i18nKey="sign.viewTransaction" />
               </a>
             </div>

@@ -8,9 +8,9 @@ export class Copy extends React.PureComponent {
     text: '',
   };
 
-  props;
+  declare props;
 
-  onClick = event => {
+  onClick = (event) => {
     const { text, onCopy, children, options } = this.props;
 
     event.stopPropagation();
@@ -18,6 +18,7 @@ export class Copy extends React.PureComponent {
 
     const elem = React.Children.only(children);
 
+    // @ts-expect-error legacy module import
     const result = copy(text, options);
 
     if (onCopy) {

@@ -12,11 +12,7 @@ interface TabProps {
 export function Tab({ className, children, isActive, onActivate }: TabProps) {
   return (
     <li
-      className={cn(
-        styles.tabListItem,
-        { [styles.tabListActive]: isActive },
-        className
-      )}
+      className={cn(styles.tabListItem, { [styles.tabListActive]: isActive }, className)}
       onClick={onActivate}
     >
       {children}
@@ -31,19 +27,14 @@ interface TabListProps {
   onActiveTab?: (index) => void;
 }
 
-export function TabList({
-  activeIndex,
-  children,
-  className,
-  onActiveTab,
-}: TabListProps) {
+export function TabList({ activeIndex, children, className, onActiveTab }: TabListProps) {
   return (
     <ol className={cn(styles.tabList, className)}>
       {React.Children.map(children, (child, index) =>
         React.cloneElement(child, {
           isActive: index == activeIndex,
           onActivate: () => onActiveTab(index),
-        })
+        }),
       )}
     </ol>
   );
@@ -55,11 +46,7 @@ interface TabPanelsProps {
   className?: string;
 }
 
-export function TabPanels({
-  activeIndex,
-  children,
-  className,
-}: TabPanelsProps) {
+export function TabPanels({ activeIndex, children, className }: TabPanelsProps) {
   const childArray = React.Children.toArray(children);
 
   return <div className={className}>{childArray[activeIndex]}</div>;
@@ -85,14 +72,14 @@ export function Tabs({ children, activeTab, onTabChange }: TabsProps) {
 
   return (
     <>
-      {React.Children.map(children, child => {
+      {React.Children.map(children, (child) => {
         switch (child.type) {
           case TabPanels:
             return React.cloneElement(child, { activeIndex: activeIndex });
           case TabList:
             return React.cloneElement(child, {
               activeIndex: activeIndex,
-              onActiveTab: activeIndex => {
+              onActiveTab: (activeIndex) => {
                 if (onTabChange) {
                   onTabChange(activeIndex);
                 }

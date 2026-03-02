@@ -22,12 +22,7 @@ const OriginWarning = ({ message }) => {
   );
 };
 
-export function TxHeader({
-  selectedAccount,
-  selectAccount,
-  message,
-  hideButton = false,
-}) {
+export function TxHeader({ selectedAccount, selectAccount, message, hideButton = false }) {
   return (
     <div className={styles.txHeader}>
       <div className="margin-main margin-main-top flex basic500">

@@ -10,14 +10,9 @@ interface IPlateProps {
   className?: string;
 }
 
-export const Plate = ({
-  className,
-  children,
-}: React.PropsWithChildren<IPlateProps>) => {
+export const Plate = ({ className, children }: React.PropsWithChildren<IPlateProps>) => {
   return (
-    <div className={cn('plate', 'plate-with-controls', 'break-all', className)}>
-      {children}
-    </div>
+    <div className={cn('plate', 'plate-with-controls', 'break-all', className)}>{children}</div>
   );
 };
 
@@ -43,7 +38,7 @@ export class PlateCollapsable extends React.PureComponent<
   resizeObserver: ResizeObserver;
   _t;
 
-  getChildrenRef = ref => (this.childrenEl = ref);
+  getChildrenRef = (ref) => (this.childrenEl = ref);
 
   toggleExpand = () => {
     this.setState({ isExpanded: !this.state.isExpanded });
@@ -56,14 +51,13 @@ export class PlateCollapsable extends React.PureComponent<
   };
 
   componentDidMount() {
-    this.resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
         this.setState({
           showExpand:
             this.props.showExpand &&
             (this.state.isExpanded ||
-              (!this.state.isExpanded &&
-                entry.target.scrollHeight > this.childrenEl.offsetHeight)),
+              (!this.state.isExpanded && entry.target.scrollHeight > this.childrenEl.offsetHeight)),
         });
       }
     });
@@ -79,9 +73,8 @@ export class PlateCollapsable extends React.PureComponent<
     const { showExpand, isExpanded, isCopied } = this.state;
     const { className, children, showCopy } = this.props;
     const classNames = cn(className, { [styles.expanded]: isExpanded });
-    const textToCopy = (
-      React.Children.only(children) as React.ReactElement<{ data: any }>
-    ).props?.data;
+    const textToCopy = (React.Children.only(children) as React.ReactElement<{ data: any }>).props
+      ?.data;
 
     return (
       <Plate className={classNames}>
@@ -98,13 +91,7 @@ export class PlateCollapsable extends React.PureComponent<
 
           {showExpand && (
             <Button onClick={this.toggleExpand}>
-              <Trans
-                i18nKey={
-                  isExpanded
-                    ? 'plateComponent.collapse'
-                    : 'plateComponent.expand'
-                }
-              />
+              <Trans i18nKey={isExpanded ? 'plateComponent.collapse' : 'plateComponent.expand'} />
             </Button>
           )}
         </div>

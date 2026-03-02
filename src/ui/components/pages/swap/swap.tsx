@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react';
-import BigNumber from '@waves/bignumber';
-import { Money, Asset } from '@waves/data-entities';
+import BigNumber from '@decentralchain/bignumber';
+import { Money, Asset } from '@decentralchain/data-entities';
 import { TTransactionType } from '@decentralchain/waves-transactions/dist/transactions';
 import { swappableAssetIds } from 'assets/constants';
 import { convertToSponsoredAssetFee, getAssetIdByName } from 'assets/utils';
@@ -10,12 +10,12 @@ import { updateAssets } from 'ui/actions/assets';
 import { resetSwapScreenInitialState } from 'ui/actions/localState';
 import { Avatar } from 'ui/components/ui/avatar/Avatar';
 import { PAGES } from 'ui/pageConfig';
-import background, { AssetDetail } from 'ui/services/Background';
+import background, { type AssetDetail } from 'ui/services/Background';
 import { useAppSelector, useAppDispatch } from 'ui/store';
 import { SwapForm } from './form';
 import { SwapResult } from './result';
 import * as styles from './swap.module.css';
-import { TRANSACTION_TYPE } from '@waves/ts-types';
+import { TRANSACTION_TYPE } from '@decentralchain/ts-types';
 
 interface Props {
   setTab: (newTab: string) => void;
@@ -25,12 +25,10 @@ export function Swap({ setTab }: Props) {
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
-  const selectedAccount = useAppSelector(state => state.selectedAccount);
-  const currentNetwork = useAppSelector(state => state.currentNetwork);
+  const selectedAccount = useAppSelector((state) => state.selectedAccount);
+  const currentNetwork = useAppSelector((state) => state.currentNetwork);
 
-  const initialStateFromRedux = useAppSelector(
-    state => state.localState.swapScreenInitialState
-  );
+  const initialStateFromRedux = useAppSelector((state) => state.localState.swapScreenInitialState);
 
   const [initialState] = React.useState(initialStateFromRedux);
 
@@ -42,13 +40,10 @@ export function Swap({ setTab }: Props) {
 
   const usdAssetId = getAssetIdByName(currentNetwork, 'USD');
 
-  const initialToAssetId =
-    initialFromAssetId === usdAssetId ? 'WAVES' : usdAssetId;
+  const initialToAssetId = initialFromAssetId === usdAssetId ? 'WAVES' : usdAssetId;
 
   const [isSwapInProgress, setIsSwapInProgress] = React.useState(false);
-  const [swapErrorMessage, setSwapErrorMessage] = React.useState<string | null>(
-    null
-  );
+  const [swapErrorMessage, setSwapErrorMessage] = React.useState<string | null>(null);
   const [wavesFeeCoins, setWavesFeeCoins] = React.useState<number | null>(null);
 
   React.useEffect(() => {
@@ -73,17 +68,14 @@ export function Swap({ setTab }: Props) {
     };
   }, [currentNetwork, selectedAccount.address]);
 
-  const assets = useAppSelector(state => state.assets);
+  const assets = useAppSelector((state) => state.assets);
 
   const swappableAssetEntries = React.useMemo(
     () =>
       swappableAssetIds[currentNetwork as 'mainnet'].map(
-        (assetId): [string, AssetDetail | undefined] => [
-          assetId,
-          assets[assetId],
-        ]
+        (assetId): [string, AssetDetail | undefined] => [assetId, assets[assetId]],
       ),
-    [assets, currentNetwork]
+    [assets, currentNetwork],
   );
 
   React.useEffect(() => {
@@ -91,8 +83,8 @@ export function Swap({ setTab }: Props) {
       new Set(
         swappableAssetEntries
           .filter(([_assetId, asset]) => asset == null)
-          .map(([assetId]) => assetId)
-      )
+          .map(([assetId]) => assetId),
+      ),
     );
 
     if (assetsToUpdate.length !== 0) {
@@ -100,18 +92,14 @@ export function Swap({ setTab }: Props) {
     }
   }, [swappableAssetEntries]);
 
-  const accountBalance = useAppSelector(
-    state => state.balances[state.selectedAccount.address]
-  );
+  const accountBalance = useAppSelector((state) => state.balances[state.selectedAccount.address]);
 
   const [performedSwapData, setPerformedSwapData] = React.useState<{
     fromMoney: Money;
     transactionId: string;
   } | null>(null);
 
-  const swappableAssets = swappableAssetEntries.map(
-    ([_assetId, asset]) => asset
-  );
+  const swappableAssets = swappableAssetEntries.map(([_assetId, asset]) => asset);
 
   return (
     <div className={styles.root}>
@@ -124,7 +112,7 @@ export function Swap({ setTab }: Props) {
 
         {wavesFeeCoins == null ||
         !accountBalance.assets ||
-        swappableAssets.some(asset => asset == null) ? (
+        swappableAssets.some((asset) => asset == null) ? (
           <div className={styles.loader} />
         ) : (
           <div className={styles.content}>
@@ -155,7 +143,7 @@ export function Swap({ setTab }: Props) {
                   const fee = convertToSponsoredAssetFee(
                     new BigNumber(wavesFeeCoins),
                     new Asset(assets[feeAssetId]),
-                    accountBalance.assets[feeAssetId]
+                    accountBalance.assets[feeAssetId],
                   );
 
                   try {
@@ -170,19 +158,16 @@ export function Swap({ setTab }: Props) {
                     });
 
                     setPerformedSwapData({
-                      fromMoney: new Money(
-                        fromCoins,
-                        new Asset(assets[fromAssetId])
-                      ),
+                      fromMoney: new Money(fromCoins, new Asset(assets[fromAssetId])),
                       transactionId: swapResult.transactionId,
                     });
-                  } catch (err) {
+                  } catch (err: any) {
                     const errMessage = err?.message;
 
                     if (typeof errMessage === 'string') {
                       // errors from nested invokes
                       let match = errMessage.match(
-                        /error\s+while\s+executing\s+account-script:\s*\w+\(code\s*=\s*(?:.+),\s*error\s*=\s*([\s\S]+)\s*,\s*log\s*=/im
+                        /error\s+while\s+executing\s+account-script:\s*\w+\(code\s*=\s*(?:.+),\s*error\s*=\s*([\s\S]+)\s*,\s*log\s*=/im,
                       );
 
                       if (match) {
@@ -190,7 +175,7 @@ export function Swap({ setTab }: Props) {
 
                         if (
                           /something\s*went\s*wrong\s*while\s*working\s*with\s*amountToSend/i.test(
-                            msg
+                            msg,
                           )
                         ) {
                           msg = t('swap.amountToSendError');
@@ -204,7 +189,7 @@ export function Swap({ setTab }: Props) {
 
                       // errors from contract itself
                       match = errMessage.match(
-                        /error\s+while\s+executing\s+account-script:\s*([\s\S]+)/im
+                        /error\s+while\s+executing\s+account-script:\s*([\s\S]+)/im,
                       );
 
                       if (match) {

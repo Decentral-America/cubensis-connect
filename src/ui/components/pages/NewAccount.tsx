@@ -36,7 +36,7 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
   static _isDisabledButton(
     { firstValue, secondValue },
     termsAccepted: boolean,
-    conditionsAccepted: boolean
+    conditionsAccepted: boolean,
   ) {
     if (!termsAccepted || !conditionsAccepted) {
       return true;
@@ -46,14 +46,8 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
       return true;
     }
 
-    const isFirstError = NewAccountComponent._validateFirst(
-      firstValue,
-      secondValue
-    );
-    const isSecondError = NewAccountComponent._validateSecond(
-      firstValue,
-      secondValue
-    );
+    const isFirstError = NewAccountComponent._validateFirst(firstValue, secondValue);
+    const isSecondError = NewAccountComponent._validateSecond(firstValue, secondValue);
 
     return isFirstError || isSecondError;
   }
@@ -80,35 +74,29 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
     return { error: 'noMatch' };
   }
 
-  getRef = input => (this.inputEl = input);
+  getRef = (input) => (this.inputEl = input);
 
   onFirstBlur = () => this._onFirstBlur();
 
   onSecondBlur = () => this._onSecondBlur();
 
-  onChangeFist = e =>
-    this._onChangeInputs(e.target.value, this.state.secondValue);
+  onChangeFist = (e) => this._onChangeInputs(e.target.value, this.state.secondValue);
 
-  onChangeSecond = e =>
-    this._onChangeInputs(this.state.firstValue, e.target.value);
+  onChangeSecond = (e) => this._onChangeInputs(this.state.firstValue, e.target.value);
 
-  handleTermsAcceptedChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  handleTermsAcceptedChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ termsAccepted: e.currentTarget.checked }, () => {
       this._onChangeInputs(this.state.firstValue, this.state.secondValue);
     });
   };
 
-  handleonditionsAcceptedChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  handleonditionsAcceptedChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ conditionsAccepted: e.currentTarget.checked }, () => {
       this._onChangeInputs(this.state.firstValue, this.state.secondValue);
     });
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (!this.state.passwordError && this.state.firstValue) {
@@ -132,9 +120,7 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
           <div>
             <div className="margin1 relative">
               <div className={`basic500 tag1 left input-title`}>
-                <Trans i18nKey="newAccount.createPassword">
-                  Create a password
-                </Trans>
+                <Trans i18nKey="newAccount.createPassword">Create a password</Trans>
               </div>
               <Input
                 id="first"
@@ -154,9 +140,7 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
             </div>
             <div className="margin1 relative">
               <div className={`basic500 tag1 left input-title`}>
-                <Trans i18nKey="newAccount.confirmPassword">
-                  Confirm password
-                </Trans>
+                <Trans i18nKey="newAccount.confirmPassword">Confirm password</Trans>
               </div>
               <Input
                 id="second"
@@ -180,17 +164,13 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
               onChange={this.handleTermsAcceptedChange}
             />
             <label htmlFor="termsAccepted">
-              <Trans i18nKey="newAccount.acceptTerms">
-                I have read and agree with the
-              </Trans>{' '}
+              <Trans i18nKey="newAccount.acceptTerms">I have read and agree with the</Trans>{' '}
               <a
                 href="https://decentralchain.io/cubensis-connect-terms"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Trans i18nKey="newAccount.termsAndConditions">
-                  Terms and Conditions
-                </Trans>
+                <Trans i18nKey="newAccount.termsAndConditions">Terms and Conditions</Trans>
               </a>
             </label>
           </div>
@@ -202,9 +182,7 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
               onChange={this.handleonditionsAcceptedChange}
             />
             <label htmlFor="conditionsAccepted">
-              <Trans i18nKey="newAccount.acceptTerms">
-                I have read and agree with the
-              </Trans>{' '}
+              <Trans i18nKey="newAccount.acceptTerms">I have read and agree with the</Trans>{' '}
               <a
                 href="https://decentralchain.io/cubensis-connect-policy"
                 target="_blank"
@@ -220,10 +198,9 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
           </Button>
           <div className={`tag1 left basic500 marginTop3`}>
             <Trans i18nKey="newAccount.passinfo">
-              The password you entered will be stored locally. If you change
-              device or lose your password, you will have to repeat the process
-              of adding accounts to Cubensis Connect. DCC does not store your
-              passwords.
+              The password you entered will be stored locally. If you change device or lose your
+              password, you will have to repeat the process of adding accounts to Cubensis Connect.
+              DCC does not store your passwords.
             </Trans>
           </div>
         </form>
@@ -246,14 +223,8 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
 
   _checkValues(firstValue, secondValue) {
     const { termsAccepted, conditionsAccepted } = this.state;
-    const firstError = NewAccountComponent._validateFirst(
-      firstValue,
-      secondValue
-    );
-    const secondError = NewAccountComponent._validateSecond(
-      firstValue,
-      secondValue
-    );
+    const firstError = NewAccountComponent._validateFirst(firstValue, secondValue);
+    const secondError = NewAccountComponent._validateSecond(firstValue, secondValue);
     const passwordError = !!(firstError || secondError);
     const buttonDisabled = NewAccountComponent._isDisabledButton(
       {
@@ -261,13 +232,11 @@ class NewAccountComponent extends React.PureComponent<INewAccountComponentProps>
         secondValue,
       },
       termsAccepted,
-      conditionsAccepted
+      conditionsAccepted,
     );
 
     this.setState({ passwordError, firstError, secondError, buttonDisabled });
   }
 }
 
-export const NewAccount = connect(mapStateToProps, { createNew, setTab })(
-  NewAccountComponent
-);
+export const NewAccount = connect(mapStateToProps, { createNew, setTab })(NewAccountComponent);

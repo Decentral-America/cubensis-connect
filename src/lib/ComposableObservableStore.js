@@ -19,7 +19,7 @@ class ComposableObservableStore extends ObservableStore {
       this.updateState({ [key]: state });
 
       // subscribe to substore update
-      config[key].subscribe(state => {
+      config[key].subscribe((state) => {
         this.updateState({ [key]: state });
       });
     }

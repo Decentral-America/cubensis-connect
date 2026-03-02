@@ -1,5 +1,5 @@
-import { IAssetInfo } from '@waves/data-entities/dist/entities/Asset';
-import { ExchangePool } from 'ui/components/pages/swap/channelClient';
+import { type IAssetInfo } from '@decentralchain/data-entities/dist/entities/Asset';
+import { type ExchangePool } from 'ui/components/pages/swap/channelClient';
 
 function prepareErrorMessage(err: any) {
   return err && err.message ? err.message : String(err);
@@ -69,10 +69,7 @@ class Background {
     }
   }
 
-  async setAutoSign(
-    origin: string,
-    options: { interval: number; totalAmount: number }
-  ) {
+  async setAutoSign(origin: string, options: { interval: number; totalAmount: number }) {
     try {
       await this.initPromise;
       return await this.background.setAutoSign(origin, options);
@@ -81,10 +78,7 @@ class Background {
     }
   }
 
-  async setNotificationPermissions(options: {
-    origin: string;
-    canUse: boolean;
-  }) {
+  async setNotificationPermissions(options: { origin: string; canUse: boolean }) {
     try {
       await this.initPromise;
       return await this.background.setNotificationPermissions(options);
@@ -386,6 +380,7 @@ class Background {
     }
   }
 
+  // @ts-expect-error legacy namespace
   async signAndPublishTransaction(data: WavesKeeper.TSignTransactionData) {
     try {
       await this.initPromise;

@@ -4,18 +4,12 @@ import * as styles from './networkSettings.styl';
 import { getMatcherPublicKey, getNetworkByte } from 'ui/utils/waves';
 import { Button, BUTTON_TYPE, Error, Input } from 'ui/components/ui';
 
-const key = key => `bottom.${key}`;
+const key = (key) => `bottom.${key}`;
 
-export class NetworkSettings extends React.PureComponent<
-  INetworkSettings,
-  IState
-> {
+export class NetworkSettings extends React.PureComponent<INetworkSettings, IState> {
   state = {} as IState;
 
-  static getDerivedStateFromProps(
-    props: INetworkSettings,
-    state: IState
-  ): IState {
+  static getDerivedStateFromProps(props: INetworkSettings, state: IState): IState {
     const { matcher, name, networkCode, node, onSave, onClose } = props;
 
     return {
@@ -49,10 +43,7 @@ export class NetworkSettings extends React.PureComponent<
 
           <div>
             <div className="margin-main-big relative">
-              <label
-                className="input-title basic500 tag1"
-                htmlFor="node_address"
-              >
+              <label className="input-title basic500 tag1" htmlFor="node_address">
                 <Trans i18nKey="networksSettings.node">Node address</Trans>
               </label>
               <Input
@@ -62,25 +53,16 @@ export class NetworkSettings extends React.PureComponent<
               />
               <Error show={this.state.nodeError}>
                 {this.state.node ? (
-                  <Trans i18nKey="networkSettings.nodeError">
-                    Incorrect node address
-                  </Trans>
+                  <Trans i18nKey="networkSettings.nodeError">Incorrect node address</Trans>
                 ) : (
-                  <Trans i18nKey="networkSettings.nodeUrlEmpty">
-                    URL is required
-                  </Trans>
+                  <Trans i18nKey="networkSettings.nodeUrlEmpty">URL is required</Trans>
                 )}
               </Error>
             </div>
 
             <div className="margin-main-big relative">
-              <label
-                className="input-title basic500 tag1"
-                htmlFor="matcher_address"
-              >
-                <Trans i18nKey="networksSettings.matcher">
-                  Matcher address
-                </Trans>
+              <label className="input-title basic500 tag1" htmlFor="matcher_address">
+                <Trans i18nKey="networksSettings.matcher">Matcher address</Trans>
               </label>
               <Input
                 id="matcher_address"
@@ -88,9 +70,7 @@ export class NetworkSettings extends React.PureComponent<
                 onChange={this.changeHandler('matcher', 'matcherError')}
               />
               <Error show={this.state.matcherError}>
-                <Trans i18nKey="networkSettings.matcherError">
-                  Incorrect matcher address
-                </Trans>
+                <Trans i18nKey="networkSettings.matcherError">Incorrect matcher address</Trans>
               </Error>
             </div>
           </div>
@@ -102,9 +82,7 @@ export class NetworkSettings extends React.PureComponent<
               onClick={this.saveHandler}
               className="margin-main-big relative"
             >
-              <Trans i18nKey="networkSettings.saveAndApply">
-                Save and apply
-              </Trans>
+              <Trans i18nKey="networkSettings.saveAndApply">Save and apply</Trans>
             </Button>
 
             <div className="center">
@@ -113,18 +91,14 @@ export class NetworkSettings extends React.PureComponent<
               </Button>
             </div>
 
-            <Button
-              className="modal-close"
-              onClick={this.state.onClose}
-              type="transparent"
-            />
+            <Button className="modal-close" onClick={this.state.onClose} type="transparent" />
           </div>
         </div>
       </div>
     );
   }
 
-  private changeHandler = (valueName, errorName) => event => {
+  private changeHandler = (valueName, errorName) => (event) => {
     const { target } = event;
     this.setState({ [valueName]: target.value, [errorName]: false } as any);
   };
@@ -160,7 +134,7 @@ export class NetworkSettings extends React.PureComponent<
     const { node } = this.state;
 
     return getNetworkByte(node)
-      .then(networkCode => this.setState({ nodeError: false, networkCode }))
+      .then((networkCode) => this.setState({ nodeError: false, networkCode }))
       .catch(() => {
         this.setState({ nodeError: true });
         return Promise.reject();

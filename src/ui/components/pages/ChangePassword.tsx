@@ -28,14 +28,14 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
     oldEqualNewError: false,
   };
 
-  getRef = input => (this.inputEl = input);
+  getRef = (input) => (this.inputEl = input);
   onFirstBlur = () => this._onBlur();
   onSecondBlur = () => this._onBlur();
   onOldBlur = () => this._onBlur();
-  onChangeFist = e => this._onChangeFist(e);
-  onChangeSecond = e => this._onChangeSecond(e);
-  onChangeOld = e => this._onChangeOld(e);
-  onSubmit = e => this._onSubmit(e);
+  onChangeFist = (e) => this._onChangeFist(e);
+  onChangeSecond = (e) => this._onChangeSecond(e);
+  onChangeOld = (e) => this._onChangeOld(e);
+  onSubmit = (e) => this._onSubmit(e);
 
   componentDidMount() {
     //this.inputEl.focus();
@@ -65,14 +65,10 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
               />
               <Error show={!!(this.state.oldError || this.state.passwordError)}>
                 {this.state.oldError ? (
-                  <Trans i18nKey="changePassword.errorShortOld">
-                    Password can't be so short
-                  </Trans>
+                  <Trans i18nKey="changePassword.errorShortOld">Password can't be so short</Trans>
                 ) : null}
                 {this.state.passwordError ? (
-                  <Trans i18nKey="changePassword.errorWrongOld">
-                    Wrong password
-                  </Trans>
+                  <Trans i18nKey="changePassword.errorWrongOld">Wrong password</Trans>
                 ) : null}
               </Error>
             </div>
@@ -90,17 +86,13 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
                 error={!!this.state.firstError || this.state.oldEqualNewError}
               />
               <Error show={!!this.state.firstError}>
-                <Trans i18nKey="changePassword.errorShortNew">
-                  Password is too short
-                </Trans>
+                <Trans i18nKey="changePassword.errorShortNew">Password is too short</Trans>
               </Error>
             </div>
 
             <div className="margin-main-big relative">
               <div className="basic500 tag1 input-title">
-                <Trans i18nKey="changePassword.confirmPassword">
-                  Confirm password
-                </Trans>
+                <Trans i18nKey="changePassword.confirmPassword">Confirm password</Trans>
               </div>
               <Input
                 id="second"
@@ -110,18 +102,12 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
                 onChange={this.onChangeSecond}
                 error={!!this.state.secondError || this.state.oldEqualNewError}
               />
-              <Error
-                show={!!this.state.secondError || this.state.oldEqualNewError}
-              >
+              <Error show={!!this.state.secondError || this.state.oldEqualNewError}>
                 {this.state.oldEqualNewError ? (
-                  <Trans i18nKey="changePassword.equalPassword">
-                    Old password is equal new
-                  </Trans>
+                  <Trans i18nKey="changePassword.equalPassword">Old password is equal new</Trans>
                 ) : null}
                 {this.state.secondError ? (
-                  <Trans i18nKey="changePassword.errorWrongConfirm">
-                    New passwords not match
-                  </Trans>
+                  <Trans i18nKey="changePassword.errorWrongConfirm">New passwords not match</Trans>
                 ) : null}
               </Error>
             </div>
@@ -130,10 +116,7 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
             <Trans i18nKey="changePassword.create">Save</Trans>
           </Button>
         </form>
-        <Modal
-          animation={Modal.ANIMATION.FLASH_SCALE}
-          showModal={this.state.showChanged}
-        >
+        <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={this.state.showChanged}>
           <div className="modal notification">
             <Trans i18nKey="changePassword.done">Password changed</Trans>
           </div>
@@ -163,7 +146,7 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
 
           setTimeout(() => this.setState({ showChanged: false }), 1000);
         },
-        () => this.setState({ passwordError: true })
+        () => this.setState({ passwordError: true }),
       );
     }
   }
@@ -173,11 +156,7 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
   }
 
   _onChange(oldValue, firstValue, secondValue) {
-    const buttonDisabled = this._isDisabledButton(
-      oldValue,
-      firstValue,
-      secondValue
-    );
+    const buttonDisabled = this._isDisabledButton(oldValue, firstValue, secondValue);
     this.setState({ oldValue, firstValue, secondValue, buttonDisabled });
   }
 
@@ -208,11 +187,7 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
       return true;
     }
 
-    return (
-      firstValue !== secondValue ||
-      secondValue.length < MIN_LENGTH ||
-      firstValue === oldValue
-    );
+    return firstValue !== secondValue || secondValue.length < MIN_LENGTH || firstValue === oldValue;
   }
 
   _checkValues() {
@@ -221,18 +196,9 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
     const firstError = this._validateFirst();
     const secondError = this._validateSecond();
     const oldEqualNewError =
-      !firstError &&
-      !secondError &&
-      !oldError &&
-      oldValue &&
-      firstValue === oldValue;
+      !firstError && !secondError && !oldError && oldValue && firstValue === oldValue;
     const buttonDisabled =
-      oldEqualNewError ||
-      oldError ||
-      firstError ||
-      secondError ||
-      !oldValue ||
-      !firstValue;
+      oldEqualNewError || oldError || firstError || secondError || !oldValue || !firstValue;
 
     if (oldError) {
       passwordError = false;
@@ -281,6 +247,4 @@ class ChangePasswordComponent extends React.PureComponent<Props> {
   }
 }
 
-export const ChangePassword = connect(undefined, { changePassword })(
-  ChangePasswordComponent
-);
+export const ChangePassword = connect(undefined, { changePassword })(ChangePasswordComponent);

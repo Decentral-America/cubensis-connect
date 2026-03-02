@@ -25,9 +25,11 @@ export class StatisticsController {
 
   static createUserId() {
     const date = Date.now();
-    const random = Math.round(Math.random() * 1000000000);
+    const randomBytes = new Uint32Array(1);
+    crypto.getRandomValues(randomBytes);
+    const random = randomBytes[0];
     return libs.crypto.base58Encode(
-      libs.crypto.sha256(libs.crypto.stringToBytes(`${date}-${random}`))
+      libs.crypto.sha256(libs.crypto.stringToBytes(`${date}-${random}`)),
     );
   }
 
@@ -39,8 +41,7 @@ export class StatisticsController {
     const user_properties = {
       browser_name: this.browser.name,
       browser_version: this.browser.version,
-      browser_version_major:
-        this.browser.version && this.browser.version.split('.')[0],
+      browser_version_major: this.browser.version && this.browser.version.split('.')[0],
       environment: CubensisConnect_ENV,
       network: network,
       chainId: networkCode ? networkCode.charCodeAt(0) : undefined,
@@ -67,7 +68,7 @@ export class StatisticsController {
 
   sendEvents() {
     this.sended = this.sended
-      .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
+      .then(() => new Promise((resolve) => setTimeout(resolve, 1000)))
       .then(
         () => {
           if (this.events.length === 0) {
@@ -89,7 +90,7 @@ export class StatisticsController {
             }),
           });
         },
-        () => {}
+        () => {},
       );
   }
 
@@ -103,17 +104,13 @@ export class StatisticsController {
      **/
   addEventOnce(eventType, ms, storeKey) {
     ms = ms || 60 * 60 * 1000; // default 1 event per hour
-    storeKey =
-      storeKey ||
-      'last' + eventType.charAt(0).toUpperCase() + eventType.slice(1);
+    storeKey = storeKey || 'last' + eventType.charAt(0).toUpperCase() + eventType.slice(1);
     const state = this.store.getState();
     const dateNow = new Date();
-    const dateLast = !!state[storeKey]
-      ? new Date(state[storeKey])
-      : dateNow - ms;
+    const dateLast = state[storeKey] ? new Date(state[storeKey]) : dateNow - ms;
 
     if (dateNow - dateLast >= ms) {
-      let partial = {};
+      const partial = {};
       partial[storeKey] = dateNow.valueOf();
       this.addEvent(eventType);
       this.store.updateState(partial);
@@ -123,7 +120,7 @@ export class StatisticsController {
   sendTxEvent(message) {
     try {
       if (message.type === 'transactionPackage') {
-        (message.data || []).forEach(data => {
+        (message.data || []).forEach((data) => {
           this.sendTxEvent({ ...message, type: 'transaction', data });
         });
       } else {

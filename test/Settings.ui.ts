@@ -1,5 +1,5 @@
 import { App, Assets, CreateNewAccount, Settings } from './utils/actions';
-import { By, until, WebElement } from 'selenium-webdriver';
+import { By, until, type WebElement } from 'selenium-webdriver';
 import { expect } from 'chai';
 import {
   CUSTOMLIST,
@@ -16,18 +16,14 @@ describe('Settings', function () {
   this.timeout(BROWSER_TIMEOUT_DELAY + 60 * 1000);
 
   async function performLogin(password: string) {
-    const passwordEls = await this.driver.findElements(
-      By.css('input#loginPassword')
-    );
+    const passwordEls = await this.driver.findElements(By.css('input#loginPassword'));
 
     if (passwordEls.length) {
       await passwordEls[0].sendKeys(password);
       await this.driver
         .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('button#loginEnter'))
-          ),
-          this.wait
+          until.elementIsEnabled(this.driver.findElement(By.css('button#loginEnter'))),
+          this.wait,
         )
         .click();
     }
@@ -38,19 +34,19 @@ describe('Settings', function () {
     await CreateNewAccount.importAccount.call(
       this,
       'rich',
-      'decentralchain private node seed with dcc tokens'
+      'decentralchain private node seed with dcc tokens',
     );
     await Assets.addAccount.call(this);
     await CreateNewAccount.importAccount.call(
       this,
       'test',
-      'side angry perfect sight capital absurd stuff pulp climb jealous onion address speed portion category'
+      'side angry perfect sight capital absurd stuff pulp climb jealous onion address speed portion category',
     );
     await Assets.addAccount.call(this);
     await CreateNewAccount.importAccount.call(
       this,
       'test3',
-      'defy credit shoe expect pair gun future slender escape visa test book tone patient vibrant'
+      'defy credit shoe expect pair gun future slender escape visa test book tone patient vibrant',
     );
 
     await Settings.setMaxSessionTimeout.call(this);
@@ -58,46 +54,33 @@ describe('Settings', function () {
     await App.open.call(this);
     await this.driver
       .wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+        this.wait,
       )
       .click();
 
     await this.driver.wait(
-      until.elementLocated(
-        By.xpath("//div[contains(@class, '-settings-content')]")
-      ),
-      this.wait
+      until.elementLocated(By.xpath("//div[contains(@class, '-settings-content')]")),
+      this.wait,
     );
   });
 
   describe('Export accounts', function () {
     it('creates an encrypted keystore file containing account details', async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('[data-testid=exportMenuItem]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('[data-testid=exportMenuItem]')), this.wait)
         .click();
       await this.driver
         .wait(
-          until.elementLocated(
-            By.css('input[value="3P5Xx9MFs8VchRjfLeocGFxXkZGknm38oq1"]')
-          ),
-          this.wait
+          until.elementLocated(By.css('input[value="3P5Xx9MFs8VchRjfLeocGFxXkZGknm38oq1"]')),
+          this.wait,
         )
         .click();
-      await this.driver
-        .findElement(By.css('[data-testid="exportButton"]'))
-        .click();
+      await this.driver.findElement(By.css('[data-testid="exportButton"]')).click();
       await this.driver
         .findElement(By.css('[data-testid="passwordInput"]'))
         .sendKeys(DEFAULT_PASSWORD);
-      await this.driver
-        .findElement(By.css('[data-testid="verifyButton"]'))
-        .click();
+      await this.driver.findElement(By.css('[data-testid="verifyButton"]')).click();
     });
   });
 
@@ -114,23 +97,21 @@ describe('Settings', function () {
         .click();
 
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-settings-networkTab')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-settings-networkTab')]")),
+        this.wait,
       );
 
       nodeUrlInput = this.driver.wait(
         until.elementLocated(By.css('input#node_address')),
-        this.wait
+        this.wait,
       );
       matcherUrlInput = this.driver.wait(
         until.elementLocated(By.css('input#matcher_address')),
-        this.wait
+        this.wait,
       );
       setDefaultBtn = this.driver.wait(
         until.elementLocated(By.css('button#setDefault')),
-        this.wait
+        this.wait,
       );
 
       nodeUrl = await nodeUrlInput.getAttribute('value');
@@ -158,9 +139,7 @@ describe('Settings', function () {
       });
       it('Can be changed', async function () {
         await matcherUrlInput.clear();
-        expect(await matcherUrlInput.getAttribute('value')).not.to.be.equal(
-          matcherUrl
-        );
+        expect(await matcherUrlInput.getAttribute('value')).not.to.be.equal(matcherUrl);
       });
       it('Can be copied');
     });
@@ -169,9 +148,7 @@ describe('Settings', function () {
       it('Resets Node and Matcher URLs', async function () {
         await setDefaultBtn.click();
         expect(await nodeUrlInput.getAttribute('value')).to.be.equal(nodeUrl);
-        expect(await matcherUrlInput.getAttribute('value')).to.be.equal(
-          matcherUrl
-        );
+        expect(await matcherUrlInput.getAttribute('value')).to.be.equal(matcherUrl);
       });
     });
   });
@@ -179,10 +156,7 @@ describe('Settings', function () {
   describe('Permissions control', function () {
     before(async function () {
       await this.driver
-        .wait(
-          until.elementLocated(By.css('button#settingsPermission')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('button#settingsPermission')), this.wait)
         .click();
     });
 
@@ -192,37 +166,32 @@ describe('Settings', function () {
 
     const checkChangingAutoLimitsInResourceSettings = () => {
       describe('Changing auto-limits in resource settings', function () {
-        let resolutionTimeSelect: WebElement,
-          spendingLimitInput: WebElement,
-          saveBtn: WebElement;
+        let resolutionTimeSelect: WebElement, spendingLimitInput: WebElement, saveBtn: WebElement;
 
         beforeEach(async function () {
           await this.driver
             .findElement(
               By.xpath(
-                "//div[contains(@class, '-list-permissionItem')]//button[contains(@class, '-list-settings')]"
-              )
+                "//div[contains(@class, '-list-permissionItem')]//button[contains(@class, '-list-settings')]",
+              ),
             )
             .click();
 
           await this.driver.wait(
             until.elementIsVisible(
-              this.driver.wait(
-                until.elementLocated(By.css('div#originSettings')),
-                this.wait
-              )
+              this.driver.wait(until.elementLocated(By.css('div#originSettings')), this.wait),
             ),
-            this.wait
+            this.wait,
           );
 
           resolutionTimeSelect = this.driver.findElement(
             By.xpath(
               "//div[contains(@class, '-settings-selectTime')]" +
-                "//div[contains(@class, '-index-selectInput')]"
-            )
+                "//div[contains(@class, '-index-selectInput')]",
+            ),
           );
           spendingLimitInput = this.driver.findElement(
-            By.xpath("//input[contains(@class, '-settings-amountInput')]")
+            By.xpath("//input[contains(@class, '-settings-amountInput')]"),
           );
 
           saveBtn = this.driver.findElement(By.css('button#save'));
@@ -232,18 +201,14 @@ describe('Settings', function () {
           await resolutionTimeSelect.click();
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-index-listItem-')][last()]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-index-listItem-')][last()]")),
+              this.wait,
             )
             .click();
           await this.driver
             .wait(until.elementIsEnabled(spendingLimitInput), this.wait)
             .sendKeys(SPENDING_LIMIT);
-          await this.driver
-            .wait(until.elementIsEnabled(saveBtn), this.wait)
-            .click();
+          await this.driver.wait(until.elementIsEnabled(saveBtn), this.wait).click();
           await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
           expect(
             await this.driver
@@ -252,12 +217,12 @@ describe('Settings', function () {
                   By.xpath(
                     "//div[contains(@class, '-list-permissionItem')]" +
                       "//div[contains(@class, '-list-statusColor')]" +
-                      '//span'
-                  )
+                      '//span',
+                  ),
                 ),
-                this.wait
+                this.wait,
               )
-              .getText()
+              .getText(),
           ).matches(/automatic signing/i);
         });
 
@@ -265,24 +230,20 @@ describe('Settings', function () {
           await resolutionTimeSelect.click();
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-index-listItem-')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-index-listItem-')]")),
+              this.wait,
             )
             .click();
-          await this.driver
-            .wait(until.elementIsEnabled(saveBtn), this.wait)
-            .click();
+          await this.driver.wait(until.elementIsEnabled(saveBtn), this.wait).click();
           await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
           expect(
             await this.driver.findElements(
               By.xpath(
                 "//div[contains(@class, '-list-permissionItem')]" +
                   "//div[contains(@class, '-list-statusColor')]" +
-                  '//span'
-              )
-            )
+                  '//span',
+              ),
+            ),
           ).length(0);
         });
       });
@@ -290,16 +251,12 @@ describe('Settings', function () {
 
     describe('White list', function () {
       before(async function () {
-        await this.driver
-          .wait(until.elementLocated(By.css('div#whiteListTab')), this.wait)
-          .click();
+        await this.driver.wait(until.elementLocated(By.css('div#whiteListTab')), this.wait).click();
 
         await this.driver.wait(
           until.elementLocated(
-            By.xpath(
-              "//div[@id='whiteListTab'][contains(@class, '-index-selected')]"
-            )
-          )
+            By.xpath("//div[@id='whiteListTab'][contains(@class, '-index-selected')]"),
+          ),
         );
       });
 
@@ -307,10 +264,8 @@ describe('Settings', function () {
         for (const origin of WHITELIST) {
           expect(
             await this.driver.findElements(
-              By.xpath(
-                `//div[contains(@class, '-list-permissionItem')]//div[text()='${origin}']`
-              )
-            )
+              By.xpath(`//div[contains(@class, '-list-permissionItem')]//div[text()='${origin}']`),
+            ),
           ).length(1);
         }
       });
@@ -330,16 +285,16 @@ describe('Settings', function () {
         // this requests permission first
         const permissionRequest = () => {
           // @ts-ignore
-          CubensisConnect.initialPromise.then(api => {
+          CubensisConnect.initialPromise.then((api) => {
             api.publicState().then(
-              resolved => {
+              (resolved) => {
                 // @ts-ignore
                 window.result = resolved;
               },
-              rejected => {
+              (rejected) => {
                 // @ts-ignore
                 window.result = rejected;
-              }
+              },
             );
           });
         };
@@ -361,54 +316,39 @@ describe('Settings', function () {
 
           await App.open.call(this);
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-originAuth-transaction')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-originAuth-transaction')]")),
+            this.wait,
           );
           await this.driver.findElement(By.css('button#approve')).click();
 
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-final-transaction')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-final-transaction')]")),
+            this.wait,
           );
           await this.driver.findElement(By.css('button#close')).click();
 
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+              this.wait,
             )
             .click();
 
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-settings-content')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-settings-content')]")),
+            this.wait,
           );
           await this.driver
-            .wait(
-              until.elementLocated(By.css('button#settingsPermission')),
-              this.wait
-            )
+            .wait(until.elementLocated(By.css('button#settingsPermission')), this.wait)
             .click();
 
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-list-permissionList')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-list-permissionList')]")),
+              this.wait,
             )
             .findElements(
-              By.xpath(
-                `//div[contains(@class, '-list-permissionItem')]//div[text()='${origin}']`
-              )
+              By.xpath(`//div[contains(@class, '-list-permissionItem')]//div[text()='${origin}']`),
             );
         });
 
@@ -418,16 +358,14 @@ describe('Settings', function () {
 
           await App.open.call(this);
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-originAuth-transaction')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-originAuth-transaction')]")),
+            this.wait,
           );
           await this.driver
             .findElement(
               By.xpath(
-                "//div[contains(@class, '-originAuth-collapsed')]//div[contains(@class, '-index-title')]"
-              )
+                "//div[contains(@class, '-originAuth-collapsed')]//div[contains(@class, '-index-title')]",
+              ),
             )
             .click();
 
@@ -437,17 +375,15 @@ describe('Settings', function () {
             .findElement(
               By.xpath(
                 "//div[contains(@class, '-settings-selectTime')]" +
-                  "//div[contains(@class, '-index-selectInput')]"
-              )
+                  "//div[contains(@class, '-index-selectInput')]",
+              ),
             )
             .click();
 
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-index-listItem-')][last()]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-index-listItem-')][last()]")),
+              this.wait,
             )
             .click();
 
@@ -455,58 +391,47 @@ describe('Settings', function () {
             .wait(
               until.elementIsEnabled(
                 this.driver.findElement(
-                  By.xpath("//input[contains(@class, '-settings-amountInput')]")
-                )
+                  By.xpath("//input[contains(@class, '-settings-amountInput')]"),
+                ),
               ),
-              this.wait
+              this.wait,
             )
             .sendKeys(SPENDING_LIMIT);
 
           await this.driver.findElement(By.css('button#approve')).click();
 
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-final-transaction')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-final-transaction')]")),
+            this.wait,
           );
           await this.driver.findElement(By.css('button#close')).click();
 
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+              this.wait,
             )
             .click();
 
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-settings-content')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-settings-content')]")),
+            this.wait,
           );
           await this.driver
-            .wait(
-              until.elementLocated(By.css('button#settingsPermission')),
-              this.wait
-            )
+            .wait(until.elementLocated(By.css('button#settingsPermission')), this.wait)
             .click();
 
           expect(
             await this.driver
               .wait(
-                until.elementLocated(
-                  By.xpath("//div[contains(@class, '-list-permissionList')]")
-                ),
-                this.wait
+                until.elementLocated(By.xpath("//div[contains(@class, '-list-permissionList')]")),
+                this.wait,
               )
               .findElements(
                 By.xpath(
-                  `//div[contains(@class, '-list-permissionItem')][./div[text()='${origin}']]//span`
-                )
-              )
+                  `//div[contains(@class, '-list-permissionItem')][./div[text()='${origin}']]//span`,
+                ),
+              ),
           ).length(1);
         });
       });
@@ -517,45 +442,34 @@ describe('Settings', function () {
 
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+              this.wait,
             )
             .click();
 
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-settings-content')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-settings-content')]")),
+            this.wait,
           );
           await this.driver
-            .wait(
-              until.elementLocated(By.css('button#settingsPermission')),
-              this.wait
-            )
+            .wait(until.elementLocated(By.css('button#settingsPermission')), this.wait)
             .click();
         });
 
         it('Block all messages from origin in custom list', async function () {
           // here we have 2 enabled origins
           const originEl: WebElement = await this.driver.findElement(
-            By.xpath("//div[contains(@class, '-list-permissionItem')]")
+            By.xpath("//div[contains(@class, '-list-permissionItem')]"),
           );
-          const origin: string = await originEl
-            .findElement(By.css('div'))
-            .getText();
+          const origin: string = await originEl.findElement(By.css('div')).getText();
 
           await originEl
             .findElement(By.xpath("//button[contains(@class, '-list-enable')]"))
             .click();
 
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//button[contains(@class, '-list-disable')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//button[contains(@class, '-list-disable')]")),
+            this.wait,
           );
 
           await publicStateFromOrigin.call(this, origin);
@@ -577,50 +491,36 @@ describe('Settings', function () {
 
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+              this.wait,
             )
             .click();
 
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-settings-content')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-settings-content')]")),
+            this.wait,
           );
           await this.driver
-            .wait(
-              until.elementLocated(By.css('button#settingsPermission')),
-              this.wait
-            )
+            .wait(until.elementLocated(By.css('button#settingsPermission')), this.wait)
             .click();
         });
 
         it('After deletion, requests generate permission request', async function () {
           // here we have 2 origins, the first one is disabled, so we will delete it
           const originEl: WebElement = await this.driver.findElement(
-            By.xpath("//div[contains(@class, '-list-permissionItem')]")
+            By.xpath("//div[contains(@class, '-list-permissionItem')]"),
           );
 
-          const origin: string = await originEl
-            .findElement(By.css('div'))
-            .getText();
+          const origin: string = await originEl.findElement(By.css('div')).getText();
           await originEl
-            .findElement(
-              By.xpath("//button[contains(@class, '-list-settings')]")
-            )
+            .findElement(By.xpath("//button[contains(@class, '-list-settings')]"))
             .click();
 
           await this.driver.wait(
             until.elementIsVisible(
-              this.driver.wait(
-                until.elementLocated(By.css('div#originSettings')),
-                this.wait
-              )
+              this.driver.wait(until.elementLocated(By.css('div#originSettings')), this.wait),
             ),
-            this.wait
+            this.wait,
           );
           this.driver.findElement(By.css('button#delete')).click();
           await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
@@ -630,11 +530,9 @@ describe('Settings', function () {
           await App.open.call(this);
           expect(
             await this.driver.wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-originAuth-transaction')]")
-              ),
-              this.wait
-            )
+              until.elementLocated(By.xpath("//div[contains(@class, '-originAuth-transaction')]")),
+              this.wait,
+            ),
           ).not.to.be.throw;
           await this.driver.findElement(By.css('button#reject')).click();
         });
@@ -667,10 +565,8 @@ describe('Settings', function () {
         await performLogin.call(this, DEFAULT_PASSWORD);
 
         await this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-settings-content')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-settings-content')]")),
+          this.wait,
         );
       });
 
@@ -680,11 +576,9 @@ describe('Settings', function () {
 
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-login-content')]")
-            ),
-            BROWSER_TIMEOUT_DELAY
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-login-content')]")),
+            BROWSER_TIMEOUT_DELAY,
+          ),
         ).not.to.be.throw;
       });
 
@@ -698,21 +592,13 @@ describe('Settings', function () {
 
       before(async function () {
         await this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-settings-content-')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-settings-content-')]")),
+          this.wait,
         );
 
-        toggleBtn = this.driver.findElement(
-          By.css('[data-testid="clickProtectionBtn"]')
-        );
-        statusSpan = this.driver.findElement(
-          By.css('[data-testid="clickProtectionStatus"] span')
-        );
-        helpIcon = this.driver.findElement(
-          By.css('[data-testid="clickProtectionIcon"]')
-        );
+        toggleBtn = this.driver.findElement(By.css('[data-testid="clickProtectionBtn"]'));
+        statusSpan = this.driver.findElement(By.css('[data-testid="clickProtectionStatus"] span'));
+        helpIcon = this.driver.findElement(By.css('[data-testid="clickProtectionIcon"]'));
       });
 
       it('Can be enabled', async function () {
@@ -720,8 +606,8 @@ describe('Settings', function () {
         await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
         expect(
           await this.driver.findElements(
-            By.css('[data-testid="clickProtectionBtn"][data-teston="true"]')
-          )
+            By.css('[data-testid="clickProtectionBtn"][data-teston="true"]'),
+          ),
         ).length(1);
         expect(await statusSpan.getText()).matches(/enabled/i);
       });
@@ -731,8 +617,8 @@ describe('Settings', function () {
         await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
         expect(
           await this.driver.findElements(
-            By.css('[data-testid="clickProtectionBtn"][data-teston="true"]')
-          )
+            By.css('[data-testid="clickProtectionBtn"][data-teston="true"]'),
+          ),
         ).length(0);
         expect(await statusSpan.getText()).matches(/disabled/i);
       });
@@ -744,14 +630,12 @@ describe('Settings', function () {
           this.driver.wait(
             until.elementIsVisible(
               this.driver.wait(
-                until.elementLocated(
-                  By.css('[data-testid="clickProtectionTooltip"]')
-                ),
-                this.wait
-              )
+                until.elementLocated(By.css('[data-testid="clickProtectionTooltip"]')),
+                this.wait,
+              ),
             ),
-            this.wait
-          )
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
     });
@@ -761,21 +645,15 @@ describe('Settings', function () {
 
       before(async function () {
         await this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-settings-content-')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-settings-content-')]")),
+          this.wait,
         );
 
-        toggleBtn = this.driver.findElement(
-          By.css('[data-testid="showSuspiciousAssetsBtn"]')
-        );
+        toggleBtn = this.driver.findElement(By.css('[data-testid="showSuspiciousAssetsBtn"]'));
         statusSpan = this.driver.findElement(
-          By.css('[data-testid="showSuspiciousAssetsStatus"] span')
+          By.css('[data-testid="showSuspiciousAssetsStatus"] span'),
         );
-        helpIcon = this.driver.findElement(
-          By.css('[data-testid="showSuspiciousAssetsIcon"]')
-        );
+        helpIcon = this.driver.findElement(By.css('[data-testid="showSuspiciousAssetsIcon"]'));
       });
 
       it('Can be disabled', async function () {
@@ -783,10 +661,8 @@ describe('Settings', function () {
         await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
         expect(
           await this.driver.findElements(
-            By.css(
-              '[data-testid="showSuspiciousAssetsBtn"][data-teston="true"]'
-            )
-          )
+            By.css('[data-testid="showSuspiciousAssetsBtn"][data-teston="true"]'),
+          ),
         ).length(0);
         expect(await statusSpan.getText()).matches(/disabled/i);
       });
@@ -796,10 +672,8 @@ describe('Settings', function () {
         await this.driver.sleep(DEFAULT_ANIMATION_DELAY);
         expect(
           await this.driver.findElements(
-            By.css(
-              '[data-testid="showSuspiciousAssetsBtn"][data-teston="true"]'
-            )
-          )
+            By.css('[data-testid="showSuspiciousAssetsBtn"][data-teston="true"]'),
+          ),
         ).length(1);
         expect(await statusSpan.getText()).matches(/enabled/i);
       });
@@ -811,14 +685,12 @@ describe('Settings', function () {
           this.driver.wait(
             until.elementIsVisible(
               this.driver.wait(
-                until.elementLocated(
-                  By.css('[data-testid="showSuspiciousAssetsTooltip"]')
-                ),
-                this.wait
-              )
+                until.elementLocated(By.css('[data-testid="showSuspiciousAssetsTooltip"]')),
+                this.wait,
+              ),
             ),
-            this.wait
-          )
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
     });
@@ -829,10 +701,8 @@ describe('Settings', function () {
 
         await this.driver
           .wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-            ),
-            this.wait
+            until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+            this.wait,
           )
           .click();
       });
@@ -844,11 +714,9 @@ describe('Settings', function () {
 
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-login-content')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-login-content')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
     });
@@ -856,18 +724,14 @@ describe('Settings', function () {
     describe('Delete accounts', function () {
       it('Account deletion warning displays', async function () {
         await this.driver
-          .findElement(
-            By.xpath("//div[contains(@class, '-settings-deleteAccounts')]")
-          )
+          .findElement(By.xpath("//div[contains(@class, '-settings-deleteAccounts')]"))
           .click();
 
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-deleteAccount-content')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-deleteAccount-content')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
 
@@ -876,19 +740,15 @@ describe('Settings', function () {
 
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-settings-content')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-settings-content')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
 
       it('Clicking "Delete account" removes all accounts from current network', async function () {
         await this.driver
-          .findElement(
-            By.xpath("//div[contains(@class, '-settings-deleteAccounts')]")
-          )
+          .findElement(By.xpath("//div[contains(@class, '-settings-deleteAccounts')]"))
           .click();
 
         await this.driver
@@ -897,11 +757,9 @@ describe('Settings', function () {
 
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-welcome-content')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-welcome-content')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
       });
     });

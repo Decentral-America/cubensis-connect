@@ -11,17 +11,8 @@ import {
   setUiState,
 } from '../../actions';
 import { PAGES } from '../../pageConfig';
-import { Asset, Money } from '@waves/data-entities';
-import {
-  Button,
-  BUTTON_TYPE,
-  Input,
-  Modal,
-  Tab,
-  TabList,
-  TabPanels,
-  Tabs,
-} from '../ui';
+import { Asset, Money } from '@decentralchain/data-entities';
+import { Button, BUTTON_TYPE, Input, Modal, Tab, TabList, TabPanels, Tabs } from '../ui';
 import { Intro } from './Intro';
 import { FeatureUpdateInfo } from './FeatureUpdateInfo';
 import { useAppDispatch, useAppSelector } from 'ui/store';
@@ -29,7 +20,7 @@ import { AssetInfo } from './assets/assetInfo';
 import { TabAssets } from './assets/tabs/tabAssets';
 import { TabNfts } from './assets/tabs/tabNfts';
 import { TabTxHistory } from './assets/tabs/tabTxHistory';
-import { AssetDetail } from '../../services/Background';
+import { type AssetDetail } from '../../services/Background';
 
 export function SearchInput({ value, onInput, onClear }) {
   const input = React.createRef<Input>();
@@ -71,29 +62,27 @@ interface Props {
 export function Assets({ setTab }: Props) {
   const dispatch = useAppDispatch();
 
-  const activeAccount = useAppSelector(state =>
-    state.accounts.find(
-      ({ address }) => address === state.selectedAccount.address
-    )
+  const activeAccount = useAppSelector((state) =>
+    state.accounts.find(({ address }) => address === state.selectedAccount.address),
   );
-  const assets = useAppSelector(state => state.assets);
-  const balances = useAppSelector(state => state.balances);
-  const notifications = useAppSelector(state => state.localState.notifications);
+  const assets = useAppSelector((state) => state.assets);
+  const balances = useAppSelector((state) => state.balances);
+  const notifications = useAppSelector((state) => state.localState.notifications);
   const showUpdateInfo = useAppSelector(
-    state => !state.uiState.isFeatureUpdateShown && !!state.accounts.length
+    (state) => !state.uiState.isFeatureUpdateShown && !!state.accounts.length,
   );
-  const activeTab = useAppSelector(state => state.uiState?.assetsTab);
+  const activeTab = useAppSelector((state) => state.uiState?.assetsTab);
 
   const [showAsset, setShowAsset] = useState(false);
   const [showCopy, setShowCopy] = React.useState(false);
 
   const [currentAsset, setCurrentAsset] = [
-    useAppSelector(state => state.uiState?.currentAsset),
+    useAppSelector((state) => state.uiState?.currentAsset),
     (assetId: AssetDetail) => dispatch(setUiState({ currentAsset: assetId })),
   ];
 
   const [currentTab, setCurrentTab] = [
-    useAppSelector(state => state.uiState?.assetsTab || 0),
+    useAppSelector((state) => state.uiState?.assetsTab || 0),
     (tabIndex: number) => dispatch(setUiState({ assetsTab: tabIndex })),
   ];
 
@@ -106,7 +95,7 @@ export function Assets({ setTab }: Props) {
     }
   }, []);
 
-  const onSelectHandler = account => {
+  const onSelectHandler = (account) => {
     dispatch(setActiveAccount(account));
     setTab(PAGES.ACCOUNT_INFO);
   };
@@ -148,9 +137,7 @@ export function Assets({ setTab }: Props) {
 
       <Tabs
         activeTab={activeTab}
-        onTabChange={activeIndex =>
-          activeIndex !== currentTab && setCurrentTab(activeIndex)
-        }
+        onTabChange={(activeIndex) => activeIndex !== currentTab && setCurrentTab(activeIndex)}
       >
         <TabList className="flex body3">
           <Tab className={styles.tabItem}>
@@ -165,25 +152,25 @@ export function Assets({ setTab }: Props) {
         </TabList>
         <TabPanels className={styles.tabPanels}>
           <TabAssets
-            onInfoClick={assetId => {
+            onInfoClick={(assetId) => {
               setCurrentAsset(assets[assetId]);
               setShowAsset(true);
             }}
-            onSendClick={assetId => {
+            onSendClick={(assetId) => {
               setCurrentAsset(assets[assetId]);
               setTab(PAGES.SEND);
             }}
-            onSwapClick={assetId => {
+            onSwapClick={(assetId) => {
               dispatch(setSwapScreenInitialState({ fromAssetId: assetId }));
               setTab(PAGES.SWAP);
             }}
           />
           <TabNfts
-            onInfoClick={assetId => {
+            onInfoClick={(assetId) => {
               setCurrentAsset(assets[assetId]);
               setShowAsset(true);
             }}
-            onSendClick={assetId => {
+            onSendClick={(assetId) => {
               setCurrentAsset(assets[assetId]);
               setTab(PAGES.SEND);
             }}
@@ -209,10 +196,7 @@ export function Assets({ setTab }: Props) {
         </div>
       </Modal>
 
-      <Modal
-        animation={Modal.ANIMATION.FLASH_SCALE}
-        showModal={notifications.accountImportSuccess}
-      >
+      <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={notifications.accountImportSuccess}>
         <div className="modal notification">
           <div>
             <Trans i18nKey="assets.accountImportSuccessNotification" />
@@ -220,10 +204,7 @@ export function Assets({ setTab }: Props) {
         </div>
       </Modal>
 
-      <Modal
-        animation={Modal.ANIMATION.FLASH_SCALE}
-        showModal={notifications.selected}
-      >
+      <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={notifications.selected}>
         <div className="modal notification">
           <div>
             <Trans i18nKey="assets.selectAccountNotification" />
@@ -231,10 +212,7 @@ export function Assets({ setTab }: Props) {
         </div>
       </Modal>
 
-      <Modal
-        animation={Modal.ANIMATION.FLASH_SCALE}
-        showModal={notifications.deleted}
-      >
+      <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={notifications.deleted}>
         <div className="modal notification active-asset">
           <div>
             <Trans i18nKey="assets.deleteAccount" />

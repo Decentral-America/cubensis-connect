@@ -15,13 +15,9 @@ export class WavesAuthCard extends React.PureComponent<IProps> {
   render() {
     const { message, collapsed } = this.props;
     const { origin } = message;
-    const className = cn(
-      styles.wavesAuthTransactionCard,
-      this.props.className,
-      {
-        [styles.wavesAuthCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.wavesAuthTransactionCard, this.props.className, {
+      [styles.wavesAuthCard_collapsed]: this.props.collapsed,
+    });
 
     return (
       <div className={className}>
@@ -33,9 +29,7 @@ export class WavesAuthCard extends React.PureComponent<IProps> {
                   <TxIcon txType={'authOrigin'} small={true} />
                 </div>
                 <div>
-                  <div className="basic500 body3 margin-min origin-ellipsis">
-                    {origin}
-                  </div>
+                  <div className="basic500 body3 margin-min origin-ellipsis">{origin}</div>
                   <h1 className="headline1">
                     <Trans i18nKey="transactions.signRequestWavesAuth" />
                   </h1>

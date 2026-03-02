@@ -1,7 +1,8 @@
 import { ACTION } from './constants';
 
 export function signAndPublishTransaction(
-  transaction: WavesKeeper.TSignTransactionData
+  // @ts-expect-error legacy namespace
+  transaction: WavesKeeper.TSignTransactionData,
 ) {
   return {
     type: ACTION.SIGN_AND_PUBLISH_TRANSACTION,

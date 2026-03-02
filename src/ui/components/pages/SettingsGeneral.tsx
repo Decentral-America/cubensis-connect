@@ -8,11 +8,11 @@ import { PAGES } from '../../pageConfig';
 import cn from 'classnames';
 
 class SettingsGeneralComponent extends React.Component {
-  readonly props;
+  declare readonly props;
   langsHandler = () => this.props.setTab(PAGES.LANGS_SETTINGS);
   passwordHandler = () => this.props.setTab(PAGES.CHANGE_PASSWORD);
   pairingHandler = () => this.props.setTab(PAGES.PAIRING);
-  setIdle = id => this.props.setIdle(id);
+  setIdle = (id) => this.props.setIdle(id);
 
   render() {
     const { idle } = this.props;
@@ -36,11 +36,7 @@ class SettingsGeneralComponent extends React.Component {
         <div className={styles.settingsMenu}>
           <div className="margin-main-big">
             <Select
-              description={
-                <Trans i18nKey="settings.sessionTimeout">
-                  Session Timeout in
-                </Trans>
-              }
+              description={<Trans i18nKey="settings.sessionTimeout">Session Timeout in</Trans>}
               selectList={selectList as any}
               selected={this.props.idleOptions.type}
               onSelectItem={this.setIdle}

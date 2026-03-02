@@ -1,5 +1,5 @@
-import BigNumber from '@waves/bignumber';
-import { Money } from '@waves/data-entities';
+import BigNumber from '@decentralchain/bignumber';
+import { type Money } from '@decentralchain/data-entities';
 import ColorHash from 'color-hash';
 import * as React from 'react';
 import { useIMask } from 'react-imask';
@@ -28,7 +28,7 @@ export function AssetAmountInput({
   onLogoClick,
   onMaxClick,
 }: Props) {
-  const network = useAppSelector(state => state.currentNetwork);
+  const network = useAppSelector((state) => state.currentNetwork);
   const asset = balance.asset;
   const logoSrc = getAssetLogo(network, asset.id);
 
@@ -92,17 +92,12 @@ export function AssetAmountInput({
       prefix: '',
       secondaryGroupSize: 0,
       suffix: '',
-    }
+    },
   );
 
   return (
     <div className={styles.root}>
-      <button
-        className={styles.logo}
-        disabled={!onLogoClick}
-        type="button"
-        onClick={onLogoClick}
-      >
+      <button className={styles.logo} disabled={!onLogoClick} type="button" onClick={onLogoClick}>
         {logoSrc ? (
           <img className={styles.logoImg} src={logoSrc} alt="" />
         ) : (
@@ -143,11 +138,7 @@ export function AssetAmountInput({
           </div>
 
           {onMaxClick && (
-            <button
-              className={styles.maxButton}
-              type="button"
-              onClick={onMaxClick}
-            >
+            <button className={styles.maxButton} type="button" onClick={onMaxClick}>
               <Trans i18nKey="assetAmountInput.maxButtonText" />
             </button>
           )}

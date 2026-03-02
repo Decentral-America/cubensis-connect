@@ -7,8 +7,8 @@ import * as styles from './styles/settings.styl';
 import { getMatcherPublicKey, getNetworkByte } from 'ui/utils/waves';
 
 class NetworksSettingsComponent extends React.PureComponent {
-  readonly props;
-  readonly state;
+  declare readonly props;
+  declare readonly state;
   _tCopy;
   _tSave;
   _tSetDefault;
@@ -16,32 +16,23 @@ class NetworksSettingsComponent extends React.PureComponent {
   static getDerivedStateFromProps(props, state) {
     state = { ...state };
 
-    const defaultServers = props.networks.find(
-      item => item.name === props.currentNetwork
-    );
+    const defaultServers = props.networks.find((item) => item.name === props.currentNetwork);
 
     const defaultNode = defaultServers.server;
     const currentNode = props.customNodes[props.currentNetwork];
     const isDefault = state.node === defaultNode;
     const isCurrent = currentNode && state.node === currentNode;
-    const hasChanges =
-      state.node && ((isDefault && currentNode) || (!isCurrent && !isDefault));
-    const node =
-      hasChanges || state.node != null
-        ? state.node
-        : currentNode || defaultNode;
+    const hasChanges = state.node && ((isDefault && currentNode) || (!isCurrent && !isDefault));
+    const node = hasChanges || state.node != null ? state.node : currentNode || defaultNode;
     const defaultMatcher = defaultServers.matcher;
     const currentMatcher = props.customMatcher[props.currentNetwork];
     const isDefaultMatcher = state.matcher === defaultMatcher;
     const isCurrentMatcher = currentMatcher && state.matcher === currentMatcher;
     const hasChangesMatcher =
       state.matcher &&
-      ((isDefaultMatcher && currentMatcher) ||
-        (!isCurrentMatcher && !isDefaultMatcher));
+      ((isDefaultMatcher && currentMatcher) || (!isCurrentMatcher && !isDefaultMatcher));
     const matcher =
-      hasChangesMatcher || state.matcher != null
-        ? state.matcher
-        : currentMatcher || defaultMatcher;
+      hasChangesMatcher || state.matcher != null ? state.matcher : currentMatcher || defaultMatcher;
 
     return {
       node,
@@ -60,10 +51,9 @@ class NetworksSettingsComponent extends React.PureComponent {
     };
   }
 
-  onInputHandler = event =>
-    this.setState({ node: event.target.value, nodeError: false });
+  onInputHandler = (event) => this.setState({ node: event.target.value, nodeError: false });
 
-  onInputMatcherHandler = event =>
+  onInputMatcherHandler = (event) =>
     this.setState({ matcher: event.target.value, matcherError: false });
 
   onSaveNodeHandler = async () => {
@@ -116,8 +106,7 @@ class NetworksSettingsComponent extends React.PureComponent {
   }
 
   render() {
-    const { nodeError, matcherError, validateData, showSetDefaultBtn } =
-      this.state;
+    const { nodeError, matcherError, validateData, showSetDefaultBtn } = this.state;
 
     const disableSave = nodeError || matcherError || validateData;
     const disableForm = validateData;
@@ -142,17 +131,12 @@ class NetworksSettingsComponent extends React.PureComponent {
             onChange={this.onInputHandler}
           />
           <Error show={nodeError}>
-            <Trans i18nKey="networkSettings.nodeError">
-              Incorrect node address
-            </Trans>
+            <Trans i18nKey="networkSettings.nodeError">Incorrect node address</Trans>
           </Error>
         </div>
 
         <div className="margin-main-big relative">
-          <label
-            className="input-title basic500 tag1"
-            htmlFor="matcher_address"
-          >
+          <label className="input-title basic500 tag1" htmlFor="matcher_address">
             <Copy text={this.state.matcher} onCopy={this.copyHandler}>
               <i className={`copy-icon ${styles.copyIcon}`}> </i>
             </Copy>
@@ -165,19 +149,14 @@ class NetworksSettingsComponent extends React.PureComponent {
             onChange={this.onInputMatcherHandler}
           />
           <Error show={matcherError}>
-            <Trans i18nKey="networkSettings.matcherError">
-              Incorrect matcher address
-            </Trans>
+            <Trans i18nKey="networkSettings.matcherError">Incorrect matcher address</Trans>
           </Error>
         </div>
 
         <div>
           <Button
             type={BUTTON_TYPE.SUBMIT}
-            disabled={
-              disableSave ||
-              !(this.state.hasChanges || this.state.hasChangesMatcher)
-            }
+            disabled={disableSave || !(this.state.hasChanges || this.state.hasChangesMatcher)}
             className="margin-main-big"
             onClick={this.onSaveNodeHandler}
           >
@@ -189,10 +168,7 @@ class NetworksSettingsComponent extends React.PureComponent {
           {showSetDefaultBtn ? (
             <Button
               id="setDefault"
-              disabled={
-                disableSave ||
-                (this.state.isDefault && this.state.isDefaultMatcher)
-              }
+              disabled={disableSave || (this.state.isDefault && this.state.isDefaultMatcher)}
               onClick={this.saveDefault}
             >
               <Trans i18nKey="networksSettings.setDefault">Set Default</Trans>
@@ -200,32 +176,21 @@ class NetworksSettingsComponent extends React.PureComponent {
           ) : null}
         </div>
 
-        <Modal
-          animation={Modal.ANIMATION.FLASH_SCALE}
-          showModal={this.state.showCopied}
-        >
+        <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={this.state.showCopied}>
           <div className="modal notification">
             <Trans i18nKey="networksSettings.copied">Copied!</Trans>
           </div>
         </Modal>
 
-        <Modal
-          animation={Modal.ANIMATION.FLASH_SCALE}
-          showModal={this.state.showSaved}
-        >
+        <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={this.state.showSaved}>
           <div className="modal notification">
             <Trans i18nKey="networksSettings.savedModal">Saved!</Trans>
           </div>
         </Modal>
 
-        <Modal
-          animation={Modal.ANIMATION.FLASH_SCALE}
-          showModal={this.state.showSetDefault}
-        >
+        <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={this.state.showSetDefault}>
           <div className="modal notification">
-            <Trans i18nKey="networksSettings.setDefaultModal">
-              Save default!
-            </Trans>
+            <Trans i18nKey="networksSettings.setDefaultModal">Save default!</Trans>
           </div>
         </Modal>
       </div>
@@ -303,14 +268,11 @@ class NetworksSettingsComponent extends React.PureComponent {
   onSaveDefault() {
     clearTimeout(this._tSetDefault);
     this.setState({ showSetDefault: true });
-    this._tSetDefault = setTimeout(
-      () => this.setState({ showSetDefault: false }),
-      1000
-    );
+    this._tSetDefault = setTimeout(() => this.setState({ showSetDefault: false }), 1000);
   }
 }
 
-const mapToProps = store => {
+const mapToProps = (store) => {
   return {
     networks: store.networks,
     currentNetwork: store.currentNetwork,
@@ -325,7 +287,4 @@ const actions = {
   setCustomCode,
 };
 
-export const NetworksSettings = connect(
-  mapToProps,
-  actions
-)(NetworksSettingsComponent);
+export const NetworksSettings = connect(mapToProps, actions)(NetworksSettingsComponent);

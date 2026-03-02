@@ -23,13 +23,9 @@ interface IProps {
 
 export class CreateOrderCard extends React.PureComponent<IProps> {
   render() {
-    const className = cn(
-      styles.createOrderTransactionCard,
-      this.props.className,
-      {
-        [styles.createOrderCard_collapsed]: this.props.collapsed,
-      }
-    );
+    const className = cn(styles.createOrderTransactionCard, this.props.className, {
+      [styles.createOrderCard_collapsed]: this.props.collapsed,
+    });
 
     const { message, assets } = this.props;
     const { data = {} } = message;
@@ -46,11 +42,7 @@ export class CreateOrderCard extends React.PureComponent<IProps> {
           </div>
           <div>
             <div className="basic500 body3 margin-min">
-              <Trans
-                i18nKey={
-                  isSell ? 'transactions.orderSell' : 'transactions.orderBuy'
-                }
-              />
+              <Trans i18nKey={isSell ? 'transactions.orderSell' : 'transactions.orderBuy'} />
               <span>
                 : <Asset assetId={amount.asset.id} />/
                 <Asset assetId={price.asset.id} />

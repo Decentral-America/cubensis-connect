@@ -1,11 +1,11 @@
 .root {
   display: flex;
-    align-items: center;
-    gap: 8px;
-    border: solid 1px #009280;
-    padding: 14px;
-    border-radius: 4px;
-    background: #061e29;
+  align-items: center;
+  gap: 8px;
+  border: solid 1px #009280;
+  padding: 14px;
+  border-radius: 4px;
+  background: #061e29;
 }
 
 .logo {

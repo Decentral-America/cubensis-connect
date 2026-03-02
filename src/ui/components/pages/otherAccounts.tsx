@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'ui/store';
-import { Asset, Money } from '@waves/data-entities';
+import { Asset, Money } from '@decentralchain/data-entities';
 import { compareAccountsByLastUsed } from 'accounts/utils';
 import { setActiveAccount } from 'ui/actions/assets';
 import { PAGES } from 'ui/pageConfig';
@@ -15,19 +15,17 @@ interface Props {
 
 export function OtherAccountsPage({ setTab }: Props) {
   const dispatch = useAppDispatch();
-  const accounts = useAppSelector(state => state.accounts);
+  const accounts = useAppSelector((state) => state.accounts);
 
-  const activeAccount = useAppSelector(state =>
-    state.accounts.find(
-      ({ address }) => address === state.selectedAccount.address
-    )
+  const activeAccount = useAppSelector((state) =>
+    state.accounts.find(({ address }) => address === state.selectedAccount.address),
   );
 
-  const assets = useAppSelector(state => state.assets);
-  const balances = useAppSelector(state => state.balances);
+  const assets = useAppSelector((state) => state.assets);
+  const balances = useAppSelector((state) => state.balances);
 
   const otherAccounts = accounts
-    .filter(account => account.address !== activeAccount.address)
+    .filter((account) => account.address !== activeAccount.address)
     .sort(compareAccountsByLastUsed);
 
   const balancesMoney: Record<string, Money> = {};
@@ -40,7 +38,7 @@ export function OtherAccountsPage({ setTab }: Props) {
     Object.entries<{ available: string; leasedOut: string }>(balances).forEach(
       ([key, { available }]) => {
         balancesMoney[key] = new Money(available, asset);
-      }
+      },
     );
   }
 
@@ -58,16 +56,16 @@ export function OtherAccountsPage({ setTab }: Props) {
             <Trans i18nKey="otherAccounts.noAccountsNote" />
           </p>
         ) : (
-          otherAccounts.map(account => (
+          otherAccounts.map((account) => (
             <AccountCard
               key={account.address}
               account={account}
               balance={balancesMoney[account.address]}
-              onClick={account => {
+              onClick={(account) => {
                 dispatch(selectAccount(account));
                 setTab(PAGES.ASSETS);
               }}
-              onInfoClick={account => {
+              onInfoClick={(account) => {
                 dispatch(setActiveAccount(account));
                 setTab(PAGES.ACCOUNT_INFO);
               }}

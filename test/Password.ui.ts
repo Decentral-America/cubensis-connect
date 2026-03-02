@@ -1,4 +1,4 @@
-import { By, until, WebElement } from 'selenium-webdriver';
+import { By, until, type WebElement } from 'selenium-webdriver';
 import { expect } from 'chai';
 import { clear } from './utils';
 import { App, CreateNewAccount } from './utils/actions';
@@ -22,28 +22,19 @@ describe('Password management', () => {
       await App.open.call(this);
       // Get Started page
       await this.driver
-        .wait(
-          until.elementLocated(By.css('.app button[type=submit]')),
-          this.wait
-        )
+        .wait(until.elementLocated(By.css('.app button[type=submit]')), this.wait)
         .click();
       // Protect Your Account page
       firstPasswordInput = this.driver.wait(
         until.elementLocated(By.css('.app input#first[type=password]')),
-        this.wait
+        this.wait,
       );
       firstPasswordErrorDiv = this.driver.findElement(
-        By.xpath(
-          "//input[@id='first']//following-sibling::div[contains(@class, '-error-error')]"
-        )
+        By.xpath("//input[@id='first']//following-sibling::div[contains(@class, '-error-error')]"),
       );
-      secondPasswordInput = this.driver.findElement(
-        By.css('.app input#second[type=password]')
-      );
+      secondPasswordInput = this.driver.findElement(By.css('.app input#second[type=password]'));
       secondPasswordErrorDiv = this.driver.findElement(
-        By.xpath(
-          "//input[@id='second']//following-sibling::div[contains(@class, '-error-error')]"
-        )
+        By.xpath("//input[@id='second']//following-sibling::div[contains(@class, '-error-error')]"),
       );
     });
 
@@ -54,18 +45,14 @@ describe('Password management', () => {
 
     it('Minimum password length 8 characters', async function () {
       await firstPasswordInput.sendKeys(PASSWORD.SHORT);
-      expect(await firstPasswordErrorDiv.getText()).matches(
-        /password is too short/i
-      );
+      expect(await firstPasswordErrorDiv.getText()).matches(/password is too short/i);
     });
 
     it('Passwords in both fields must mismatch', async function () {
       // check password mismatches
       await firstPasswordInput.sendKeys(PASSWORD.DEFAULT);
       await secondPasswordInput.sendKeys(PASSWORD.SHORT);
-      expect(await secondPasswordErrorDiv.getText()).matches(
-        /passwords does not match/i
-      );
+      expect(await secondPasswordErrorDiv.getText()).matches(/passwords does not match/i);
     });
 
     it('Passwords in both fields must match', async function () {
@@ -79,31 +66,21 @@ describe('Password management', () => {
     it('Successful password creation', async function () {
       await firstPasswordInput.sendKeys(PASSWORD.DEFAULT);
       await secondPasswordInput.sendKeys(PASSWORD.DEFAULT);
-      await this.driver
-        .findElement(By.css('.app input#termsAccepted[type=checkbox]'))
-        .click();
-      await this.driver
-        .findElement(By.css('.app input#conditionsAccepted[type=checkbox]'))
-        .click();
+      await this.driver.findElement(By.css('.app input#termsAccepted[type=checkbox]')).click();
+      await this.driver.findElement(By.css('.app input#conditionsAccepted[type=checkbox]')).click();
       await this.driver
         .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('.app button[type=submit]'))
-          ),
-          this.wait
+          until.elementIsEnabled(this.driver.findElement(By.css('.app button[type=submit]'))),
+          this.wait,
         )
         .click();
       // check we are at create new account page
       await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-import-import')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-import-import')]")),
+        this.wait,
       );
       expect(
-        await this.driver
-          .findElement(By.css('.app button#createNewAccount'))
-          .getText()
+        await this.driver.findElement(By.css('.app button#createNewAccount')).getText(),
       ).matches(/create a new account/i);
     });
   });
@@ -120,10 +97,8 @@ describe('Password management', () => {
       await App.open.call(this);
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+          this.wait,
         )
         .click();
       await this.driver
@@ -134,14 +109,10 @@ describe('Password management', () => {
         .click();
       oldPasswordInput = this.driver.wait(
         until.elementLocated(By.css('input#old[type=password]')),
-        this.wait
+        this.wait,
       );
-      newFirstPasswordInput = this.driver.findElement(
-        By.css('input#first[type=password]')
-      );
-      newSecondPasswordInput = this.driver.findElement(
-        By.css('input#second[type=password]')
-      );
+      newFirstPasswordInput = this.driver.findElement(By.css('input#first[type=password]'));
+      newSecondPasswordInput = this.driver.findElement(By.css('input#second[type=password]'));
     });
 
     beforeEach(async function () {
@@ -157,10 +128,10 @@ describe('Password management', () => {
         await this.driver
           .findElement(
             By.xpath(
-              "//input[@id='old']//following-sibling::div[contains(@class, '-error-error')]"
-            )
+              "//input[@id='old']//following-sibling::div[contains(@class, '-error-error')]",
+            ),
           )
-          .getText()
+          .getText(),
       ).matches(/Password can't be so short/i);
       await clear(oldPasswordInput);
 
@@ -170,10 +141,10 @@ describe('Password management', () => {
         await this.driver
           .findElement(
             By.xpath(
-              "//input[@id='first']//following-sibling::div[contains(@class, '-error-error')]"
-            )
+              "//input[@id='first']//following-sibling::div[contains(@class, '-error-error')]",
+            ),
           )
-          .getText()
+          .getText(),
       ).matches(/Password is too short/i);
       await clear(newFirstPasswordInput);
     });
@@ -187,9 +158,7 @@ describe('Password management', () => {
       await newFirstPasswordInput.sendKeys('\t');
 
       const errDiv = this.driver.findElement(
-        By.xpath(
-          "//input[@id='second']//following-sibling::div[contains(@class, '-error-error')]"
-        )
+        By.xpath("//input[@id='second']//following-sibling::div[contains(@class, '-error-error')]"),
       );
       expect(await errDiv.getText()).matches(/New passwords does not match/i);
       await clear(newSecondPasswordInput);
@@ -205,9 +174,7 @@ describe('Password management', () => {
       await newFirstPasswordInput.sendKeys('\t');
 
       const errDiv = this.driver.findElement(
-        By.xpath(
-          "//input[@id='second']//following-sibling::div[contains(@class, '-error-error')]"
-        )
+        By.xpath("//input[@id='second']//following-sibling::div[contains(@class, '-error-error')]"),
       );
       expect(await errDiv.getText()).matches(/Old password is equal new/i);
       await clear(newFirstPasswordInput);
@@ -225,22 +192,18 @@ describe('Password management', () => {
 
       await this.driver
         .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('.app button[type=submit]'))
-          ),
-          this.wait
+          until.elementIsEnabled(this.driver.findElement(By.css('.app button[type=submit]'))),
+          this.wait,
         )
         .click();
 
       expect(
         await this.driver
           .wait(
-            until.elementIsVisible(
-              this.driver.findElement(By.css('.modal.notification'))
-            ),
-            this.wait
+            until.elementIsVisible(this.driver.findElement(By.css('.modal.notification'))),
+            this.wait,
           )
-          .getText()
+          .getText(),
       ).matches(/Password changed/i);
     });
   });
@@ -252,25 +215,19 @@ describe('Password management', () => {
     async function performLogout() {
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-menu-settingsIcon')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-menu-settingsIcon')]")),
+          this.wait,
         )
         .click();
       await this.driver
         .wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-settings-logout')]")
-          ),
-          this.wait
+          until.elementLocated(By.xpath("//div[contains(@class, '-settings-logout')]")),
+          this.wait,
         )
         .click();
       loginForm = await this.driver.wait(
-        until.elementLocated(
-          By.xpath("//div[contains(@class, '-login-content')]")
-        ),
-        this.wait
+        until.elementLocated(By.xpath("//div[contains(@class, '-login-content')]")),
+        this.wait,
       );
     }
 
@@ -281,10 +238,8 @@ describe('Password management', () => {
 
       await this.driver
         .wait(
-          until.elementIsEnabled(
-            this.driver.findElement(By.css('button#loginEnter'))
-          ),
-          this.wait
+          until.elementIsEnabled(this.driver.findElement(By.css('button#loginEnter'))),
+          this.wait,
         )
         .click();
     }
@@ -294,7 +249,7 @@ describe('Password management', () => {
       await CreateNewAccount.importAccount.call(
         this,
         'rich',
-        'decentralchain private node seed with dcc tokens'
+        'decentralchain private node seed with dcc tokens',
       );
     });
 
@@ -312,10 +267,10 @@ describe('Password management', () => {
         await this.driver
           .findElement(
             By.xpath(
-              "//input[@type='password']//following-sibling::div[contains(@class, '-error-error')]"
-            )
+              "//input[@type='password']//following-sibling::div[contains(@class, '-error-error')]",
+            ),
           )
-          .getText()
+          .getText(),
       ).matches(/Wrong password/i);
       await loginInput.clear();
     });
@@ -326,11 +281,9 @@ describe('Password management', () => {
 
       expect(
         await this.driver.wait(
-          until.elementLocated(
-            By.xpath("//div[contains(@class, '-assets-assets')]")
-          ),
-          this.wait
-        )
+          until.elementLocated(By.xpath("//div[contains(@class, '-assets-assets')]")),
+          this.wait,
+        ),
       ).not.to.be.throw;
     });
 
@@ -345,36 +298,26 @@ describe('Password management', () => {
           .click();
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-forgotAccount-content')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-forgotAccount-content')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
-        expect(
-          await this.driver
-            .findElement(By.css('button#resetConfirm'))
-            .isEnabled()
-        ).to.be.false;
+        expect(await this.driver.findElement(By.css('button#resetConfirm')).isEnabled()).to.be
+          .false;
       });
 
       it('Clicking "Cancel" button returns to login page and login is available', async function () {
         await this.driver.findElement(By.css('button#resetCancel')).click();
         expect(
-          await this.driver.wait(
-            until.elementLocated(By.css('input#loginPassword')),
-            this.wait
-          )
+          await this.driver.wait(until.elementLocated(By.css('input#loginPassword')), this.wait),
         ).not.to.be.empty;
 
         await performLogin.call(this, currentPassword);
         expect(
           await this.driver.wait(
-            until.elementLocated(
-              By.xpath("//div[contains(@class, '-assets-assets')]")
-            ),
-            this.wait
-          )
+            until.elementLocated(By.xpath("//div[contains(@class, '-assets-assets')]")),
+            this.wait,
+          ),
         ).not.to.be.throw;
         await performLogout.call(this);
       });
@@ -388,33 +331,25 @@ describe('Password management', () => {
         before(async function () {
           await this.driver
             .wait(
-              until.elementLocated(
-                By.xpath("//div[contains(@class, '-login-content')]")
-              ),
-              this.wait
+              until.elementLocated(By.xpath("//div[contains(@class, '-login-content')]")),
+              this.wait,
             )
-            .findElement(
-              By.xpath("//div[contains(@class, '-login-forgotLnk')]")
-            )
+            .findElement(By.xpath("//div[contains(@class, '-login-forgotLnk')]"))
             .click();
 
           defaultPhrase = await this.driver
             .wait(until.elementLocated(By.css('div#defaultPhrase')), this.wait)
             .getText();
 
-          confirmPhraseInput = this.driver.findElement(
-            By.css('input#confirmPhrase')
-          );
+          confirmPhraseInput = this.driver.findElement(By.css('input#confirmPhrase'));
 
           confirmPhraseErrorDiv = this.driver.findElement(
             By.xpath(
-              "//input[@id='confirmPhrase']//following-sibling::div[contains(@class, '-error-error')]"
-            )
+              "//input[@id='confirmPhrase']//following-sibling::div[contains(@class, '-error-error')]",
+            ),
           );
 
-          resetConfirmBtn = this.driver.findElement(
-            By.css('button#resetConfirm')
-          );
+          resetConfirmBtn = this.driver.findElement(By.css('button#resetConfirm'));
         });
 
         beforeEach(async function () {
@@ -432,7 +367,7 @@ describe('Password management', () => {
           await confirmPhraseInput.sendKeys(defaultPhrase.toLowerCase());
           await confirmPhraseInput.sendKeys('\t');
           expect(await confirmPhraseErrorDiv.getText()).matches(
-            /The phrase is entered incorrectly/i
+            /The phrase is entered incorrectly/i,
           );
           expect(await resetConfirmBtn.isEnabled()).to.be.false;
         });
@@ -444,13 +379,11 @@ describe('Password management', () => {
           expect(
             await this.driver
               .wait(
-                until.elementLocated(
-                  By.xpath("//div[contains(@class, '-welcome-content')]")
-                ),
-                this.wait
+                until.elementLocated(By.xpath("//div[contains(@class, '-welcome-content')]")),
+                this.wait,
               )
               .findElement(By.css('.app button[type=submit]'))
-              .getText()
+              .getText(),
           ).matches(/Get started/i);
         });
       });

@@ -15,10 +15,7 @@ export class OriginAuthCard extends React.PureComponent<IProps> {
   render() {
     const { message, collapsed } = this.props;
     const { origin } = message;
-    const className = cn(
-      styles.originAuthTransactionCard,
-      this.props.className
-    );
+    const className = cn(styles.originAuthTransactionCard, this.props.className);
 
     return (
       <div className={className}>
@@ -30,9 +27,7 @@ export class OriginAuthCard extends React.PureComponent<IProps> {
                   <TxIcon txType={messageType} small={true} />
                 </div>
                 <div>
-                  <div className="basic500 body3 margin-min origin-ellipsis">
-                    {origin}
-                  </div>
+                  <div className="basic500 body3 margin-min origin-ellipsis">{origin}</div>
                   <h1 className="headline1">
                     <Trans i18nKey="transactions.allowAccessTitle" />
                   </h1>

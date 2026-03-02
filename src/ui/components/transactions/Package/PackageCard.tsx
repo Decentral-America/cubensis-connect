@@ -41,9 +41,7 @@ export class PackageCard extends React.PureComponent<IProps> {
     });
 
     return (
-      <div
-        className={`${myClassName} ${styles.packageTransactionCard} ${styles.groupTx}`}
-      >
+      <div className={`${myClassName} ${styles.packageTransactionCard} ${styles.groupTx}`}>
         <div className={styles.groupBottom}> </div>
         <div className={styles.groupEffect}>
           <div className={styles.cardHeader}>
@@ -53,11 +51,7 @@ export class PackageCard extends React.PureComponent<IProps> {
 
             <div>
               <div className="basic500 body3 margin-min">
-                {title && collapsed ? (
-                  title
-                ) : (
-                  <Trans i18nKey="transactions.packTransactionGroup" />
-                )}
+                {title && collapsed ? title : <Trans i18nKey="transactions.packTransactionGroup" />}
               </div>
               <h1 className="headline1 margin-main">
                 {tx.length} <Trans i18nKey="transactions.packTransactions" />
@@ -66,12 +60,7 @@ export class PackageCard extends React.PureComponent<IProps> {
               <div className={styles.amounts}>
                 {amounts.map(({ amount, sign }, index) => (
                   <div key={`${index}${amount.asset.id}`}>
-                    <Balance
-                      balance={amount}
-                      split
-                      showAsset
-                      addSign={`${sign} `}
-                    />
+                    <Balance balance={amount} split showAsset addSign={`${sign} `} />
                   </div>
                 ))}
               </div>

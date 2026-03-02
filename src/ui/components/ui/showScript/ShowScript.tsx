@@ -33,11 +33,8 @@ const Data = ({ data, getScriptRef }) => {
                 <td title={item.type} className={styles.dataItemData}>
                   {item.type}
                 </td>
-                <td
-                  title={String(item.value)}
-                  className={styles.dataItemDataLast}
-                >
-                  {!!item.value ? item.value : 'Key Deletion'}
+                <td title={String(item.value)} className={styles.dataItemDataLast}>
+                  {item.value ? item.value : 'Key Deletion'}
                 </td>
               </tr>
             </tbody>
@@ -66,7 +63,7 @@ const DataNoKey = ({ data, getScriptRef }) => {
             <tbody key={index}>
               <tr className={cn(styles.dataRow)}>
                 <td className={styles.dataItemData}>{item.type}</td>
-                {!!length ? (
+                {length ? (
                   <td title={itemValueJson} className={styles.dataItemDataLast}>
                     [
                     {itemValue.map((item, index) =>
@@ -78,7 +75,7 @@ const DataNoKey = ({ data, getScriptRef }) => {
                         <>
                           {JSON.stringify(item)},<br />
                         </>
-                      )
+                      ),
                     )}
                   </td>
                 ) : (
@@ -96,7 +93,7 @@ const DataNoKey = ({ data, getScriptRef }) => {
 };
 
 export class ShowScript extends React.PureComponent {
-  readonly props: {
+  declare readonly props: {
     noKey?: boolean;
     data?: Array<any>;
     isData?: boolean;
@@ -114,19 +111,14 @@ export class ShowScript extends React.PureComponent {
   protected scriptEl: HTMLDivElement;
   protected _t;
 
-  toggleShowScript = () =>
-    this.setState({ showAllScript: !this.state.showAllScript });
+  toggleShowScript = () => this.setState({ showAllScript: !this.state.showAllScript });
   onCopy = () => this._onCopy();
-  getScriptRef = ref => (this.scriptEl = ref);
+  getScriptRef = (ref) => (this.scriptEl = ref);
 
   componentDidMount() {
     const { script, optional, hideScript, data } = this.props;
 
-    if (
-      !this.scriptEl ||
-      hideScript ||
-      (optional && !(script || (data && data.length)))
-    ) {
+    if (!this.scriptEl || hideScript || (optional && !(script || (data && data.length)))) {
       return null;
     }
 
@@ -153,34 +145,22 @@ export class ShowScript extends React.PureComponent {
     return (
       <div>
         {hasScript && (
-          <div
-            className={`plate plate-with-controls break-all ${showAllClass}`}
-          >
-            {!isData && (
-              <ContentScript getScriptRef={this.getScriptRef} script={script} />
-            )}
-            {isData && !noKey && (
-              <Data data={data} getScriptRef={this.getScriptRef} />
-            )}
-            {isData && noKey && (
-              <DataNoKey data={data} getScriptRef={this.getScriptRef} />
-            )}
+          <div className={`plate plate-with-controls break-all ${showAllClass}`}>
+            {!isData && <ContentScript getScriptRef={this.getScriptRef} script={script} />}
+            {isData && !noKey && <Data data={data} getScriptRef={this.getScriptRef} />}
+            {isData && noKey && <DataNoKey data={data} getScriptRef={this.getScriptRef} />}
             <div className="buttons-wrapper">
               {hasScript ? (
                 <Copy text={toCopy} onCopy={this.onCopy}>
                   <Button>
-                    <Trans i18nKey="showScriptComponent.copyCode">
-                      Copy code
-                    </Trans>
+                    <Trans i18nKey="showScriptComponent.copyCode">Copy code</Trans>
                   </Button>
                 </Copy>
               ) : null}
               {this.state.showResizeBtn ? (
                 <Button onClick={this.toggleShowScript}>
                   {!this.state.showAllScript ? (
-                    <Trans i18nKey="showScriptComponent.showAll">
-                      Show all
-                    </Trans>
+                    <Trans i18nKey="showScriptComponent.showAll">Show all</Trans>
                   ) : (
                     <Trans i18nKey="showScriptComponent.hide">Hide</Trans>
                   )}
@@ -188,10 +168,7 @@ export class ShowScript extends React.PureComponent {
               ) : null}
             </div>
 
-            <Modal
-              animation={Modal.ANIMATION.FLASH_SCALE}
-              showModal={this.state.showCopied}
-            >
+            <Modal animation={Modal.ANIMATION.FLASH_SCALE} showModal={this.state.showCopied}>
               <div className="modal notification">
                 <Trans i18nKey="showScriptComponent.copied">Copied!</Trans>
               </div>

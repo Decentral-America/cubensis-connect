@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Money } from '@waves/data-entities';
-import { BigNumber } from '@waves/bignumber';
+import { Money } from '@decentralchain/data-entities';
+import { BigNumber } from '@decentralchain/bignumber';
 import { Loader } from '../loader';
 import { connect } from 'react-redux';
 import { getAsset } from '../../../actions';
@@ -49,9 +49,7 @@ const BalanceComponent = ({
       return <div>N/A</div>;
   }
 
-  const tokens = (
-    isShortFormat ? balanceOut.toFormat() : balanceOut.toTokens()
-  ).split('.');
+  const tokens = (isShortFormat ? balanceOut.toFormat() : balanceOut.toTokens()).split('.');
   const assetName = showAsset ? balanceOut.asset.displayName : null;
 
   if (!split) {
@@ -79,9 +77,7 @@ const BalanceComponent = ({
   );
 };
 
-export const Balance = connect(({ assets }: any) => ({ assets }), { getAsset })(
-  BalanceComponent
-);
+export const Balance = connect(({ assets }: any) => ({ assets }), { getAsset })(BalanceComponent);
 
 interface IProps {
   balance: Money | string | BigNumber;
@@ -92,6 +88,6 @@ interface IProps {
   children?: any;
   addSign?: string;
   className?: string;
-  assets?: Object;
+  assets?: object;
   getAsset: (id: string) => void;
 }
