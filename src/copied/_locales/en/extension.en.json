@@ -479,7 +479,7 @@
     "requestRejected": "Request has not been signed",
     "signAccessHost": "wants to access your DCC Address",
     "signAccessInfo": "The application will have access to your DCC address but will not expose your SEED or private key. Never enter your secret phrase (SEED) on any website you are redirected to.",
-    "signAccessWaves": "Sign in with DCC",
+    "signAccessDecentralChain": "Sign in with DCC",
     "signButton": "Sign",
     "someError": "Something went wrong",
     "switchAccount": "Switch account",
@@ -512,7 +512,7 @@
     "transactionSendTransfer": "You have sent transfer",
     "understand": "I understand",
     "viewTransaction": "View transaction",
-    "wavesAuthConfirmed": "Sign a DCC auth request!"
+    "decentralChainAuthConfirmed": "Sign a DCC auth request!"
   },
   "swap": {
     "amountToSendError": "Could not perform swap due to SwopFi dApp state. Please try again or slightly increase slippage tolerance if possible",
@@ -624,11 +624,11 @@
     "setSponsored": "Set Sponsorship",
     "showAll": "Show all",
     "showTransactions": "Show transactions",
-    "signAccessWaves": "Sign in with DCC",
+    "signAccessDecentralChain": "Sign in with DCC",
     "signCustomRequest": "Sign a request",
     "signMatcherRequest": "Sign a request to the Matcher",
     "signRequestMatcher": "Sign a request to the Matcher",
-    "signRequestWavesAuth": "Sign a DCC auth request",
+    "signRequestDecentralChainAuth": "Sign a DCC auth request",
     "signToMatcher": "Sign a request to the Matcher",
     "to": "To",
     "total": "Total",
@@ -645,7 +645,7 @@
     "txTime": "TX Time",
     "unknown": "Unknown",
     "dcc": "DCC",
-    "wavesAuthTimeStamp": "Time Stamp"
+    "decentralChainAuthTimeStamp": "Time Stamp"
   },
   "ui": {
     "logoTitle": "Keep your DCC keys safe online"

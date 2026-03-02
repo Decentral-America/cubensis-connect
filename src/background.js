@@ -37,9 +37,9 @@ import { SwapController } from './controllers/SwapController';
 import { getExtraFee, getMinimumFee } from './controllers/CalculateFeeController';
 import { setupDnode } from './lib/dnode-util';
 import { WindowManager } from './lib/WindowManger';
-import '@decentralchain/waves-transactions';
+import '@decentralchain/transactions';
 import { getAdapterByType } from '@decentralchain/signature-adapter';
-import { waves } from './controllers/transactionsController';
+import { decentralChain } from './controllers/transactionsController';
 
 const version = extension.runtime.getManifest().version;
 
@@ -320,7 +320,7 @@ class BackgroundService extends EventEmitter {
     this.messageController = new MessageController({
       initState: initState.MessageController,
       signTx: this.walletController.signTx.bind(this.walletController),
-      signWaves: this.walletController.signWaves.bind(this.walletController),
+      signDecentralChain: this.walletController.signDecentralChain.bind(this.walletController),
       auth: this.walletController.auth.bind(this.walletController),
       signRequest: this.walletController.signRequest.bind(this.walletController),
       signBytes: this.walletController.signBytes.bind(this.walletController),
@@ -671,10 +671,10 @@ class BackgroundService extends EventEmitter {
       auth: async (data, options) => {
         return await newMessage(data, 'auth', options, false);
       },
-      wavesAuth: async (data, options) => {
+      decentralChainAuth: async (data, options) => {
         const publicKey = data && data.publicKey;
         const timestamp = (data && data.timestamp) || Date.now();
-        return await newMessage({ publicKey, timestamp }, 'wavesAuth', options, false);
+        return await newMessage({ publicKey, timestamp }, 'decentralChainAuth', options, false);
       },
       signRequest: async (data, options) => {
         return await newMessage(data, 'request', options, false);
@@ -683,7 +683,7 @@ class BackgroundService extends EventEmitter {
         return await newMessage(data, 'customData', options, false);
       },
       verifyCustomData: async (data) => {
-        return waves.verifyCustomData(data);
+        return decentralChain.verifyCustomData(data);
       },
       notification: async (data) => {
         const state = this.getState();

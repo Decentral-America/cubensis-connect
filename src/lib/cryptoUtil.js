@@ -1,4 +1,4 @@
-import { libs } from '@decentralchain/waves-transactions';
+import { libs } from '@decentralchain/transactions';
 
 function blake2b(input) {
   return libs.crypto.blake2b(input);

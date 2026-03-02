@@ -1,5 +1,9 @@
 import { combineReducers } from 'redux';
-import { ACTION, type setSwapScreenInitialState, type resetSwapScreenInitialState } from '../actions';
+import {
+  ACTION,
+  type setSwapScreenInitialState,
+  type resetSwapScreenInitialState,
+} from '../actions';
 import { pairing } from './pairing';
 
 function newUser(state = {}, action) {

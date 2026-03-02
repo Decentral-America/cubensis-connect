@@ -1,16 +1,16 @@
 export const WHITELIST = [
   'swop.fi',
-  'waves.exchange',
-  'testnet.waves.exchange',
+  'decentral.exchange',
+  'testnet.decentral.exchange',
   'oracles.decentralscan.com',
   'tokenrating.decentralscan.com',
-  'waves-dapp.com',
-  'waves-ide.com',
-  'wavesducks.com',
+  'decentralchain-dapp.com',
+  'decentralchain-ide.com',
+  'decentralchainducks.com',
   'vires.finance',
 ];
 
-export const CUSTOMLIST = ['waves.tech', 'docs.waves.tech'];
+export const CUSTOMLIST = ['decentralchain.org', 'docs.decentralchain.org'];
 
 export const DEFAULT_PASSWORD = 'default-password';
 

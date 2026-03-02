@@ -119,9 +119,9 @@ export const TxFee = connect(
 });
 
 function convertFee(from: Money, toAsset: Asset): Money {
-  const isWaves = (assetId: string) => assetId === 'DCC';
+  const isDcc = (assetId: string) => assetId === 'DCC';
   const minSponsoredFee = (asset: Asset) =>
-    !isWaves(asset.id) ? asset.minSponsoredFee : DCC_MIN_FEE;
+    !isDcc(asset.id) ? asset.minSponsoredFee : DCC_MIN_FEE;
   return new Money(
     new BigNumber(from.toCoins())
       .mul(new BigNumber(minSponsoredFee(toAsset)))

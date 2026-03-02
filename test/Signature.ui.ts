@@ -214,7 +214,7 @@ describe('Signature', function () {
       // TODO this checks should be into unittests
       it('Address');
       it('Alias');
-      it('Waves / asset / smart asset');
+      it('DCC / asset / smart asset');
       it('Attachment');
       it('Transfers to Gateways');
     });
@@ -331,7 +331,7 @@ describe('Signature', function () {
       describe('Payment', function () {
         it('Zero count');
         it('Maximum count');
-        it('Waves / asset / smart asset');
+        it('DCC / asset / smart asset');
       });
     });
 

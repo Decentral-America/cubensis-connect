@@ -35,7 +35,7 @@ const SLIPPAGE_TOLERANCE_OPTIONS = [
 const KEEPER_FEE = new BigNumber(0.1);
 
 function getAssetBalance(asset: Asset, accountBalance: AccountBalance) {
-  return asset.id === 'WAVES'
+  return asset.id === 'DCC'
     ? new Money(accountBalance.available, asset)
     : new Money(accountBalance.assets?.[asset.id]?.balance || '0', asset);
 }
@@ -46,7 +46,7 @@ interface Props {
   isSwapInProgress: boolean;
   swapErrorMessage: string;
   swappableAssets: AssetDetail[];
-  wavesFeeCoins: number;
+  dccFeeCoins: number;
   onSwap: (data: {
     feeAssetId: string;
     fromAssetId: string;
@@ -70,7 +70,7 @@ export function SwapForm({
   isSwapInProgress,
   swapErrorMessage,
   swappableAssets,
-  wavesFeeCoins,
+  dccFeeCoins,
   onSwap,
 }: Props) {
   const { t } = useTranslation();
@@ -84,26 +84,26 @@ export function SwapForm({
     (state) => state.config.network_config[state.currentNetwork].swapChannel,
   );
 
-  const wavesFeeCoinsBN = new BigNumber(wavesFeeCoins);
+  const dccFeeCoinsBN = new BigNumber(dccFeeCoins);
 
   const sponsoredAssetBalanceEntries = Object.entries(accountBalance.assets).filter(
     ([assetId, assetBalance]) => {
       const sponsoredAssetFee = convertToSponsoredAssetFee(
-        wavesFeeCoinsBN,
+        dccFeeCoinsBN,
         new Asset(assets[assetId]),
         assetBalance,
       );
 
       return (
         assetBalance.minSponsoredAssetFee != null &&
-        new BigNumber(assetBalance.sponsorBalance).gte(wavesFeeCoinsBN) &&
+        new BigNumber(assetBalance.sponsorBalance).gte(dccFeeCoinsBN) &&
         new BigNumber(assetBalance.balance).gte(sponsoredAssetFee.getCoins())
       );
     },
   );
 
   if (sponsoredAssetBalanceEntries.length === 0) {
-    sponsoredAssetBalanceEntries.push(['WAVES', accountBalance.assets['WAVES']]);
+    sponsoredAssetBalanceEntries.push(['DCC', accountBalance.assets['DCC']]);
   }
 
   const [{ fromAssetId, toAssetId }, setAssetIds] = React.useState({
@@ -125,7 +125,7 @@ export function SwapForm({
 
   function formatSponsoredAssetBalanceEntry([assetId, assetBalance]: [string, AssetBalance]) {
     const fee = convertToSponsoredAssetFee(
-      new BigNumber(wavesFeeCoins),
+      new BigNumber(dccFeeCoins),
       new Asset(assets[assetId]),
       assetBalance,
     );
@@ -214,7 +214,7 @@ export function SwapForm({
   }, [watchExchange]);
 
   const sponsoredAssetFee = convertToSponsoredAssetFee(
-    wavesFeeCoinsBN,
+    dccFeeCoinsBN,
     feeAsset,
     accountBalance.assets[feeAssetId],
   );
@@ -313,7 +313,7 @@ export function SwapForm({
 
           if (feeAssetId === fromAssetId) {
             const fee = convertToSponsoredAssetFee(
-              new BigNumber(wavesFeeCoins),
+              new BigNumber(dccFeeCoins),
               new Asset(assets[feeAssetId]),
               accountBalance.assets[feeAssetId],
             );

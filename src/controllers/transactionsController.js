@@ -1,20 +1,24 @@
-import { customData, verifyCustomData, wavesAuth } from '@decentralchain/waves-transactions';
+import {
+  customData,
+  verifyCustomData,
+  wavesAuth as decentralChainAuth,
+} from '@decentralchain/transactions';
 
-export const waves = {
-  parseWavesAuth: (message) => {
-    if (!message || message.type !== 'wavesAuth') {
-      throw new Error('Incorrect data for sign wavesAuth data');
+export const decentralChain = {
+  parseDecentralChainAuth: (message) => {
+    if (!message || message.type !== 'decentralChainAuth') {
+      throw new Error('Incorrect data for sign decentralChainAuth data');
     }
 
     const { data } = message;
-    const { hash } = wavesAuth(data, 'fake user');
+    const { hash } = decentralChainAuth(data, 'fake user');
     return {
       id: hash,
     };
   },
 
-  signWavesAuth: async (data, user) => {
-    return wavesAuth(data, user.seed);
+  signDecentralChainAuth: async (data, user) => {
+    return decentralChainAuth(data, user.seed);
   },
 
   parseCustomData: (message) => {

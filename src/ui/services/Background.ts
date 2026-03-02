@@ -380,8 +380,7 @@ class Background {
     }
   }
 
-  // @ts-expect-error legacy namespace
-  async signAndPublishTransaction(data: WavesKeeper.TSignTransactionData) {
+  async signAndPublishTransaction(data: CubensisConnect.TSignTransactionData) {
     try {
       await this.initPromise;
       return await this.background.signAndPublishTransaction(data);

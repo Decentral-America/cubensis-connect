@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
-import * as styles from './wavesAuth.styl';
+import * as styles from './decentralChainAuth.styl';
 import { DateFormat } from '../../ui';
 
 interface IProps {
@@ -8,7 +8,7 @@ interface IProps {
   assets: any;
 }
 
-export class WavesAuthInfo extends React.PureComponent<IProps> {
+export class DecentralChainAuthInfo extends React.PureComponent<IProps> {
   render() {
     const { message } = this.props;
     const { messageHash, data } = message;
@@ -17,7 +17,7 @@ export class WavesAuthInfo extends React.PureComponent<IProps> {
       <div>
         <div className={styles.txRow}>
           <div className="tx-title body3 basic500">
-            <Trans i18nKey="transactions.wavesAuthTimeStamp" />
+            <Trans i18nKey="transactions.decentralChainAuthTimeStamp" />
           </div>
           <div className={'fullwidth'}>
             <DateFormat value={data.timestamp} showRaw={true} className={'fullwidth'} />

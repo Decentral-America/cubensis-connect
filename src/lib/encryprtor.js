@@ -1,4 +1,4 @@
-import { seedUtils } from '@decentralchain/waves-transactions';
+import { seedUtils } from '@decentralchain/transactions';
 
 export function encrypt(object, password) {
   const jsonObj = JSON.stringify(object);

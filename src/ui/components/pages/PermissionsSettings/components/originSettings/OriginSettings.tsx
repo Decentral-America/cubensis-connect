@@ -220,7 +220,7 @@ class OriginSettingsComponent extends React.PureComponent<IProps, IState> {
               value={value}
               placeholder={0}
             />
-            <div className={styles.waves}>DCC</div>
+            <div className={styles.dcc}>DCC</div>
           </div>
 
           <div className="flex margin-main-big margin-main-big-top">

@@ -40,13 +40,13 @@ describe('constants', () => {
       expect(DEFAULT_CONFIG.NETWORKS).toEqual(['mainnet', 'testnet', 'stagenet', 'custom']);
     });
 
-    it('should have DecentralChain node URLs (not Waves)', () => {
+    it('should have DecentralChain node URLs (not legacy Waves)', () => {
       const { NETWORK_CONFIG } = DEFAULT_CONFIG;
       expect(NETWORK_CONFIG.mainnet.server).toContain('decentralchain.io');
       expect(NETWORK_CONFIG.testnet.server).toContain('decentralchain.io');
       expect(NETWORK_CONFIG.stagenet.server).toContain('decentralchain.io');
 
-      // Verify no Waves URLs remain
+      // Verify no legacy Waves URLs remain
       const allUrls = Object.values(NETWORK_CONFIG)
         .flatMap((cfg) => [cfg.server, cfg.matcher])
         .filter(Boolean);
@@ -82,7 +82,7 @@ describe('constants', () => {
       expect(allowMatcher.length).toBeGreaterThan(0);
     });
 
-    it('should not contain any Waves domains', () => {
+    it('should not contain any legacy Waves domains', () => {
       for (const domain of allowMatcher) {
         expect(domain).not.toContain('waves');
       }

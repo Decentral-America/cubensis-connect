@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react';
 import ObservableStore from 'obs-store';
-import { libs } from '@decentralchain/waves-transactions';
+import { libs } from '@decentralchain/transactions';
 import { statisticsApiKey } from '../../config.json';
 import extension from 'extensionizer';
 import { detect } from '../lib/detectBrowser';

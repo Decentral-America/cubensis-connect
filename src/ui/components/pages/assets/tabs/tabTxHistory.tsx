@@ -5,7 +5,7 @@ import { icontains } from '../helpers';
 import { HistoryItem } from '../historyItem';
 import * as React from 'react';
 import { SearchInput } from '../../Assets';
-import { type TTransaction, type WithId } from '@decentralchain/waves-transactions/dist/transactions';
+import { type TTransaction, type WithId } from '@decentralchain/transactions/dist/transactions';
 import { useAppSelector } from '../../../../store';
 import {
   buildTxTypeOptions,

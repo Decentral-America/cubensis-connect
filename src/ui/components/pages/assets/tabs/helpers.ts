@@ -1,7 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { setUiState } from '../../../../actions';
 import { TRANSACTION_TYPE } from '@decentralchain/ts-types';
-import { type AssetFilters, type NftFilters, type TxHistoryFilters } from '../../../../reducers/updateState';
+import {
+  type AssetFilters,
+  type NftFilters,
+  type TxHistoryFilters,
+} from '../../../../reducers/updateState';
 import * as React from 'react';
 import { type Dispatch, type SetStateAction } from 'react';
 import { type AssetDetail } from '../../../../services/Background';

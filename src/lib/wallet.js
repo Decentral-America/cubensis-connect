@@ -1,6 +1,6 @@
 import { getAdapterByType } from '@decentralchain/signature-adapter';
-import { libs as transactionsLibs } from '@decentralchain/waves-transactions';
-import { waves } from '../controller./transactionsController';
+import { libs as transactionsLibs } from '@decentralchain/transactions';
+import { decentralChain } from '../controllers/transactionsController';
 import { BigNumber } from '@decentralchain/bignumber';
 import create from 'parse-json-bignumber';
 
@@ -84,8 +84,8 @@ export class Wallet {
     return base58Encode(sharedKey(privateKey, publicKey, prefix));
   }
 
-  async signWaves(type, data) {
-    return waves[type](data, this.user);
+  async signDecentralChain(type, data) {
+    return decentralChain[type](data, this.user);
   }
 
   async signTx(tx) {

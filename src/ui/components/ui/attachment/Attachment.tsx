@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { libs } from '@decentralchain/waves-transactions';
+import { libs } from '@decentralchain/transactions';
 import cn from 'classnames';
 import * as styles from './attachment.styl';
 

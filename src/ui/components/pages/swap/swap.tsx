@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react';
 import BigNumber from '@decentralchain/bignumber';
 import { Money, Asset } from '@decentralchain/data-entities';
-import { TTransactionType } from '@decentralchain/waves-transactions/dist/transactions';
+import { TTransactionType } from '@decentralchain/transactions/dist/transactions';
 import { swappableAssetIds } from 'assets/constants';
 import { convertToSponsoredAssetFee, getAssetIdByName } from 'assets/utils';
 import * as React from 'react';
@@ -36,15 +36,15 @@ export function Swap({ setTab }: Props) {
     dispatch(resetSwapScreenInitialState());
   }, []);
 
-  const initialFromAssetId = initialState.fromAssetId || 'WAVES';
+  const initialFromAssetId = initialState.fromAssetId || 'DCC';
 
   const usdAssetId = getAssetIdByName(currentNetwork, 'USD');
 
-  const initialToAssetId = initialFromAssetId === usdAssetId ? 'WAVES' : usdAssetId;
+  const initialToAssetId = initialFromAssetId === usdAssetId ? 'DCC' : usdAssetId;
 
   const [isSwapInProgress, setIsSwapInProgress] = React.useState(false);
   const [swapErrorMessage, setSwapErrorMessage] = React.useState<string | null>(null);
-  const [wavesFeeCoins, setWavesFeeCoins] = React.useState<number | null>(null);
+  const [dccFeeCoins, setDccFeeCoins] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -55,7 +55,7 @@ export function Swap({ setTab }: Props) {
       background.getExtraFee(selectedAccount.address, currentNetwork),
     ]).then(([feeMinimum, feeExtra]) => {
       if (!cancelled) {
-        setWavesFeeCoins(feeMinimum + feeExtra);
+        setDccFeeCoins(feeMinimum + feeExtra);
       }
     });
 
@@ -110,7 +110,7 @@ export function Swap({ setTab }: Props) {
           </h1>
         </header>
 
-        {wavesFeeCoins == null ||
+        {dccFeeCoins == null ||
         !accountBalance.assets ||
         swappableAssets.some((asset) => asset == null) ? (
           <div className={styles.loader} />
@@ -128,7 +128,7 @@ export function Swap({ setTab }: Props) {
                 isSwapInProgress={isSwapInProgress}
                 swapErrorMessage={swapErrorMessage}
                 swappableAssets={swappableAssets}
-                wavesFeeCoins={wavesFeeCoins}
+                dccFeeCoins={dccFeeCoins}
                 onSwap={async ({
                   feeAssetId,
                   fromAssetId,
@@ -141,7 +141,7 @@ export function Swap({ setTab }: Props) {
                   setIsSwapInProgress(true);
 
                   const fee = convertToSponsoredAssetFee(
-                    new BigNumber(wavesFeeCoins),
+                    new BigNumber(dccFeeCoins),
                     new Asset(assets[feeAssetId]),
                     accountBalance.assets[feeAssetId],
                   );

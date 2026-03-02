@@ -1,6 +1,6 @@
 import { DEFAULT_FEE_CONFIG, DEFAULT_FEE_CONFIG_URL } from '../constants';
 import { SIGN_TYPE } from '@decentralchain/signature-adapter';
-import { libs } from '@decentralchain/waves-transactions';
+import { libs } from '@decentralchain/transactions';
 import { BigNumber } from '@decentralchain/bignumber';
 
 const CONFIG_EXPIRATION_TIME = 60 * 60 * 1000;

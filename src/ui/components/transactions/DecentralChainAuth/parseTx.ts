@@ -1,4 +1,4 @@
-export const messageType = 'wavesAuth';
+export const messageType = 'decentralChainAuth';
 export const txType = 'request';
 
 export function getAssetsId(tx = null): Array<string> {

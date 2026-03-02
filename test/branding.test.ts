@@ -32,9 +32,9 @@ describe('branding audit', () => {
     expect(violations).toEqual([]);
   });
 
-  it('should not have support@waves.tech in manifest', () => {
+  it('should not have support@decentralchain.org in manifest', () => {
     const manifest = fs.readFileSync(path.resolve(srcDir, 'copied/manifest.json'), 'utf-8');
-    expect(manifest).not.toContain('support@waves.tech');
+    expect(manifest).not.toContain('support@decentralchain.org');
     expect(manifest).toContain('DecentralChain');
   });
 

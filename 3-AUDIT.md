@@ -239,7 +239,7 @@ npm run test:coverage
 
 ### Phase F — Branding & Legal Audit
 
-**Goal:** Verify complete separation from Waves ecosystem. No residual branding.
+**Goal:** Verify complete separation from legacy Waves ecosystem. No residual branding.
 
 #### Search Patterns
 
@@ -247,15 +247,15 @@ Run these searches across the entire project (including test files, configs, doc
 
 ```bash
 # Must return zero results in source code and configs:
-grep -ri "wavesplatform\|waves\.exchange\|wavesnodes\.com\|wavesexplorer" --include="*.ts" --include="*.js" --include="*.json" --include="*.yml" --include="*.md" .
+grep -ri "decentralchain\|decentral\.exchange\|decentralchainnodes\.com\|decentralchainexplorer" --include="*.ts" --include="*.js" --include="*.json" --include="*.yml" --include="*.md" .
 
 # Must return zero results in package.json dependencies:
 grep "npm:@waves" package.json
 
 # Acceptable exceptions (document each one):
-# - .proto files: "package waves;" is a wire-format identifier, not branding
-# - CHANGELOG.md: historical entries describing the migration from Waves
-# - KNOWN_ISSUES.md: documenting remaining dependencies on Waves packages
+# - .proto files: "package decentralchain;" is a wire-format identifier, not branding
+# - CHANGELOG.md: historical entries describing the migration from legacy Waves
+# - KNOWN_ISSUES.md: documenting remaining dependencies on legacy Waves packages
 ```
 
 #### Branding Checklist
@@ -267,7 +267,7 @@ grep "npm:@waves" package.json
 - [ ] README badges reference DecentralChain URLs
 - [ ] License copyright says "DecentralChain"
 - [ ] No `npm:@waves/*` aliases in dependencies (unless unavoidable — must be documented in KNOWN_ISSUES.md)
-- [ ] Comments and JSDoc do not reference Waves (except in wire-format documentation)
+- [ ] Comments and JSDoc do not reference legacy Waves branding (except in wire-format documentation)
 
 ---
 

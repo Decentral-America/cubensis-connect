@@ -1,8 +1,8 @@
 # Cubensis Connect
 
-en | [ru](https://github.com/wavesplatform/cubensis-connect/blob/master/README_ru.md)
+en | [ru](https://github.com/decentralchain/cubensis-connect/blob/master/README_ru.md)
 
-Cubensis Connect is an extension that allows users to securely interact with Waves-enabled web services from the Chrome browser.
+Cubensis Connect is an extension that allows users to securely interact with DecentralChain-enabled web services from the Chrome browser.
 
 Seed phrases and private keys are encrypted and stored within the extension and cannot be accessed by online dApps and services, making sure that users' funds are always protected from hackers and malicious websites. Completion of a transaction doesn't require entering any sensitive information.
 
@@ -33,7 +33,7 @@ On browser pages that operate under the http/https (not worked local pages with 
 
 All methods, except for "on" operate asynchronously and return [promises](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-In code, you can use [TypeScript types](https://github.com/wavesplatform/CubensisConnect-types)
+In code, you can use [TypeScript types](https://github.com/decentralchain/CubensisConnect-types)
 
 On initialize `window.CubensisConnect` has not api methods.
 You can use `CubensisConnect.initialPromise` for waiting end initializing api.
@@ -121,7 +121,7 @@ Description of query return fields
 - `initialized` - boolean keeper initialized
 - `locked` - boolean keeper in wait mode
 - `account` – current account, if the user allowed access to the website, or null
-- `network` – current Waves network, node and matcher addresses
+- `network` – current DecentralChain network, node and matcher addresses
 - `messages` – signature request statuses
 - `txVersion` – available transaction versions for each type
 
@@ -161,7 +161,7 @@ Possible errors
 
 #### encryptMessage
 
-You can encrypt string messages to account in Waves network.
+You can encrypt string messages to account in DecentralChain network.
 You need have recipient publicKey.
 
 CubensisConnect.encryptMessage(`*string to encrypt*`, `*public key in base58 string*`, `*prefix is secret app string need for encoding*`)
@@ -187,7 +187,7 @@ Possible errors
 
 #### decryptMessage
 
-You can decrypt string messages from account in Waves network to you.
+You can decrypt string messages from account in DecentralChain network to you.
 You need have sender publicKey and encrypted message.
 
 CubensisConnect.decryptMessage(`*string to decrypt*`, `*public key in base58 string*`, `*prefix is secret app string need for encoding*`)
@@ -231,7 +231,7 @@ If a website is not trusted, events won't show.
 
 #### auth
 
-This is a method for obtaining a signature of authorization data while verifying Waves' user. It works the same way as [Web Auth API](https://docs.waves.exchange/en/waves-exchange/waves-exchange-client-api/waves-exchange-web-auth-api).
+This is a method for obtaining a signature of authorization data while verifying DecentralChain's user. It works the same way as [Web Auth API](https://docs.decentral.exchange/en/decentralchain-exchange/decentralchain-exchange-client-api/decentralchain-exchange-web-auth-api).
 
 Example:
 
@@ -280,7 +280,7 @@ Example
 const authData = {
   data: 'Generated string from server',
   name: 'My test App',
-  icon: '/img/icons/waves_logo.svg',
+  icon: '/img/icons/decentralchain_logo.svg',
   referrer: 'https://decentral.exchange/',
   successPath: 'login',
 };
@@ -301,7 +301,7 @@ If the verification is successful, Cubensis Connect will return to the promise a
 - `host` – a host that requested a signature
 - `name` – the name of an application that requested a signature
 - `prefix` – a prefix participating in the signature
-- `address` – an address in Waves network
+- `address` – an address in DecentralChain network
 - `publicKey` – the user's public key
 - `signature` - signature
 - `version` – API version
@@ -314,7 +314,7 @@ ERRORS
 
 #### signTransaction
 
-A method for signing transactions in Waves' network.
+A method for signing transactions in DecentralChain's network.
 
 Example:
 
@@ -335,7 +335,7 @@ const txData = {
 };
 CubensisConnect.signTransaction(txData)
   .then((data) => {
-    //data – a line ready for sending to Waves network's node (server)
+    //data – a line ready for sending to DecentralChain network's node (server)
   })
   .catch((error) => {
     //Processing errors
@@ -346,7 +346,7 @@ API returns lines, not an object, as in javascript precision is lost in operatio
 
 A description of supported transaction types is below.
 
-In the example, we are signing a transaction for transferring DCC to the alias `test`in Waves' network.
+In the example, we are signing a transaction for transferring DCC to the alias `test`in DecentralChain's network.
 
 REPLY
 
@@ -396,7 +396,7 @@ const txData = {
 
 CubensisConnect.signAndPublishTransaction(txData)
   .then((data) => {
-    //data - a line ready for sending to Waves network's node (server)
+    //data - a line ready for sending to DecentralChain network's node (server)
   })
   .catch((error) => {
     //processing errors
@@ -405,7 +405,7 @@ CubensisConnect.signAndPublishTransaction(txData)
 
 REPLY
 
-A reply from Waves network returns as a line containing the entire past transaction.
+A reply from DecentralChain network returns as a line containing the entire past transaction.
 
 ERRORS
 
@@ -422,7 +422,7 @@ A package transaction signature. Sometimes several transactions need to be simul
 - `6` – burns a token
 - `8` – leases DCC
 - `9` – cancels the leasing
-- `10` – creating an alias for an address in Waves network
+- `10` – creating an alias for an address in DecentralChain network
 - `11` – mass transfer
 - `12` - adds, modifies and deletes data entries in the sender's account data storage
 - `13` - assigns the dApp script or account script to the sender's account
@@ -481,10 +481,10 @@ ERRORS
 
 Same as in `signTransaction`
 
-##### [Transactions](https://docs.waves.tech/en/building-apps/waves-api-and-sdk/client-libraries/waves-transactions)\*\*
+##### [Transactions](https://docs.decentralchain.org/en/building-apps/decentralchain-api-and-sdk/client-libraries/decentralchain-transactions)\*\*
 
-Every user of Waves' network has a state (balances, assets, data, scripts), and every past transactions changes these data. \
-In Cubensis Connect API it is different from [NODE REST API](https://docs.waves.tech/en/waves-node/node-api/).
+Every user of DecentralChain's network has a state (balances, assets, data, scripts), and every past transactions changes these data. \
+In Cubensis Connect API it is different from [NODE REST API](https://docs.decentralchain.org/en/decentralchain-node/node-api/).
 
 `signTransaction`, `signAndPublishTransaction` accept transactions as follows
 
@@ -516,7 +516,7 @@ If the field contains other types than MoneyLike, for instance, string/MoneyLike
 
 ---
 
-###### [Type 3 ISSUE – token issue](https://docs.waves.tech/en/blockchain/transaction-type/issue-transaction)\*\*
+###### [Type 3 ISSUE – token issue](https://docs.decentralchain.org/en/blockchain/transaction-type/issue-transaction)\*\*
 
 - `name` [4, 16] string – token name,
 - `description` [0, 1000] string – token description,
@@ -524,7 +524,7 @@ If the field contains other types than MoneyLike, for instance, string/MoneyLike
 - `precision` [0 - 8] number - precision,
 - `reissuable` true|false – re-issuable,
 - `*fee` MoneyLike -fee
-- `*script` string – [smart asset](https://docs.waves.tech/en/building-apps/smart-contracts/what-is-smart-asset)
+- `*script` string – [smart asset](https://docs.decentralchain.org/en/building-apps/smart-contracts/what-is-smart-asset)
 - `*senderPublicKey` string – sender's public key in base58
 - `*timestamp` number/string – time in ms
 
@@ -555,7 +555,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, we are issuing a new asset in the quantity of 1,000,000, and your balance will show 10,000.00 Best Token
 
-###### [Type 4 TRANSFER – asset transfer](https://docs.waves.tech/en/blockchain/transaction-type/transfer-transaction)\*\*
+###### [Type 4 TRANSFER – asset transfer](https://docs.decentralchain.org/en/blockchain/transaction-type/transfer-transaction)\*\*
 
 - `amount` MoneyLike - amount,
 - `recipient` string – recipient's address or alias
@@ -583,7 +583,7 @@ CubensisConnect.signAndPublishTransaction({
   });
 ```
 
-###### [Type 5 REISSUE – token reissue](https://docs.waves.tech/en/blockchain/transaction-type/reissue-transaction)\*\*
+###### [Type 5 REISSUE – token reissue](https://docs.decentralchain.org/en/blockchain/transaction-type/reissue-transaction)\*\*
 
 - `assetId` string - "asset ID",
 - `quantity` [0 - (JLM)] number/string/MoneyLike - quantity,
@@ -617,7 +617,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, we are re-issuing a new asset in the quantity of 1,000,000, and your balance will show 10,000.00 Best Token
 
-###### [Type 6 BURN – burning tokens](https://docs.waves.tech/en/blockchain/transaction-type/burn-transaction)\*\*
+###### [Type 6 BURN – burning tokens](https://docs.decentralchain.org/en/blockchain/transaction-type/burn-transaction)\*\*
 
 - `assetId` string – asset ID,
 - `amount` [0 - (JLM)] number/string/MoneyLike - quantity,
@@ -649,7 +649,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, 1,000 coins `are burned`.
 
-###### [Type 8 LEASE - Leasing](https://docs.waves.tech/en/blockchain/transaction-type/lease-transaction)\*\*
+###### [Type 8 LEASE - Leasing](https://docs.decentralchain.org/en/blockchain/transaction-type/lease-transaction)\*\*
 
 - `recipient` string – recipient's address or alias,
 - `amount` [0 - (JLM)] number/string/MoneyLike - quantity,
@@ -681,7 +681,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, 0.00001000 DCC is leased.
 
-###### [Type 9 LEASE CANCEL – cancel leasing](https://docs.waves.tech/en/blockchain/transaction-type/lease-cancel-transaction)\*\*
+###### [Type 9 LEASE CANCEL – cancel leasing](https://docs.decentralchain.org/en/blockchain/transaction-type/lease-cancel-transaction)\*\*
 
 - `leaseId` string – leasing transaction ID,
 - `*fee` MoneyLike -fee
@@ -711,7 +711,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, the leasing transaction is cancelled.
 
-###### [Type 10 CREATE ALIAS – creating an alias for an address](https://docs.waves.tech/en/blockchain/transaction-type/create-alias-transaction)\*\*
+###### [Type 10 CREATE ALIAS – creating an alias for an address](https://docs.decentralchain.org/en/blockchain/transaction-type/create-alias-transaction)\*\*
 
 - `alias`[4, 30] string - alias
 - `*fee` MoneyLike -fee
@@ -741,7 +741,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, an alias (another name) is created.
 
-###### [Type 11 MASS TRANSFER - a mass transfer of an asset](https://docs.waves.tech/en/blockchain/transaction-type/mass-transfer-transaction)\*\*
+###### [Type 11 MASS TRANSFER - a mass transfer of an asset](https://docs.decentralchain.org/en/blockchain/transaction-type/mass-transfer-transaction)\*\*
 
 - `totalAmount` moneyLike – total to be sent // instead of calculating the amount you may insert { assetId: "ID of the asset to be sent", coins: 0},
 - `transfers`  a mass of objects
@@ -778,7 +778,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, 0.002 DCC will be sent to alias1 and alias2.
 
-###### [Type 12 DATA TRANSACTION - saving data](https://docs.waves.tech/en/blockchain/transaction-type/data-transaction)\*\*
+###### [Type 12 DATA TRANSACTION - saving data](https://docs.decentralchain.org/en/blockchain/transaction-type/data-transaction)\*\*
 
 - `data`  mass of objects
   - `type` "binary"/string/"integer"/"boolean" - type,
@@ -824,14 +824,14 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, new data will be stored in the state.
 
-###### [Type 13 SET SCRIPT – scripting an account](https://docs.waves.tech/en/blockchain/transaction-type/set-script-transaction)\*\*
+###### [Type 13 SET SCRIPT – scripting an account](https://docs.decentralchain.org/en/blockchain/transaction-type/set-script-transaction)\*\*
 
-- `script` string - [script](https://docs.waves.tech/en/building-apps/smart-contracts/waves-smart-contracts-overview)
+- `script` string - [script](https://docs.decentralchain.org/en/building-apps/smart-contracts/decentralchain-smart-contracts-overview)
 - `*fee` MoneyLike -fee
 - `*senderPublicKey` string - sender's public key in base58
 - `*timestamp` number/string – time in ms
 
-For cancelling a script the field `script` has to be `null`. [Script development on RIDE](https://waves-ide.com/)
+For cancelling a script the field `script` has to be `null`. [Script development on RIDE](https://decentralchain-ide.com/)
 
 Example:
 
@@ -880,7 +880,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, a new script will be added to the account, allowing any transactions without a signature (be careful!).
 
-###### [Type 14 Sponsored Fee Transaction - Sponsorship](https://docs.waves.tech/en/blockchain/transaction-type/sponsor-fee-transaction)\*\*
+###### [Type 14 Sponsored Fee Transaction - Sponsorship](https://docs.decentralchain.org/en/blockchain/transaction-type/sponsor-fee-transaction)\*\*
 
 - `minSponsoredAssetFee` MoneyLike – fee price in the asset.
 - `*fee` MoneyLike - fee
@@ -913,15 +913,15 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, a transfer fee can be paid in the asset.
 
-###### [Type 15 SET ASSET SCRIPT – setting a script to an asset](https://docs.waves.tech/en/blockchain/transaction-type/set-asset-script-transaction)\*\*
+###### [Type 15 SET ASSET SCRIPT – setting a script to an asset](https://docs.decentralchain.org/en/blockchain/transaction-type/set-asset-script-transaction)\*\*
 
 - `assetId` string – asset ID
-- `script` string – [script](https://docs.waves.tech/en/building-apps/smart-contracts/what-is-smart-asset)
+- `script` string – [script](https://docs.decentralchain.org/en/building-apps/smart-contracts/what-is-smart-asset)
 - `*fee` MoneyLike – fee
 - `*senderPublicKey` string - sender's public key in base58
 - `*timestamp` number/string – time in ms
 
-It's now impossible to cancel a script, you can only add a new script. [Script development on RIDE](https://waves-ide.com/)
+It's now impossible to cancel a script, you can only add a new script. [Script development on RIDE](https://decentralchain-ide.com/)
 
 Example:
 
@@ -947,7 +947,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, the asset's script will be reset.
 
-###### [Type 16 SCRIPT INVOCATION - call account script function](https://docs.waves.tech/en/blockchain/transaction-type/invoke-script-transaction)\*\*
+###### [Type 16 SCRIPT INVOCATION - call account script function](https://docs.decentralchain.org/en/blockchain/transaction-type/invoke-script-transaction)\*\*
 
 - `dApp` string – address script account
 - `call` object –
@@ -993,7 +993,7 @@ CubensisConnect.signAndPublishTransaction({
 
 In case of a success, invoke script function `tellme` in testnet account `3N27HUMt4ddx2X7foQwZRmpFzg5PSzLrUgU`
 
-##### [Calculating transaction fees](https://docs.waves.tech/en/blockchain/transaction/transaction-fee)\*\*
+##### [Calculating transaction fees](https://docs.decentralchain.org/en/blockchain/transaction/transaction-fee)\*\*
 
 ---
 
@@ -1184,7 +1184,7 @@ Method Cubensis Connect for sign custom data for different services, it accepts 
 - `version` 1
 - `binary` string 'base64:....'
 
-Note: This method adds the `[255, 255, 255, 1]` prefix to the signed bytes. This was done to make it impossible to sign transaction data in this method, which can lead to unauthenticated transactions and phishing. For the details check `serializeCustomData` method in [waves-transactions](https://github.com/wavesplatform/waves-transactions/blob/master/src/requests/custom-data.ts#L63) library.
+Note: This method adds the `[255, 255, 255, 1]` prefix to the signed bytes. This was done to make it impossible to sign transaction data in this method, which can lead to unauthenticated transactions and phishing. For the details check `serializeCustomData` method in [decentralchain-transactions](https://github.com/decentralchain/decentralchain-transactions/blob/master/src/requests/custom-data.ts#L63) library.
 
 Example:
 
@@ -1221,7 +1221,7 @@ ERRORS:
   - `value` /string/string/number/boolean
 
 Bytes to sign: [255, 255, 255, 2, ...(from data Array to bin)]
-[waves-transaction library](https://github.com/wavesplatform/waves-transactions/blob/master/src/requests/custom-data.ts)
+[decentralchain-transaction library](https://github.com/decentralchain/decentralchain-transactions/blob/master/src/requests/custom-data.ts)
 
 Example:
 

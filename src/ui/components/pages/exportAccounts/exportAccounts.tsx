@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import background from '../../../services/Background';
 import { ExportKeystoreChooseAccounts, type ExportKeystoreAccount } from './chooseAccounts';
 import { ExportAccountsPasswordModal } from './passwordModal';
-import { seedUtils } from '@decentralchain/waves-transactions';
+import { seedUtils } from '@decentralchain/transactions';
 
 interface Props {
   allNetworksAccounts: ExportKeystoreAccount[];

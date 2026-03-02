@@ -1,6 +1,6 @@
 import { BigNumber } from '@decentralchain/bignumber';
 import { Asset, Money } from '@decentralchain/data-entities';
-import { validators } from '@decentralchain/waves-transactions';
+import { validators } from '@decentralchain/transactions';
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'ui/store';

@@ -50,7 +50,7 @@ export class CurrentAccountController {
           const address = account.address;
           const isActiveAddress = address === activeAccount.address;
 
-          const [wavesBalances, myAssets, myNfts, aliases, txHistory] = await Promise.all(
+          const [dccBalances, myAssets, myNfts, aliases, txHistory] = await Promise.all(
             [
               `addresses/balance/details/${address}`,
               ...(isActiveAddress
@@ -110,8 +110,8 @@ export class CurrentAccountController {
             await this.assetInfoController.updateAssets(fetchAssetIds);
           }
 
-          const available = new BigNumber(wavesBalances.available);
-          const regular = new BigNumber(wavesBalances.regular);
+          const available = new BigNumber(dccBalances.available);
+          const regular = new BigNumber(dccBalances.regular);
           const leasedOut = regular.sub(available);
 
           return [
@@ -136,8 +136,8 @@ export class CurrentAccountController {
                       {
                         DCC: {
                           minSponsoredAssetFee: '100000',
-                          sponsorBalance: wavesBalances.available,
-                          balance: wavesBalances.available,
+                          sponsorBalance: dccBalances.available,
+                          balance: dccBalances.available,
                         },
                       },
                     ),

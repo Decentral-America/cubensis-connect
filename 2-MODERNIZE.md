@@ -146,27 +146,27 @@ If the current version is _older_ than the baseline, something may be wrong — 
 
 Replace ALL Waves-specific values:
 
-| Category                | Waves → DecentralChain                                                     |
-| ----------------------- | -------------------------------------------------------------------------- |
-| Package scope           | `@waves/*` → `@decentralchain/*`                                           |
-| Token name              | `WAVES` → `DCC`                                                            |
-| API endpoints           | `nodes.wavesnodes.com` → DecentralChain equivalents                        |
-| Network byte / chain ID | Waves chain IDs → DecentralChain equivalents                               |
-| Address prefixes        | Waves format → DecentralChain format                                       |
-| Explorer links          | `wavesexplorer.com` → DecentralChain explorer                              |
-| Default nodes           | Waves nodes → DecentralChain nodes                                         |
-| Fee structures          | Waves fees → DecentralChain rules                                          |
-| Author/org              | `Wavesplatform` / `wavesplatform` → `DecentralChain` / `Decentral-America` |
-| README badges           | Waves URLs → DecentralChain URLs                                           |
+| Category                | Waves → DecentralChain                                                      |
+| ----------------------- | --------------------------------------------------------------------------- |
+| Package scope           | `@waves/*` → `@decentralchain/*`                                            |
+| Token name              | `WAVES` → `DCC`                                                             |
+| API endpoints           | `nodes.decentralchainnodes.com` → DecentralChain equivalents                |
+| Network byte / chain ID | legacy Waves chain IDs → DecentralChain equivalents                         |
+| Address prefixes        | legacy Waves format → DecentralChain format                                 |
+| Explorer links          | `decentralchainexplorer.com` → DecentralChain explorer                      |
+| Default nodes           | legacy Waves nodes → DecentralChain nodes                                   |
+| Fee structures          | legacy Waves fees → DecentralChain rules                                    |
+| Author/org              | `Wavesplatform` / `decentralchain` → `DecentralChain` / `Decentral-America` |
+| README badges           | legacy Waves URLs → DecentralChain URLs                                     |
 
 **If equivalents are unknown → ask. Do NOT invent protocol behavior.**
 
 The final package MUST:
 
-- NOT require Waves nodes
-- NOT depend on Waves APIs or SDKs
+- NOT require legacy Waves nodes
+- NOT depend on legacy Waves APIs or SDKs
 - NOT import `@waves/*` packages
-- NOT reference Waves branding anywhere (code, comments, docs, config)
+- NOT reference legacy Waves branding anywhere (code, comments, docs, config)
 - Function as a standalone DecentralChain library
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1262,7 +1262,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - Legacy build tooling ({{PREVIOUS_BUILD_TOOL}}).
 - {{PREVIOUS_PM}} lockfile.
-- All Waves branding and references.
+- All legacy Waves branding and references.
 ```
 
 ---

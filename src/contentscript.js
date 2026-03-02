@@ -10,7 +10,7 @@ if (shouldInject()) {
 
 // function initKeeper() {
 //     let cbs = [];
-//     window.CubensisConnect = window.Waves = {
+//     window.CubensisConnect = window.DecentralChain = {
 //         on: function (event, cb) { cbs.push({ event, cb }) },
 //         _inited: function (api) {
 //             cbs.forEach(function ({ event, cb }) {

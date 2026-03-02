@@ -14,11 +14,9 @@ const devConf = (conf) => ({
       {
         enforce: 'pre',
         test: /\.js$/,
-        exclude: [
-          'long',
-          '@decentralchain/data-entities',
-          '@decentralchain/waves-transactions',
-        ].map((moduleName) => new RegExp(path.join(__dirname, 'node_modules', moduleName))),
+        exclude: ['long', '@decentralchain/data-entities', '@decentralchain/transactions'].map(
+          (moduleName) => new RegExp(path.join(__dirname, 'node_modules', moduleName)),
+        ),
         loader: 'source-map-loader',
       },
       ...conf.module.rules,

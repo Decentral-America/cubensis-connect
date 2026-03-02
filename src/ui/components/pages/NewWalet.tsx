@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
 import { newAccountSelect } from '../../actions';
 import { AvatarList, Button } from '../ui';
-import { seedUtils } from '@decentralchain/waves-transactions';
+import { seedUtils } from '@decentralchain/transactions';
 import { PAGES } from '../../pageConfig';
 
 interface Account {

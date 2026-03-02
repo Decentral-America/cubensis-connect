@@ -7,7 +7,7 @@ import background from '../../services/Background';
 import { getAsset } from '../../actions';
 import { Asset, Money } from '@decentralchain/data-entities';
 import { PAGES } from '../../pageConfig';
-import { seedUtils } from '@decentralchain/waves-transactions';
+import { seedUtils } from '@decentralchain/transactions';
 import { getAccountLink } from '../../urls';
 
 const { Seed } = seedUtils;

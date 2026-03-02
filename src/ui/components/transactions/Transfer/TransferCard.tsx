@@ -6,7 +6,7 @@ import cn from 'classnames';
 import { Attachment, Balance } from '../../ui';
 import { getMoney } from '../../../utils/converters';
 import { getAmount, messageType } from './parseTx';
-import { readAttachment } from '../../../utils/waves';
+import { readAttachment } from '../../../utils/decentralchain';
 
 interface IProps {
   assets: any;

@@ -25,9 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **All `@waves/*` imports replaced** with `@decentralchain/*` across 60+ files (using npm aliases until packages are published)
 - Updated `engines.node` from `^10.24.1` to `>=22`
 - Updated `.nvmrc` from `10` to `22`
-- Updated manifest.json author from `support@waves.tech` to `DecentralChain`
+- Updated manifest.json author from `support@decentralchain.org` to `DecentralChain`
 - Updated LICENSE copyright to `DecentralChain`
-- Removed `wavesplatform` and `waves.exchange` references from `inpage.js`
+- Removed `decentralchain` and `decentral.exchange` references from `inpage.js`
 - Created modern CI workflow with Node 22/24 matrix
 - Added Dependabot configuration for weekly dependency updates
 - Added governance docs: `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`
@@ -56,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### version 1.1.12
 
-- Fix links to waves.exchange
+- Fix links to decentral.exchange
 
 #### version 1.1.11
 
@@ -114,7 +114,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### version 1.1.3
 
-- Fix bug with attachments from waves lib
+- Fix bug with attachments from decentralchain lib
 
 #### version 1.1.2
 

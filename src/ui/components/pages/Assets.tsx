@@ -106,10 +106,10 @@ export function Assets({ setTab }: Props) {
 
   const assetInfo = assets['DCC'];
 
-  let wavesBalance;
+  let dccBalance;
   if (assetInfo) {
     const asset = new Asset(assetInfo);
-    wavesBalance = new Money(balances[address]?.available || 0, asset);
+    dccBalance = new Money(balances[address]?.available || 0, asset);
   }
 
   return (
@@ -117,7 +117,7 @@ export function Assets({ setTab }: Props) {
       <div className={styles.activeAccount}>
         <ActiveAccountCard
           account={activeAccount}
-          balance={wavesBalance}
+          balance={dccBalance}
           onCopy={() => {
             setShowCopy(true);
             setTimeout(() => setShowCopy(false), 1000);

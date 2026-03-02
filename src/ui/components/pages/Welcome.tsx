@@ -26,7 +26,7 @@ export class Welcome extends React.Component<IWelcomeProps> {
           <div>
             <Trans i18nKey="welcome.info">
               Cubensis Connect — is the safest way to interact with third-party web resources with
-              Waves-integrated functionality or DApps.
+              DecentralChain-integrated functionality or DApps.
             </Trans>
           </div>
           <div>

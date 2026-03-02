@@ -1,7 +1,7 @@
 import { type Account } from 'accounts/types';
 import { ACTION } from '../actions';
 import { type AssetDetail } from '../services/Background';
-import { type TTransaction, type WithId } from '@decentralchain/waves-transactions/dist/transactions';
+import { type TTransaction, type WithId } from '@decentralchain/transactions/dist/transactions';
 
 export * from './localState';
 export * from './remoteConfig';

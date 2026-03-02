@@ -92,9 +92,9 @@ const assetTickers = {
   '9AT2kEi8C4AYxV1qKxtQTVpD5i54jCPvaNNRP6VzRtYZ': 'USDTLP',
   '97zHFp1C3cB7qfvx8Xv5f2rWp9nUSG5UnAamfPcW6txf': 'USDTUSDNLP',
   DSbbhLsSTeDg5Lsiufk2Aneh3DjVqJuPr2M9uU1gwy5p: 'VIRES',
-  '45WTLz6e3Ek8Ffe7QHMkQ2TwfozfWsrodTHMtPyTMNtt': 'WAVESDOWN',
-  HiiB3SSS1c89J5qQ6RLTUx4qgszLMQS2WRC3wfGfaCF8: 'WAVESUP',
-  '7KZbJrVopwJhkdwbe1eFDBbex4dkY63MxjTNjqXtrzj1': 'WAVESUSDNLP',
+  '45WTLz6e3Ek8Ffe7QHMkQ2TwfozfWsrodTHMtPyTMNtt': 'DCCDOWN',
+  HiiB3SSS1c89J5qQ6RLTUx4qgszLMQS2WRC3wfGfaCF8: 'DCCUP',
+  '7KZbJrVopwJhkdwbe1eFDBbex4dkY63MxjTNjqXtrzj1': 'DCCUSDNLP',
   DHgwrRvVyqJsepd32YbBqUeDH4GJ1N984X8QoekjgH8J: 'WCT',
   '4LHHvYGNKJUg5hj65aGD5vgScvCBmLpdRFtjokvCjSL8': 'WEST',
   AbunLGErT5ctzVN8MVjb4Ad9YgjpubB8Hqb17VxzfAck: 'WW',
@@ -172,7 +172,7 @@ export class AssetInfoController {
     }
   }
 
-  getWavesAsset() {
+  getDccAsset() {
     return DCC;
   }
 
@@ -314,7 +314,7 @@ export class AssetInfoController {
             };
           }
         });
-        assets[network]['DCC'] = this.getWavesAsset();
+        assets[network]['DCC'] = this.getDccAsset();
         this.store.updateState({ assets });
         break;
       default:

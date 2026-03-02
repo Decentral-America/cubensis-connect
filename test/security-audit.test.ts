@@ -88,14 +88,14 @@ describe('security audit', () => {
     expect(content).not.toContain('Math.random');
   });
 
-  it('should have renamed WavesTransactionConverter', () => {
+  it('should have renamed legacy WavesTransactionConverter', () => {
     expect(fs.existsSync(path.resolve(srcDir, 'controllers/WavesTransactionConverter.js'))).toBe(
       false,
     );
     expect(fs.existsSync(path.resolve(srcDir, 'controllers/TransactionConverter.js'))).toBe(true);
   });
 
-  it('should have renamed wavesTransactionsController', () => {
+  it('should have renamed legacy wavesTransactionsController', () => {
     expect(fs.existsSync(path.resolve(srcDir, 'controllers/wavesTransactionsController.js'))).toBe(
       false,
     );

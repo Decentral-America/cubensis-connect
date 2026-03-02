@@ -1,10 +1,10 @@
 # Cubensis Connect
 
-[en](https://github.com/wavesplatform/cubensis-connect/blob/master/README.md) | ru
+[en](https://github.com/decentralchain/cubensis-connect/blob/master/README.md) | ru
 
 Приложение для хранения данных пользователя
-и проведения транзакций в блокчейн сети Waves.
-[Информация о сети Waves](https://docs.waves.tech/ru/)
+и проведения транзакций в блокчейн сети DecentralChain.
+[Информация о сети DecentralChain](https://docs.decentralchain.org/ru/)
 
 ## Cubensis Connect API
 
@@ -32,7 +32,7 @@
 
 > Все методы кроме `on` работают асинхронно и возвращают [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 
-В вашем коде вы можете использовать [TypeScript types](https://github.com/wavesplatform/CubensisConnect-types)
+В вашем коде вы можете использовать [TypeScript types](https://github.com/decentralchain/CubensisConnect-types)
 
 При загрузке страницы в объекте CubensisConnect нет методов апи до окончания инициализации плагина.
 Для облегчения работы с CubensisConnect при инициализации в `window.CubensisConnect` есть `initialPromise`,
@@ -101,10 +101,10 @@ const result = await getPublicState();
     "account": {
         "name": "foo",
         "publicKey": "bar",
-        "address": "waves адрес",
+        "address": "DecentralChain адрес",
         "networkCode": "байт сети",
         "balance": {
-            "available": "баланс в waves",
+            "available": "баланс в DCC",
             "leasedOut": "баланс в лизинге"
         }
     },
@@ -128,7 +128,7 @@ const result = await getPublicState();
 - `initialized` - boolean Keeper проинициализирован
 - `locked` - boolean Keeper в режиме ожидания
 - `account` - текущий аккаунт, если пользователь разрешит сайту доступ, или null
-- `network` - текущая сеть waves, адрес ноды и матчера
+- `network` - текущая сеть DecentralChain, адрес ноды и матчера
 - `messages` - статусы запросов на подпись
 - `txVersion` - доступные версии транзакций для каждого типа
 
@@ -140,7 +140,7 @@ const result = await getPublicState();
 
 #### encryptMessage
 
-Вы можете зашифровать текст для конкретного пользователя сети Waves, зная его публичный ключ.
+Вы можете зашифровать текст для конкретного пользователя сети DecentralChain, зная его публичный ключ.
 
 CubensisConnect.encryptMessage(`текст для шифрования`, `публичный ключ в кодировке base58`, `префикс строкой уникальный для каждого приложения`)
 
@@ -166,7 +166,7 @@ CubensisConnect.encryptMessage(
 
 #### decryptMessage
 
-Вы можете расшифровать сообщение, зашифрованное для вас пользователем сети Waves, зная сообщение и публичный ключ отправителя.
+Вы можете расшифровать сообщение, зашифрованное для вас пользователем сети DecentralChain, зная сообщение и публичный ключ отправителя.
 
 ```js
 CubensisConnect.decryptMessage(
@@ -242,8 +242,8 @@ CubensisConnect.notification({
 
 #### auth
 
-Метод для получения подписи авторизационных данных при подтверждении пользователя Waves.
-Работает аналогично [протоколу авторизации Waves Exchange](https://docs.waves.exchange/ru/waves-exchange/waves-exchange-client-api/waves-exchange-web-auth-api).
+Метод для получения подписи авторизационных данных при подтверждении пользователя DecentralChain.
+Работает аналогично [протоколу авторизации DecentralChain Exchange](https://docs.decentral.exchange/ru/decentralchain-exchange/decentralchain-exchange-client-api/decentralchain-exchange-web-auth-api).
 
 Пример:
 
@@ -292,7 +292,7 @@ getAuthData(authData);
 const authData = {
   data: 'Generated string from server',
   name: 'My test App',
-  icon: '/img/icons/waves_logo.svg',
+  icon: '/img/icons/decentralchain_logo.svg',
   referrer: 'https://decentral.exchange/',
   successPath: 'login',
 };
@@ -313,7 +313,7 @@ CubensisConnect.auth(authData)
 - `host` - хост, запросивший подпись
 - `name` - название приложения запрашивающее подпись
 - `prefix` - префикс, участвующий в подписи
-- `address` - адрес в сети Waves
+- `address` - адрес в сети DecentralChain
 - `publicKey` - публичный ключ пользователя
 - `signature` - подпись
 - `version` - версия апи
@@ -326,7 +326,7 @@ CubensisConnect.auth(authData)
 
 #### signTransaction
 
-Метод для подписи транзакций в сети Waves.
+Метод для подписи транзакций в сети DecentralChain.
 
 Пример:
 
@@ -347,7 +347,7 @@ const txData = {
 };
 CubensisConnect.signTransaction(txData)
   .then((data) => {
-    //data - строка готовая для отсылки на ноду(сервер) сети Waves
+    //data - строка готовая для отсылки на ноду(сервер) сети DecentralChain
   })
   .catch((error) => {
     //Обработка ошибок
@@ -358,7 +358,7 @@ CubensisConnect.signTransaction(txData)
 >
 > Описание поддерживаемых типов транзакций вы найдете ниже
 
-В примере мы подписываем транзакцию на перевод токенов Waves на алиас `test` в сети Waves.
+В примере мы подписываем транзакцию на перевод токенов DCC на алиас `test` в сети DecentralChain.
 
 ОТВЕТ
 
@@ -408,7 +408,7 @@ const txData = {
 
 CubensisConnect.signAndPublishTransaction(txData)
   .then((data) => {
-    //data - строка готовая для отсылки на ноду(сервер) сети Waves
+    //data - строка готовая для отсылки на ноду(сервер) сети DecentralChain
   })
   .catch((error) => {
     //Обработка ошибок
@@ -416,7 +416,7 @@ CubensisConnect.signAndPublishTransaction(txData)
 ```
 
 ОТВЕТ
-Возвращается строкой ответ от сети Waves - полное содержание прошедшей транзакции
+Возвращается строкой ответ от сети DecentralChain - полное содержание прошедшей транзакции
 
 ОШИБКИ
 
@@ -484,8 +484,8 @@ CubensisConnect.signTransactionPackage(tx, name);
 
 Подписать 2 транзакции:
 
-- перевода на алиас test 1.567 Waves
-- перевода на алиас merry 0.1 Waves
+- перевода на алиас test 1.567 DCC
+- перевода на алиас merry 0.1 DCC
 
 ОТВЕТ
 
@@ -494,11 +494,11 @@ CubensisConnect.signTransactionPackage(tx, name);
 ОШИБКИ
 Аналогично `signTransaction`.
 
-##### [Транзакции](https://docs.waves.tech/en/building-apps/waves-api-and-sdk/client-libraries/waves-transactions)
+##### [Транзакции](https://docs.decentralchain.org/en/building-apps/decentralchain-api-and-sdk/client-libraries/decentralchain-transactions)
 
-У каждого пользователя в сети waves есть стейт (балансы, ассеты, данные, скрипты),
+У каждого пользователя в сети DecentralChain есть стейт (балансы, ассеты, данные, скрипты),
 любая прошедшая транзакция меняет эти данные.
-В CubensisConnect API - отличается от [NODE REST API](https://docs.waves.tech/ru/waves-node/node-api/).
+В CubensisConnect API - отличается от [NODE REST API](https://docs.decentralchain.org/ru/decentralchain-node/node-api/).
 
 `signTransaction`, `signAndPublishTransaction` принимают транзакцию в следующем виде
 
@@ -533,7 +533,7 @@ MoneyLike может иметь вид:
 
 ---
 
-###### [Тип 3 ISSUE - выпуск токена](https://docs.waves.tech/ru/blockchain/transaction-type/issue-transaction)
+###### [Тип 3 ISSUE - выпуск токена](https://docs.decentralchain.org/ru/blockchain/transaction-type/issue-transaction)
 
 - `name` [4, 16] string - Название токена,
 - `description` [0, 1000] string - Описание токена,
@@ -541,7 +541,7 @@ MoneyLike может иметь вид:
 - `precision` [0 - 8] number - точность,
 - `reissuable` true|false - возможно перевыпускать,
 - `*fee` MoneyLike -комиссия
-- `*script` string - [smart asset](https://docs.waves.tech/ru/building-apps/smart-contracts/what-is-smart-asset)
+- `*script` string - [smart asset](https://docs.decentralchain.org/ru/building-apps/smart-contracts/what-is-smart-asset)
 - `*senderPublicKey` string - публичный ключ отправителя в base58
 - `*timestamp` number/string - время в мс
 
@@ -573,7 +573,7 @@ CubensisConnect.signAndPublishTransaction({
 В случае успеха мы выпускаем новыйй ассет в количестве 1000000 шт.
 которые будут на вашем балансе 10000.00 Best Token
 
-###### [Тип 4 TRANSFER - передача ассетов](https://docs.waves.tech/ru/blockchain/transaction-type/transfer-transaction)
+###### [Тип 4 TRANSFER - передача ассетов](https://docs.decentralchain.org/ru/blockchain/transaction-type/transfer-transaction)
 
 - `amount` MoneyLike - количество,
 - `recipient` string - адрес получателя или алиас
@@ -594,14 +594,14 @@ CubensisConnect.signAndPublishTransaction({
   },
 })
   .then((tx) => {
-    console.log('Ура! Я смог отправить Waves!!!');
+    console.log('Ура! Я смог отправить DCC!!!');
   })
   .catch((error) => {
     console.error('Что-то пошло не так', error);
   });
 ```
 
-###### [Тип 5 REISSUE - довыпуск токенов](https://docs.waves.tech/ru/blockchain/transaction-type/reissue-transaction)
+###### [Тип 5 REISSUE - довыпуск токенов](https://docs.decentralchain.org/ru/blockchain/transaction-type/reissue-transaction)
 
 - `assetId` string - "Id ассета",
 - `quantity` [0 - (JLM)] number/string/MoneyLike - количество,
@@ -636,7 +636,7 @@ CubensisConnect.signAndPublishTransaction({
 В случае успеха мы довыпускаем новый ассет в количестве 1000000 `coins`,
 которые будут на вашем балансе 10000.00 Best Token.
 
-###### [Тип 6 BURN - сжигание токена](https://docs.waves.tech/ru/blockchain/transaction-type/burn-transaction)
+###### [Тип 6 BURN - сжигание токена](https://docs.decentralchain.org/ru/blockchain/transaction-type/burn-transaction)
 
 - `assetId` string - Id ассета,
 - `amount` [0 - (JLM)] number/string/MoneyLike - количество,
@@ -668,7 +668,7 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха сжигается 1000 `coins`.
 
-###### [Тип 8 LEASE - Передача в лизинг](https://docs.waves.tech/ru/blockchain/transaction-type/lease-transaction)
+###### [Тип 8 LEASE - Передача в лизинг](https://docs.decentralchain.org/ru/blockchain/transaction-type/lease-transaction)
 
 - `recipient` string - адрес получателя или алиас,
 - `amount` [0 - (JLM)] number/string/MoneyLike - количество,
@@ -698,9 +698,9 @@ CubensisConnect.signAndPublishTransaction({
   });
 ```
 
-В случае успеха передается в лизинг 0.00001000 Waves.
+В случае успеха передается в лизинг 0.00001000 DCC.
 
-###### [Тип 9 LEASE CANCEL - отмена лизинга](https://docs.waves.tech/ru/blockchain/transaction-type/lease-cancel-transaction)
+###### [Тип 9 LEASE CANCEL - отмена лизинга](https://docs.decentralchain.org/ru/blockchain/transaction-type/lease-cancel-transaction)
 
 - `leaseId` string - id транзакции лизинга,
 - `*fee` MoneyLike -комиссия
@@ -730,7 +730,7 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха отменяется лизинг.
 
-###### [Тип 10 CREATE ALIAS - создание алиаса для адреса](https://docs.waves.tech/ru/blockchain/transaction-type/create-alias-transaction)
+###### [Тип 10 CREATE ALIAS - создание алиаса для адреса](https://docs.decentralchain.org/ru/blockchain/transaction-type/create-alias-transaction)
 
 - `alias`[4, 30] string - имя
 - `*fee` MoneyLike -комиссия
@@ -760,7 +760,7 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха для адреса создается алиас (дополнительное имя).
 
-###### [Тип 11 MASS TRANSFER - массовая рассылка ассета](https://docs.waves.tech/ru/blockchain/transaction-type/mass-transfer-transaction)
+###### [Тип 11 MASS TRANSFER - массовая рассылка ассета](https://docs.decentralchain.org/ru/blockchain/transaction-type/mass-transfer-transaction)
 
 - `totalAmount` moneyLike - итого отправлено (можно не считать сумму и вставить `{ assetId: "id отправляемого ассета", coins: 0}`),
 - `transfers` массив объектов
@@ -795,9 +795,9 @@ CubensisConnect.signAndPublishTransaction({
   });
 ```
 
-В случае успеха на адреса alias1, alias2 придет по 0.002 Waves.
+В случае успеха на адреса alias1, alias2 придет по 0.002 DCC.
 
-###### [Тип 12 DATA TRANSACTION - сохранение данных](https://docs.waves.tech/ru/blockchain/transaction-type/data-transaction)
+###### [Тип 12 DATA TRANSACTION - сохранение данных](https://docs.decentralchain.org/ru/blockchain/transaction-type/data-transaction)
 
 - `data` массив объектов
   - `type` "binary"/string/"integer"/"boolean" - тип,
@@ -835,15 +835,15 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха в стейте будут храниться новые данные.
 
-###### [Тип 13 SET SCRIPT - установка скрипта на аккаунт](https://docs.waves.tech/ru/blockchain/transaction-type/set-script-transaction)
+###### [Тип 13 SET SCRIPT - установка скрипта на аккаунт](https://docs.decentralchain.org/ru/blockchain/transaction-type/set-script-transaction)
 
-- `script` string - [скрипт](https://docs.waves.tech/ru/building-apps/smart-contracts/waves-smart-contracts-overview)
+- `script` string - [скрипт](https://docs.decentralchain.org/ru/building-apps/smart-contracts/decentralchain-smart-contracts-overview)
 - `*fee` MoneyLike -комиссия
 - `*senderPublicKey` string - публичный ключ отправителя в base58
 - `*timestamp` number/string - время в мс
 
 Для снятия скрипта поле `script` равно ``.
-[Разработка скрипта в RIDE](https://waves-ide.com/)
+[Разработка скрипта в RIDE](https://decentralchain-ide.com/)
 
 Пример:
 
@@ -891,7 +891,7 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха на аккаунте будет новый скрипт, разрешающий на аккаунте любые транзакции без подписи (будьте осторожны!).
 
-###### [Тип 14 Sponsored Fee Transaction - Спонсорство](https://docs.waves.tech/ru/blockchain/transaction-type/sponsor-fee-transaction)
+###### [Тип 14 Sponsored Fee Transaction - Спонсорство](https://docs.decentralchain.org/ru/blockchain/transaction-type/sponsor-fee-transaction)
 
 - `minSponsoredAssetFee` MoneyLike - цена комиссии в ассете.
 - `*fee` MoneyLike - комиссия
@@ -924,16 +924,16 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха, в ассете можно платить комиссию за трансфер
 
-###### [Тип 15 SET ASSET SCRIPT - скрипт на ассет](https://docs.waves.tech/ru/blockchain/transaction-type/set-asset-script-transaction)
+###### [Тип 15 SET ASSET SCRIPT - скрипт на ассет](https://docs.decentralchain.org/ru/blockchain/transaction-type/set-asset-script-transaction)
 
 - `assetId` string - id ассета
-- `script` string - [скрипт](https://docs.waves.tech/ru/building-apps/smart-contracts/what-is-smart-asset)
+- `script` string - [скрипт](https://docs.decentralchain.org/ru/building-apps/smart-contracts/what-is-smart-asset)
 - `*fee` MoneyLike -комиссия
 - `*senderPublicKey` string - публичный ключ отправителя в base58
 - `*timestamp` number/string - время в мс
 
 Снятие скрипта невозможно, только записать новый.
-[Разработка скрипта в RIDE](https://waves-ide.com/)
+[Разработка скрипта в RIDE](https://decentralchain-ide.com/)
 
 Пример:
 
@@ -959,7 +959,7 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха на ассете будет переписан скрипт
 
-###### [Тип 16 SCRIPT INVOCATION - выполнение функций скрипта](https://docs.waves.tech/ru/blockchain/transaction-type/invoke-script-transaction)
+###### [Тип 16 SCRIPT INVOCATION - выполнение функций скрипта](https://docs.decentralchain.org/ru/blockchain/transaction-type/invoke-script-transaction)
 
 - `dApp` string адрес контракта
 - `call` объект следующей структуры
@@ -1005,7 +1005,7 @@ CubensisConnect.signAndPublishTransaction({
 
 В случае успеха будет запущен скрипт
 
-##### [Как рассчитать комиссию](https://docs.waves.tech/ru/blockchain/transaction/transaction-fee)
+##### [Как рассчитать комиссию](https://docs.decentralchain.org/ru/blockchain/transaction/transaction-fee)
 
 ---
 
@@ -1030,7 +1030,7 @@ CubensisConnect.signAndPublishTransaction({
 * `orderType` 'sell'/'buy' - тип ордера
 * `matcherPublicKey` string публичный ключ exchange сервиса
 * `expiration` string/number - время жизни ордера
-* `*matcherFee` MoneyLike - комиссия (мин 0.003 Waves),
+* `*matcherFee` MoneyLike - комиссия (мин 0.003 DCC),
 * `*timestamp` string/number текущее время
 * `*senderPublicKey` string публичный ключ в base58
 

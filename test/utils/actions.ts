@@ -3,7 +3,7 @@
  *
  * NOTE: Each of them needs to bind `this` from test.
  */
-import { seedUtils } from '@decentralchain/waves-transactions';
+import { seedUtils } from '@decentralchain/transactions';
 import type * as mocha from 'mocha';
 import { By, until, type WebElement } from 'selenium-webdriver';
 import { DEFAULT_ANIMATION_DELAY, DEFAULT_PASSWORD } from './constants';

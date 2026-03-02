@@ -1,5 +1,5 @@
 import ObservableStore from 'obs-store';
-import { seedUtils } from '@decentralchain/waves-transactions';
+import { seedUtils } from '@decentralchain/transactions';
 import { decrypt, encrypt } from '../lib/encryprtor';
 import { Wallet } from '../lib/wallet';
 
@@ -226,9 +226,9 @@ export class WalletController {
     return await wallet.signTx(tx);
   }
 
-  async signWaves(type, data, address, network) {
+  async signDecentralChain(type, data, address, network) {
     const wallet = this._findWallet(address, network);
-    return await wallet.signWaves(type, data);
+    return await wallet.signDecentralChain(type, data);
   }
 
   /**

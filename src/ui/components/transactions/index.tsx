@@ -22,7 +22,7 @@ import packageTx from './Package';
 import unknown from './Unknown';
 import customData from './CustomData';
 import updateAssetInfo from './UpdateAssetInfo';
-import wavesAuth from './WavesAuth';
+import decentralChainAuth from './DecentralChainAuth';
 import { type Money } from '@decentralchain/data-entities';
 
 interface Message {
@@ -64,7 +64,7 @@ const MESSAGES: Message[] = [
   packageTx,
   customData,
   updateAssetInfo,
-  wavesAuth,
+  decentralChainAuth,
 ] as any;
 
 export { FinalTransaction } from './FinalTransaction';

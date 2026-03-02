@@ -18,15 +18,15 @@ setupInpageApi().catch((e) => log.error(e));
 async function setupInpageApi() {
   let cbs = {};
   let args = {};
-  const wavesAppDef = createDeffer();
-  const wavesApp = {};
-  const wavesApi = {
-    initialPromise: wavesAppDef.promise,
+  const dccAppDef = createDeffer();
+  const dccApp = {};
+  const dccApi = {
+    initialPromise: dccAppDef.promise,
   };
   const proxyApi = {
     get(target, prop) {
-      if (wavesApi[prop]) {
-        return wavesApi[prop];
+      if (dccApi[prop]) {
+        return dccApi[prop];
       }
 
       if (!cbs[prop] && prop !== 'on') {
@@ -57,7 +57,7 @@ async function setupInpageApi() {
     },
   };
 
-  global.CubensisConnect = global.Waves = new Proxy(wavesApp, proxyApi);
+  global.CubensisConnect = global.DecentralChain = new Proxy(dccApp, proxyApi);
 
   const connectionStream = new LocalMessageDuplexStream({
     name: 'cubensis_connect_page',
@@ -89,9 +89,9 @@ async function setupInpageApi() {
 
   args = [];
   cbs = {};
-  Object.assign(wavesApi, inpageApi);
-  wavesAppDef.resolve(wavesApi);
-  global.CubensisConnect = global.Waves = wavesApi;
+  Object.assign(dccApi, inpageApi);
+  dccAppDef.resolve(dccApi);
+  global.CubensisConnect = global.DecentralChain = dccApi;
   setupClickInterceptor(inpageApi);
 }
 

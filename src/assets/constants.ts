@@ -25,7 +25,7 @@ export const assetIds: {
 
 export const swappableAssetIds = {
   mainnet: [
-    'WAVES',
+    'DCC',
     'BAG',
     'BTC',
     'CRV',

@@ -19,16 +19,16 @@ export function getDefaultExchanger(
   const exchangersArr = Object.values(exchangersMap);
 
   const usdnAssetId = getAssetIdByName(network, 'USD');
-  const wavesAssetId = getAssetIdByName(network, 'DCC');
+  const dccAssetId = getAssetIdByName(network, 'DCC');
 
-  const usdnWavesExchanger = exchangersArr.find(
+  const usdnDccExchanger = exchangersArr.find(
     (exchanger) =>
       [exchanger.A_asset_id, exchanger.B_asset_id].includes(usdnAssetId) &&
-      [exchanger.A_asset_id, exchanger.B_asset_id].includes(wavesAssetId),
+      [exchanger.A_asset_id, exchanger.B_asset_id].includes(dccAssetId),
   );
 
-  if (usdnWavesExchanger) {
-    return usdnWavesExchanger;
+  if (usdnDccExchanger) {
+    return usdnDccExchanger;
   }
 
   return exchangersArr[0];

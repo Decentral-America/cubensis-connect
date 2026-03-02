@@ -5,13 +5,13 @@ import { DEFAULT_FEE_CONFIG } from '../constants';
 import { assetIds, assetLogosByNetwork, swappableAssetIds } from './constants';
 
 export function convertToSponsoredAssetFee(
-  wavesFeeCoins: BigNumber,
+  dccFeeCoins: BigNumber,
   asset: Asset,
   assetBalance: AssetBalance,
 ) {
   return new Money(
     new BigNumber(assetBalance.minSponsoredAssetFee)
-      .mul(wavesFeeCoins)
+      .mul(dccFeeCoins)
       .div(DEFAULT_FEE_CONFIG.calculate_fee_rules.default.fee),
     asset,
   );
