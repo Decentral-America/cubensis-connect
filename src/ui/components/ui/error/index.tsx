@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './error.styl';
+import * as styles from './error.module.css';
 import cn from 'classnames';
 import { Trans } from 'react-i18next';
 
@@ -26,7 +26,7 @@ export class Error extends React.PureComponent {
     const { showed } = state;
     const { show } = props;
 
-    if (!state || showed != show) {
+    if (!state || showed !== show) {
       return { ...state, showed: show };
     }
 

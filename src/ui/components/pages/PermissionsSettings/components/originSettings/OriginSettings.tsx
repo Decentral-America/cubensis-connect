@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import cn from 'classnames';
-import * as styles from './settings.styl';
+import * as styles from './settings.module.css';
 import { Button, BUTTON_TYPE, Input, Select } from 'ui/components/ui';
 import { BigNumber } from '@decentralchain/bignumber';
 

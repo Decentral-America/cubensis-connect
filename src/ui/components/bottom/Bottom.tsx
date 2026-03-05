@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as styles from './bottom.styl';
+import * as styles from './bottom.module.css';
 import cn from 'classnames';
 import { loading, setNetwork } from '../../actions';
 import { Network } from './components';

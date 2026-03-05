@@ -80,10 +80,10 @@ export const ExportAccounts = connect(mapStateToProps)(function ExportAccounts({
 
             const now = new Date();
             const pad = (zeroes: number, value: number) => value.toString().padStart(zeroes, '0');
-            const nowStr = `${pad(2, now.getFullYear() % 100)}${pad(
+            const nowStr = `${pad(2, now.getFullYear() % 100)}${pad(2, now.getMonth() + 1)}${pad(
               2,
-              now.getMonth() + 1,
-            )}${pad(2, now.getDate())}${pad(2, now.getHours())}${pad(2, now.getMinutes())}`;
+              now.getDate(),
+            )}${pad(2, now.getHours())}${pad(2, now.getMinutes())}`;
 
             const filename = `keystore-wkeeper-${nowStr}.json`;
 

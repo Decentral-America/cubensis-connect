@@ -20,7 +20,7 @@ export function decrypt<T>(encryptedText: string, password: string): T | never {
     const decryptedJson = seedUtils.decryptSeed(encryptedText, password);
     return JSON.parse(decryptedJson);
   } catch (e) {
-    throw new Error('Invalid password');
+    throw new Error('Invalid password', { cause: e });
   }
 }
 
@@ -115,7 +115,7 @@ export const byteArrayToString = function (bytes: Uint8Array): string {
       ch = ch & (0x3f >> extra);
       for (; extra > 0; extra -= 1) {
         const chx = bytes[index++];
-        if ((chx & 0xc0) != 0x80) return null;
+        if ((chx & 0xc0) !== 0x80) return null;
 
         ch = (ch << 6) | (chx & 0x3f);
       }
@@ -130,11 +130,10 @@ export const byteArrayToString = function (bytes: Uint8Array): string {
 const bytesToBase58 = libs.crypto.base58Encode;
 const bytesToString = byteArrayToString;
 
-export const bytesToSafeString = ifElse(
-  pipe(identity, bytesToString, isNil),
-  pipe(identity, bytesToBase58, concat('base58:')),
-  pipe(identity, bytesToString),
-);
+export const bytesToSafeString = (input: Uint8Array): string => {
+  const str = bytesToString(input);
+  return isNil(str) ? 'base58:' + bytesToBase58(input) : str;
+};
 
 export const readAttachment = (data) => {
   if (!data) {
@@ -145,5 +144,5 @@ export const readAttachment = (data) => {
     return data;
   }
 
-  return bytesToSafeString(data);
+  return bytesToSafeString(data as Uint8Array);
 };

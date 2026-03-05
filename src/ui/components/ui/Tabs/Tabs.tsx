@@ -1,4 +1,4 @@
-import * as styles from './tabs.styl';
+import * as styles from './tabs.module.css';
 import * as React from 'react';
 import cn from 'classnames';
 
@@ -24,16 +24,16 @@ interface TabListProps {
   activeIndex?: number;
   children: React.ReactElement | React.ReactElement[];
   className?: string;
-  onActiveTab?: (index) => void;
+  onActiveTab?: (index: number) => void;
 }
 
 export function TabList({ activeIndex, children, className, onActiveTab }: TabListProps) {
   return (
     <ol className={cn(styles.tabList, className)}>
       {React.Children.map(children, (child, index) =>
-        React.cloneElement(child, {
-          isActive: index == activeIndex,
-          onActivate: () => onActiveTab(index),
+        React.cloneElement(child as React.ReactElement<TabProps>, {
+          isActive: index === activeIndex,
+          onActivate: () => onActiveTab?.(index),
         }),
       )}
     </ol>
@@ -64,7 +64,7 @@ export function TabPanel({ children, className }: TabPanelProps) {
 interface TabsProps {
   activeTab?: number;
   children: [React.ReactElement, React.ReactElement];
-  onTabChange?: (activeIndex) => void;
+  onTabChange?: (activeIndex: number) => void;
 }
 
 export function Tabs({ children, activeTab, onTabChange }: TabsProps) {
@@ -73,13 +73,15 @@ export function Tabs({ children, activeTab, onTabChange }: TabsProps) {
   return (
     <>
       {React.Children.map(children, (child) => {
-        switch (child.type) {
+        switch ((child as React.ReactElement<unknown>).type) {
           case TabPanels:
-            return React.cloneElement(child, { activeIndex: activeIndex });
-          case TabList:
-            return React.cloneElement(child, {
+            return React.cloneElement(child as React.ReactElement<TabPanelsProps>, {
               activeIndex: activeIndex,
-              onActiveTab: (activeIndex) => {
+            });
+          case TabList:
+            return React.cloneElement(child as React.ReactElement<TabListProps>, {
+              activeIndex: activeIndex,
+              onActiveTab: (activeIndex: number) => {
                 if (onTabChange) {
                   onTabChange(activeIndex);
                 }

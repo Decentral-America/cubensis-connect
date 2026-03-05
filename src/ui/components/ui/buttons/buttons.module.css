@@ -1,0 +1,214 @@
+:global .buttons-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+:global .buttons-wrapper > button,
+:global .buttons-wrapper .buttons-group {
+  flex-basis: calc(50% - 7px);
+}
+:global .buttons-group button:not(.transparent):not(.custom) {
+  border-radius: 0;
+}
+:global .buttons-group button:not(.transparent):not(.custom):first-child {
+  border-radius: 4px 0 0 4px;
+}
+:global .buttons-group button:not(.transparent):not(.custom):last-child {
+  border-radius: 0 4px 4px 0;
+}
+.button {
+  cursor: pointer;
+  font-size: 14px;
+  font-family: Roboto;
+  font-weight: 300;
+}
+.button:not(.transparent):not(.custom) {
+  transition: all 0.3s;
+  white-space: nowrap;
+  display: block;
+  border-radius: 4px;
+}
+.button:not(.transparent):not(.custom):not(.submitTiny) {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+}
+.button.custom {
+  text-decoration: none;
+}
+.button.default {
+  background-color: rgba(3, 35, 43, 0.82);
+  border: 1px solid #dae1e9;
+  color: #fff;
+  font-weight: 300;
+}
+.button.default:hover {
+  border: 1px solid #0e0e1c;
+}
+.button:focus {
+  outline: none;
+}
+.button.submit,
+.button.submitTiny {
+  background-color: #177488;
+  color: #fff;
+}
+.button.submit:hover,
+.button.submitTiny:hover {
+  background-color: #0a7e72;
+}
+.button.submit.disabled,
+.button.submitTiny.disabled,
+.button.submit:disabled,
+.button.submitTiny:disabled,
+.button.submit[disabled],
+.button.submitTiny[disabled] {
+  background-color: #009688;
+  cursor: default;
+}
+.button.submit.disabled:hover,
+.button.submitTiny.disabled:hover,
+.button.submit:disabled:hover,
+.button.submitTiny:disabled:hover,
+.button.submit[disabled]:hover,
+.button.submitTiny[disabled]:hover {
+  background-color: #009688;
+}
+.button.submit-tiny {
+  height: 32px;
+}
+.button.icon {
+  width: auto;
+  display: inline-block;
+  padding: 0 16px 0 36px;
+}
+.button.transparent {
+  background-color: transparent;
+}
+.button.transparent.disabled {
+  background-color: transparent;
+}
+.button.transparent:hover {
+  background-color: transparent;
+  text-decoration: none;
+}
+.button.transparent.fullwidth {
+  width: 100%;
+}
+.button.transparent.body1 {
+  font-size: 14px;
+}
+.button.warning {
+  background-color: #e5494d;
+  color: #fff;
+  font-weight: 300;
+}
+.button.warning:hover {
+  background-color: rgba(229, 73, 77, 0.8);
+}
+.button.warning.disabled,
+.button.warning:disabled,
+.button.warning[disabled] {
+  opacity: 0.5;
+  cursor: default;
+}
+.button.warning.disabled:hover,
+.button.warning:disabled:hover,
+.button.warning[disabled]:hover {
+  opacity: 0.5;
+}
+.button.danger {
+  background-color: #e53935;
+  color: #fff;
+  font-weight: 300;
+}
+.button.danger:hover {
+  background-color: rgba(229, 73, 77, 0.8);
+}
+.button.interface {
+  background-color: rgba(3, 35, 43, 0.82);
+  height: 32px;
+  line-height: 32px;
+  padding: 0 14px;
+  box-shadow: 0 2px 4px 0 rgba(0, 153, 135, 0.204);
+  font-weight: 400;
+  width: auto;
+  margin: 0;
+  border: 0.5px solid transparent;
+  flex-basis: auto;
+}
+.button.interface:not(:last-child) {
+  margin-right: 14px;
+}
+.button.interface:hover {
+  box-shadow: 0 4px 6px 0 rgba(0, 153, 135, 0.204);
+}
+.button.interface.disabled,
+.button.interface:disabled,
+.button.interface[disabled] {
+  background-color: transparent;
+  border: 0.5px solid #dae1e9;
+  box-shadow: none;
+}
+.button.button_loading {
+  position: relative;
+  color: transparent;
+}
+.button.button_loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -8px;
+  margin-left: -8px;
+  border: 2px solid #004649;
+  border-right-color: #177488;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  animation: rotate-spinner 0.6s linear infinite;
+}
+@-moz-keyframes rotate-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+@-webkit-keyframes rotate-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+@-o-keyframes rotate-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+@keyframes rotate-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}

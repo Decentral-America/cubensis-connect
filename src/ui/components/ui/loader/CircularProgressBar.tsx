@@ -3,10 +3,12 @@ import { CircleProgressBar } from './circle-progress-bar';
 
 export class CircularProgressbar extends React.PureComponent {
   declare readonly props: IProps;
-  drawer: CircleProgressBar;
+  drawer: any;
   canvas: HTMLCanvasElement;
 
-  getRef = (el: HTMLCanvasElement) => (this.canvas = el);
+  getRef = (el: HTMLCanvasElement | null) => {
+    if (el) this.canvas = el;
+  };
 
   constructor(props: IProps) {
     super(props);

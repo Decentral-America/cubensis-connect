@@ -1,4 +1,4 @@
-import * as styles from './cancelLease.styl';
+import * as styles from './cancelLease.module.css';
 import * as React from 'react';
 
 import { CancelLeaseCard } from './CancelLeaseCard';

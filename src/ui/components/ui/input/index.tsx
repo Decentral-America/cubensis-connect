@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './input.styl';
+import * as styles from './input.module.css';
 import cn from 'classnames';
 
 export class Input extends React.Component {

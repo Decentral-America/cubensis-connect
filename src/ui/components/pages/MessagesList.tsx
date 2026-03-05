@@ -14,7 +14,7 @@ import { Intro } from './Intro';
 import { getConfigByTransaction } from '../transactions';
 import { NotificationCard } from '../notifications';
 import { TransactionWallet } from '../wallets/TransactionWallet';
-import * as styles from './styles/messageList.styl';
+import * as styles from './styles/messageList.module.css';
 import { Button, BUTTON_TYPE } from '../ui';
 
 const Messages = ({ messages, assets, onSelect }: IProps) => {

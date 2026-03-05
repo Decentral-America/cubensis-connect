@@ -1,6 +1,6 @@
 import * as React from 'react';
 import cn from 'classnames';
-import * as styles from './index.styl';
+import * as styles from './index.module.css';
 
 export class Tabs extends React.PureComponent<IProps, IState> {
   selectHandler = (name) => () => {

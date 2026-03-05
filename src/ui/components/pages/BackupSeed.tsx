@@ -1,4 +1,4 @@
-import * as styles from './styles/backupSeed.styl';
+import * as styles from './styles/backupSeed.module.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { setUiState, setUiStateAndSetTab } from '../../actions';

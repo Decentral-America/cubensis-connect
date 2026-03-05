@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { ListItem } from './ListItem';
-import * as styles from './list.styl';
+import * as styles from './list.module.css';
 
 export class List extends React.PureComponent<IProps> {
   render(): React.ReactNode {

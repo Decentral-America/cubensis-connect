@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
-import * as styles from './styles/accountInfo.styl';
+import * as styles from './styles/accountInfo.module.css';
 import { Avatar, Balance, Button, CopyText, Error, Input, Modal } from '../ui';
 import background from '../../services/Background';
 import { getAsset } from '../../actions';

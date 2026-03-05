@@ -1,4 +1,4 @@
-import * as styles from './styles/forgotAccount.styl';
+import * as styles from './styles/forgotAccount.module.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';

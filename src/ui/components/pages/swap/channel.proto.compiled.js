@@ -1,4 +1,4 @@
-/*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
+ 
 import * as $protobuf from "protobufjs/minimal";
 
 // Common aliases
@@ -118,9 +118,9 @@ export const proto = $root.proto = (() => {
         Request.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Request();
+            const end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Request();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                const tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.exchange = $root.proto.Request.Exchange.decode(reader, reader.uint32());
@@ -160,11 +160,11 @@ export const proto = $root.proto = (() => {
         Request.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            let properties = {};
+            const properties = {};
             if (message.exchange != null && message.hasOwnProperty("exchange")) {
                 properties.payload = 1;
                 {
-                    let error = $root.proto.Request.Exchange.verify(message.exchange);
+                    const error = $root.proto.Request.Exchange.verify(message.exchange);
                     if (error)
                         return "exchange." + error;
                 }
@@ -183,7 +183,7 @@ export const proto = $root.proto = (() => {
         Request.fromObject = function fromObject(object) {
             if (object instanceof $root.proto.Request)
                 return object;
-            let message = new $root.proto.Request();
+            const message = new $root.proto.Request();
             if (object.exchange != null) {
                 if (typeof object.exchange !== "object")
                     throw TypeError(".proto.Request.exchange: object expected");
@@ -204,7 +204,7 @@ export const proto = $root.proto = (() => {
         Request.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            const object = {};
             if (message.exchange != null && message.hasOwnProperty("exchange")) {
                 object.exchange = $root.proto.Request.Exchange.toObject(message.exchange, options);
                 if (options.oneofs)
@@ -345,9 +345,9 @@ export const proto = $root.proto = (() => {
             Exchange.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Request.Exchange();
+                const end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Request.Exchange();
                 while (reader.pos < end) {
-                    let tag = reader.uint32();
+                    const tag = reader.uint32();
                     switch (tag >>> 3) {
                     case 1:
                         message.id = reader.string();
@@ -422,7 +422,7 @@ export const proto = $root.proto = (() => {
             Exchange.fromObject = function fromObject(object) {
                 if (object instanceof $root.proto.Request.Exchange)
                     return object;
-                let message = new $root.proto.Request.Exchange();
+                const message = new $root.proto.Request.Exchange();
                 if (object.id != null)
                     message.id = String(object.id);
                 if (object.source != null)
@@ -453,13 +453,13 @@ export const proto = $root.proto = (() => {
             Exchange.toObject = function toObject(message, options) {
                 if (!options)
                     options = {};
-                let object = {};
+                const object = {};
                 if (options.defaults) {
                     object.id = "";
                     object.source = "";
                     object.target = "";
                     if ($util.Long) {
-                        let long = new $util.Long(0, 0, false);
+                        const long = new $util.Long(0, 0, false);
                         object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                     } else
                         object.amount = options.longs === String ? "0" : 0;
@@ -608,9 +608,9 @@ export const proto = $root.proto = (() => {
         Response.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response();
+            const end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response();
             while (reader.pos < end) {
-                let tag = reader.uint32();
+                const tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
                     message.id = reader.string();
@@ -653,14 +653,14 @@ export const proto = $root.proto = (() => {
         Response.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            let properties = {};
+            const properties = {};
             if (message.id != null && message.hasOwnProperty("id"))
                 if (!$util.isString(message.id))
                     return "id: string expected";
             if (message.exchange != null && message.hasOwnProperty("exchange")) {
                 properties.payload = 1;
                 {
-                    let error = $root.proto.Response.Exchange.verify(message.exchange);
+                    const error = $root.proto.Response.Exchange.verify(message.exchange);
                     if (error)
                         return "exchange." + error;
                 }
@@ -679,7 +679,7 @@ export const proto = $root.proto = (() => {
         Response.fromObject = function fromObject(object) {
             if (object instanceof $root.proto.Response)
                 return object;
-            let message = new $root.proto.Response();
+            const message = new $root.proto.Response();
             if (object.id != null)
                 message.id = String(object.id);
             if (object.exchange != null) {
@@ -702,7 +702,7 @@ export const proto = $root.proto = (() => {
         Response.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
-            let object = {};
+            const object = {};
             if (options.defaults)
                 object.id = "";
             if (message.id != null && message.hasOwnProperty("id"))
@@ -827,9 +827,9 @@ export const proto = $root.proto = (() => {
             Exchange.decode = function decode(reader, length) {
                 if (!(reader instanceof $Reader))
                     reader = $Reader.create(reader);
-                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response.Exchange();
+                const end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response.Exchange();
                 while (reader.pos < end) {
-                    let tag = reader.uint32();
+                    const tag = reader.uint32();
                     switch (tag >>> 3) {
                     case 1:
                         message.result = $root.proto.Response.Exchange.Result.decode(reader, reader.uint32());
@@ -875,7 +875,7 @@ export const proto = $root.proto = (() => {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 if (message.result != null && message.hasOwnProperty("result")) {
-                    let error = $root.proto.Response.Exchange.Result.verify(message.result);
+                    const error = $root.proto.Response.Exchange.Result.verify(message.result);
                     if (error)
                         return "result." + error;
                 }
@@ -900,7 +900,7 @@ export const proto = $root.proto = (() => {
             Exchange.fromObject = function fromObject(object) {
                 if (object instanceof $root.proto.Response.Exchange)
                     return object;
-                let message = new $root.proto.Response.Exchange();
+                const message = new $root.proto.Response.Exchange();
                 if (object.result != null) {
                     if (typeof object.result !== "object")
                         throw TypeError(".proto.Response.Exchange.result: object expected");
@@ -928,7 +928,7 @@ export const proto = $root.proto = (() => {
             Exchange.toObject = function toObject(message, options) {
                 if (!options)
                     options = {};
-                let object = {};
+                const object = {};
                 if (options.arrays || options.defaults)
                     object.errors = [];
                 if (options.defaults)
@@ -1097,9 +1097,9 @@ export const proto = $root.proto = (() => {
                 Pool.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response.Exchange.Pool();
+                    const end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response.Exchange.Pool();
                     while (reader.pos < end) {
-                        let tag = reader.uint32();
+                        const tag = reader.uint32();
                         switch (tag >>> 3) {
                         case 1:
                             message.vendor = reader.string();
@@ -1186,7 +1186,7 @@ export const proto = $root.proto = (() => {
                 Pool.fromObject = function fromObject(object) {
                     if (object instanceof $root.proto.Response.Exchange.Pool)
                         return object;
-                    let message = new $root.proto.Response.Exchange.Pool();
+                    const message = new $root.proto.Response.Exchange.Pool();
                     if (object.vendor != null)
                         message.vendor = String(object.vendor);
                     if (object.type != null)
@@ -1221,7 +1221,7 @@ export const proto = $root.proto = (() => {
                 Pool.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
-                    let object = {};
+                    const object = {};
                     if (options.defaults) {
                         object.vendor = "";
                         object.type = "";
@@ -1229,7 +1229,7 @@ export const proto = $root.proto = (() => {
                         object.source = "";
                         object.target = "";
                         if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
+                            const long = new $util.Long(0, 0, false);
                             object.estimatedAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.estimatedAmount = options.longs === String ? "0" : 0;
@@ -1389,9 +1389,9 @@ export const proto = $root.proto = (() => {
                 Result.decode = function decode(reader, length) {
                     if (!(reader instanceof $Reader))
                         reader = $Reader.create(reader);
-                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response.Exchange.Result();
+                    const end = length === undefined ? reader.len : reader.pos + length, message = new $root.proto.Response.Exchange.Result();
                     while (reader.pos < end) {
-                        let tag = reader.uint32();
+                        const tag = reader.uint32();
                         switch (tag >>> 3) {
                         case 1:
                             message.amount = reader.int64();
@@ -1455,7 +1455,7 @@ export const proto = $root.proto = (() => {
                         if (!Array.isArray(message.route))
                             return "route: array expected";
                         for (let i = 0; i < message.route.length; ++i) {
-                            let error = $root.proto.Response.Exchange.Pool.verify(message.route[i]);
+                            const error = $root.proto.Response.Exchange.Pool.verify(message.route[i]);
                             if (error)
                                 return "route." + error;
                         }
@@ -1474,7 +1474,7 @@ export const proto = $root.proto = (() => {
                 Result.fromObject = function fromObject(object) {
                     if (object instanceof $root.proto.Response.Exchange.Result)
                         return object;
-                    let message = new $root.proto.Response.Exchange.Result();
+                    const message = new $root.proto.Response.Exchange.Result();
                     if (object.amount != null)
                         if ($util.Long)
                             (message.amount = $util.Long.fromValue(object.amount)).unsigned = false;
@@ -1520,17 +1520,17 @@ export const proto = $root.proto = (() => {
                 Result.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
-                    let object = {};
+                    const object = {};
                     if (options.arrays || options.defaults)
                         object.route = [];
                     if (options.defaults) {
                         if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
+                            const long = new $util.Long(0, 0, false);
                             object.amount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.amount = options.longs === String ? "0" : 0;
                         if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
+                            const long = new $util.Long(0, 0, false);
                             object.worstAmount = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.worstAmount = options.longs === String ? "0" : 0;

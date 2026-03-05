@@ -1,4 +1,4 @@
-import * as styles from './final.styl';
+import * as styles from './final.module.css';
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { Button, BUTTON_TYPE } from '../../ui';

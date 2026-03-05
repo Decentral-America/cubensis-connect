@@ -1,4 +1,4 @@
-import * as styles from './styles/conditions.styl';
+import * as styles from './styles/conditions.module.css';
 import * as React from 'react';
 import { setTab } from '../../actions';
 import { Trans } from 'react-i18next';

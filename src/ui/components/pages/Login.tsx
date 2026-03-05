@@ -1,4 +1,4 @@
-import * as styles from './styles/login.styl';
+import * as styles from './styles/login.module.css';
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { connect } from 'react-redux';

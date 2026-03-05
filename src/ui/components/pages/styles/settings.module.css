@@ -1,0 +1,145 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100% - 48px);
+}
+.title1 {
+  padding: 60px 60px 24px;
+}
+.settingsMenu {
+  flex-grow: 1;
+  padding: 0 60px;
+}
+.settingsMenuItem {
+  border-bottom: 1px solid #e9e9eb;
+  line-height: 44px;
+  height: 44px;
+  display: block;
+  background-position: center right;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+}
+.settingsMenuItem button.settingsBtn {
+  opacity: 0.6;
+  width: 100%;
+  height: 44px;
+}
+.settingsMenuItem:hover button.settingsBtn {
+  opacity: 1;
+}
+.settingsMenuItem.general {
+  background-image: url('../../../assets/img/general-14-basic200.svg');
+}
+.settingsMenuItem.network {
+  background-image: url('../../../assets/img/network-14-basic-200.svg');
+}
+.settingsMenuItem.pairing {
+  background-image: url('../../../assets/img/pairing-14-basic-200.svg');
+}
+.settingsMenuItem.export {
+  background-image: url('../../../assets/img/export-14-basic200.svg');
+}
+.settingsMenuItem.language {
+  background-image: url('../../../assets/img/language-14-basic-200.svg');
+}
+.settingsMenuItem.password {
+  background-image: url('../../../assets/img/password-14-basic-200.svg');
+}
+.settingsMenuItem.permissions {
+  background-image: url('../../../assets/img/permission-14-basic-200.svg');
+}
+.quickSettingsMenu {
+  padding: 0 60px;
+}
+.networkTab {
+  margin: 64px 60px 0 60px;
+}
+.networkTab .copyIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.settingsFooter {
+  display: flex;
+  padding: 0 60px;
+}
+.showSuspiciousAssets,
+.clickProtection {
+  display: flex;
+  line-height: 1.5em;
+  padding-top: 10px;
+  height: 64px;
+}
+.settingsFooter {
+  background: #0e0e1d;
+  justify-content: center;
+}
+.buttonsWrapper {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  height: 86px;
+}
+.buttonsWrapper > div {
+  display: flex;
+  flex-basis: 50%;
+  justify-content: space-around;
+  align-items: center;
+}
+.buttonsWrapper .icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin-bottom: 6px;
+}
+.deleteAccounts,
+.logout {
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: transparent;
+  border: 0 none;
+  font-size: 11px;
+  padding: 10px;
+}
+.deleteAccounts .icon {
+  background: url('../../../assets/img/delete-18-error-400.svg') center no-repeat;
+}
+.logout .icon {
+  background: url('../../../assets/img/logout-18-submit-400.svg') center no-repeat;
+}
+.helpTooltip {
+  max-width: calc(357px - 120px);
+}
+.powerBtnState {
+  flex-grow: 1;
+}
+.tooltip {
+  display: none;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  padding: 10px;
+  position: absolute;
+  bottom: 20px;
+  right: 0;
+  width: 236px;
+  font-size: 14px;
+}
+.tooltip::after {
+  display: block;
+  content: '';
+  position: absolute;
+  right: 5px;
+  bottom: -5px;
+  z-index: -1;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0, 0, 0, 0.8);
+}

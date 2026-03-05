@@ -1,0 +1,282 @@
+.transaction {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  background: #0e0e1d;
+}
+.transaction-card,
+.transferTransactionCard {
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 #007269;
+  padding: 10px;
+  background: rgba(10, 141, 110, 0.169);
+  position: relative;
+}
+.cardClose {
+  background: url('../../../assets/img/close-18-basic-500.svg') center no-repeat;
+  width: 18px;
+  height: 18px;
+}
+.cardHeader {
+  display: flex;
+  align-items: center;
+}
+.cardContent .txRow {
+  padding-bottom: 0;
+}
+.cardContent .txRow:last-child {
+  padding-bottom: 0;
+}
+.cardContent .txRow + .txRow {
+  border-top: none;
+}
+.originAddress {
+  font-size: 12px;
+  display: block;
+  word-break: break-all;
+  text-decoration: none;
+}
+.originNetwork {
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.originNetworkIcon {
+  margin-right: 8px;
+}
+.txBalanceWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.txValue {
+  width: 100%;
+}
+.txRow {
+  width: 100%;
+  display: flex;
+  padding: 10px 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  word-break: break-all;
+  text-align: left;
+  font-size: 12px;
+  color: #fff;
+}
+.txRow:last-child {
+  padding-bottom: 20px;
+}
+.txRow.bordered {
+  border-top: 1px dashed #dae1e9;
+  border-bottom: 1px dashed #dae1e9;
+}
+.txRow.borderedTop {
+  border-top: 1px dashed #dae1e9;
+  border-bottom: 0 none;
+}
+.txRow.borderedBottom {
+  border-bottom: 1px dashed #dae1e9;
+  border-top: 0 none;
+}
+.txRow + .txRow {
+  border-top: 1px dashed #dae1e9;
+}
+.txRowDescription {
+  padding-bottom: 0;
+}
+.txRowDescription + .txRow {
+  border-top: 0 none;
+}
+.toggleList {
+  line-height: 1em;
+  cursor: pointer;
+}
+.toggleList .buttonTextCenter {
+  display: flex;
+  align-items: center;
+}
+.toggleList .arrowDown,
+.toggleList .arrowUp {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
+}
+.toggleList .arrowDown {
+  background: url('../../../assets/img/arrow-down-14-basic-200.svg') center no-repeat;
+}
+.toggleList .arrowUp {
+  background: url('../../../assets/img/arrow-up-14-basic-200.svg') center no-repeat;
+}
+.expandableList .txRow {
+  background: #0e0e1d;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  width: 100%;
+  display: block;
+  padding: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  word-break: break-all;
+  text-align: left;
+  font-size: 12px;
+  clear: both;
+}
+.expandableList .txRow + .txRow {
+  border-top: 1px dashed #dae1e9;
+  padding-top: 10px;
+}
+.txBalance {
+  width: 100%;
+  margin: 0 auto 36px auto;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.txBalance.block {
+  display: block;
+}
+.txBalance span:first-child {
+  font-weight: 600;
+}
+.txHeader {
+  width: 100%;
+  padding: 0 14px;
+  cursor: default;
+  position: relative;
+  z-index: 23;
+}
+.txButtonsWrapper {
+  width: 100%;
+  padding: 14px 14px 0 14px;
+  background: #fff;
+  border-top: 1px solid #004649;
+  text-align: center;
+  flex-wrap: wrap;
+}
+.txButtonsWrapper button {
+  margin-bottom: 14px;
+  max-width: 100%;
+}
+.groupTx {
+  margin-bottom: 20px;
+  padding: 0;
+}
+.groupTx .groupBottom {
+  left: 0;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.groupTx .groupBottom::after,
+.groupTx .groupBottom::before {
+  position: absolute;
+  content: '';
+  width: calc(100% - 20px);
+  height: 10px;
+  box-shadow: 0 2px 4px 0 #007269;
+  z-index: 2;
+  display: block;
+  border-radius: 0 0 4px 4px;
+  background: rgba(10, 141, 110, 0.169);
+  left: 10px;
+  bottom: -6px;
+}
+.groupTx .groupBottom::after {
+  width: calc(100% - 40px);
+  left: 20px;
+  bottom: -12px;
+  z-index: 1;
+}
+.groupEffect {
+  padding: 10px;
+  z-index: 3;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px 0 #007269;
+  background: rgba(10, 141, 110, 0.169);
+}
+.txBigIcon {
+  width: 80px;
+  height: 80px;
+  margin: 14px auto 0 auto;
+}
+.txSign .infoBlock {
+  margin: 0 0 24px 0;
+}
+.txSign .iconMargin {
+  margin: 64px auto 4px auto;
+}
+.txSign .appName {
+  max-width: 100%;
+  word-break: break-all;
+}
+.originWarning {
+  flex-basis: 100%;
+  overflow: auto;
+  max-height: 120px;
+}
+.originWarning div:first-child {
+  text-decoration: underline;
+  padding-bottom: 2px;
+}
+.showAllScript {
+  max-height: none;
+}
+.showAllScript div:first-child {
+  max-height: none;
+}
+.txIcon div,
+.transferTxIcon div {
+  width: 48px;
+  height: 48px;
+  max-width: 48px;
+  max-height: 48px;
+  margin: 0 10px 0 0;
+}
+.txIcon img,
+.transferTxIcon img {
+  max-width: 48px;
+  max-height: 48px;
+}
+.txIconBig div,
+.transferTxIconBig div {
+  width: 80px;
+  height: 80px;
+  max-width: 80px;
+  max-height: 80px;
+  margin: 4px auto 14px auto;
+}
+.txIconBig img,
+.transferTxIconBig img {
+  max-width: 80px;
+  max-height: 80px;
+}
+.txScrollBox,
+.transferTxScrollBox {
+  overflow: auto;
+  position: relative;
+  padding-left: 14px;
+  padding-right: 14px;
+  flex-grow: 1;
+  flex-shrink: 999;
+}
+.messageTransactionIcon {
+  background: url('../../../assets/img/t-message-48.svg') center no-repeat;
+  width: 48px;
+  height: 48px;
+  margin: 0 10px 0 0;
+}
+.transferCard_collapsed .origin {
+  display: none;
+}
+.transferTxScrollBox {
+  flex-grow: 0;
+}

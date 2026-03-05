@@ -10,7 +10,7 @@ import {
 } from '../../actions';
 import { PAGES } from '../../pageConfig';
 import { TransactionWallet } from '../wallets/TransactionWallet';
-import * as styles from './styles/messageList.styl';
+import * as styles from './styles/messageList.module.css';
 import { Intro } from './Intro';
 
 const NotificationItem = ({ notification }) => (

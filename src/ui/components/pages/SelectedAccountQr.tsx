@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
-import * as styles from './styles/selectedAccountQr.styl';
+import * as styles from './styles/selectedAccountQr.module.css';
 import { Button, QRCode } from '../ui';
 
 class QRCodeSelectedAccountComponent extends React.PureComponent {

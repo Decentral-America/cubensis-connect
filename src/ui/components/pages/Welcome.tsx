@@ -1,4 +1,4 @@
-import * as styles from './styles/welcome.styl';
+import * as styles from './styles/welcome.module.css';
 import * as React from 'react';
 import { BigLogo } from '../head';
 import { Trans } from 'react-i18next';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Avatar, Button, Copy, Ellipsis, Modal } from '../ui';
 import cn from 'classnames';
-import * as styles from './wallet.styl';
+import * as styles from './wallet.module.css';
 import { Trans } from 'react-i18next';
 import { Tooltip } from '../ui/tooltip';
 
@@ -27,7 +27,7 @@ export const TransactionWallet = ({
 
   const avatarSize = 28;
   className = cn(styles.wallet, className, {
-    [styles.walletClean]: type == 'clean',
+    [styles.walletClean]: type === 'clean',
     [styles.activeWallet]: active,
   });
 

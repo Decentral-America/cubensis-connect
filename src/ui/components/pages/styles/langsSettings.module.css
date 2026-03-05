@@ -1,0 +1,69 @@
+.content {
+  width: 100%;
+  position: relative;
+  padding: 64px 60px 0 60px;
+  overflow: auto;
+  height: calc(100% - 48px);
+}
+.content::after {
+  display: block;
+  content: '';
+  bottom: 0;
+  position: fixed;
+  width: calc(100% - 14px);
+  height: 60px;
+  margin-left: -60px;
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #fff 61%, #fff 100%);
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #fff 61%, #fff 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 61%, #fff 100%);
+}
+.lang {
+  width: 100%;
+  height: 44px;
+  border-bottom: 1px solid #e9e9eb;
+  display: flex;
+  position: relative;
+}
+.lang.selected div {
+  color: #999;
+}
+.langsList {
+  padding-bottom: 60px;
+}
+.flagIcon {
+  height: 44px;
+  width: 18px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.selectButton {
+  display: flex;
+  height: 44px;
+  font-weight: 400;
+  cursor: pointer;
+  align-items: center;
+}
+:global .introLangList {
+  padding-bottom: 60px;
+}
+:global .introLangList:before {
+  display: block;
+  z-index: 1;
+  content: '';
+  bottom: 0;
+  width: calc(100% - 14px);
+  height: 80px;
+  margin-left: -60px;
+  position: fixed;
+  background: #fff;
+}
+:global .introLangList::after {
+  bottom: 80px;
+  height: 40px;
+}
+:global .introLangList button {
+  position: fixed;
+  bottom: 40px;
+  z-index: 2;
+}

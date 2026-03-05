@@ -1,4 +1,4 @@
-import * as styles from './chooseAccounts.styl';
+import * as styles from './chooseAccounts.module.css';
 import cn from 'classnames';
 import * as React from 'react';
 import { Button } from 'ui/components/ui/buttons/Button';

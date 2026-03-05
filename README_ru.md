@@ -32,7 +32,7 @@
 
 > Все методы кроме `on` работают асинхронно и возвращают [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 
-В вашем коде вы можете использовать [TypeScript types](https://github.com/decentralchain/CubensisConnect-types)
+В вашем коде вы можете использовать [TypeScript types](https://github.com/Decentral-America/cubensis-connect-types)
 
 При загрузке страницы в объекте CubensisConnect нет методов апи до окончания инициализации плагина.
 Для облегчения работы с CubensisConnect при инициализации в `window.CubensisConnect` есть `initialPromise`,

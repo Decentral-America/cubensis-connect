@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as styles from '../../pages/styles/transactions.styl';
+import * as styles from '../../pages/styles/transactions.module.css';
 import { Trans } from 'react-i18next';
 import { DateFormat } from '../../ui';
 import { TxFee } from './TxFee';

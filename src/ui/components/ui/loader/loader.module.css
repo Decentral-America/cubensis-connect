@@ -1,0 +1,7 @@
+.loader {
+  width: 146px;
+  min-height: 8px;
+  display: inline-block;
+  border-radius: 4px;
+  overflow: hidden;
+}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
-import * as styles from './matcher.styl';
+import * as styles from './matcher.module.css';
 
 interface IProps {
   message: any;

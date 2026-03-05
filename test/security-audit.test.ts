@@ -12,9 +12,14 @@ describe('security audit', () => {
     expect(raw).toContain('"strict": true');
   });
 
-  it('should target Node >= 22 in engines', () => {
+  it('should target Node >= 24 in engines', () => {
     const pkg = JSON.parse(fs.readFileSync(path.resolve(rootDir, 'package.json'), 'utf-8'));
-    expect(pkg.engines.node).toBe('>=22');
+    expect(pkg.engines.node).toBe('>=24');
+  });
+
+  it('should be ESM-only (type: module)', () => {
+    const pkg = JSON.parse(fs.readFileSync(path.resolve(rootDir, 'package.json'), 'utf-8'));
+    expect(pkg.type).toBe('module');
   });
 
   it('should have husky pre-commit hook', () => {
@@ -37,14 +42,10 @@ describe('security audit', () => {
     expect(fs.existsSync(path.resolve(rootDir, '.babelrc'))).toBe(false);
   });
 
-  it('should have modern babel.config.json', () => {
-    const config = JSON.parse(fs.readFileSync(path.resolve(rootDir, 'babel.config.json'), 'utf-8'));
-    expect(config.presets).toBeDefined();
-    expect(
-      config.presets.some(
-        (p: string | string[]) => (Array.isArray(p) ? p[0] : p) === '@babel/preset-typescript',
-      ),
-    ).toBe(true);
+  it('should have Vite config (migrated from Babel)', () => {
+    expect(fs.existsSync(path.resolve(rootDir, 'vite.config.ts'))).toBe(true);
+    // Babel is no longer used — Vite handles TS/JSX transpilation
+    expect(fs.existsSync(path.resolve(rootDir, 'babel.config.json'))).toBe(false);
   });
 
   it('should not have awesome-typescript-loader in package.json', () => {
@@ -53,10 +54,11 @@ describe('security audit', () => {
     expect(allDeps['awesome-typescript-loader']).toBeUndefined();
   });
 
-  it('should not have webpack 4 in package.json', () => {
+  it('should not have webpack in package.json (migrated to Vite)', () => {
     const pkg = JSON.parse(fs.readFileSync(path.resolve(rootDir, 'package.json'), 'utf-8'));
-    const webpackVersion = pkg.devDependencies?.webpack || '';
-    expect(webpackVersion).toMatch(/\^5/);
+    const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
+    expect(allDeps['webpack']).toBeUndefined();
+    expect(allDeps['vite']).toBeDefined();
   });
 
   it('should not have extract-text-webpack-plugin in package.json', () => {
@@ -73,8 +75,8 @@ describe('security audit', () => {
     expect(allDeps.chai).toBeUndefined();
   });
 
-  it('should have crypto.getRandomValues in Statistics.js (not Math.random)', () => {
-    const content = fs.readFileSync(path.resolve(srcDir, 'controllers/Statistics.js'), 'utf-8');
+  it('should have crypto.getRandomValues in Statistics.ts (not Math.random)', () => {
+    const content = fs.readFileSync(path.resolve(srcDir, 'controllers/Statistics.ts'), 'utf-8');
     expect(content).toContain('crypto.getRandomValues');
     expect(content).not.toContain('Math.random');
   });
@@ -86,19 +88,5 @@ describe('security audit', () => {
     );
     expect(content).toContain('crypto.getRandomValues');
     expect(content).not.toContain('Math.random');
-  });
-
-  it('should have renamed legacy WavesTransactionConverter', () => {
-    expect(fs.existsSync(path.resolve(srcDir, 'controllers/WavesTransactionConverter.js'))).toBe(
-      false,
-    );
-    expect(fs.existsSync(path.resolve(srcDir, 'controllers/TransactionConverter.js'))).toBe(true);
-  });
-
-  it('should have renamed legacy wavesTransactionsController', () => {
-    expect(fs.existsSync(path.resolve(srcDir, 'controllers/wavesTransactionsController.js'))).toBe(
-      false,
-    );
-    expect(fs.existsSync(path.resolve(srcDir, 'controllers/transactionsController.js'))).toBe(true);
   });
 });

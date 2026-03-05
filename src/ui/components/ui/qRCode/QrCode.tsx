@@ -18,9 +18,23 @@ const DEFAULTS = {
   },
 };
 
+/**
+ * SECURITY: QR code SVG rendering.
+ * The `src` value comes exclusively from the `qrcode` library's toString() method,
+ * which generates deterministic SVG from controlled input. We sanitize the SVG string
+ * to strip any potentially dangerous elements (script, event handlers) as a defense-in-depth
+ * measure against supply chain attacks on the qrcode dependency.
+ */
+function sanitizeSvg(svg: string): string {
+  // Strip script tags and event handler attributes as defense-in-depth
+  return svg
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/\bon\w+\s*=\s*["'][^"']*["']/gi, '');
+}
+
 const QrCodeImage = ({ options, src, width, height, className, ...props }) => {
   const isSvg = options.type === 'svg';
-  const svgSource = !isSvg || !src ? null : { __html: src };
+  const svgSource = !isSvg || !src ? null : { __html: sanitizeSvg(src) };
 
   return (
     <div className={className} {...props}>

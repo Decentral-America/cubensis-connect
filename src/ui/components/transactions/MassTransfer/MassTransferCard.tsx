@@ -1,4 +1,4 @@
-import * as styles from './massTransfer.styl';
+import * as styles from './massTransfer.module.css';
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { TxIcon } from '../BaseTransaction';
@@ -16,7 +16,7 @@ const Transfers = ({ transfers, totalAmount, count = MIN_COUNT }) => {
 
   return transfers.slice(0, count).map(({ recipient, amount }) => {
     const money = getMoney(getTransferAmount(amount, totalAmount.asset.id), assets);
-    const isAddress = recipient.length == ADDRESS_LENGTH;
+    const isAddress = recipient.length === ADDRESS_LENGTH;
 
     return (
       <div key={recipient} className={styles.txRow}>

@@ -110,14 +110,15 @@ describe('Signature', function () {
   describe('Permission request from origin', function () {
     const authFormLocator = By.xpath("//div[contains(@class, '-originAuth-transaction')]");
     const REJECT_FOREVER = 'Reject forever';
-    let lastOrigin;
+    let lastOrigin: string | undefined;
 
     beforeEach(async function () {
       await this.driver.switchTo().window(tabOrigin);
 
-      const origin = this.currentTest.title != REJECT_FOREVER ? CUSTOMLIST[0] : CUSTOMLIST[1];
+      const origin = this.currentTest.title !== REJECT_FOREVER ? CUSTOMLIST[0] : CUSTOMLIST[1];
       if (origin !== lastOrigin) {
         await this.driver.get(`http://${origin}`);
+        lastOrigin = origin;
       }
       await this.driver.executeScript(() => {
         // @ts-ignore

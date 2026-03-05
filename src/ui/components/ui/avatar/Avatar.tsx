@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './avatar.styl';
+import * as styles from './avatar.module.css';
 import * as avatar from 'identity-img';
 import cn from 'classnames';
 

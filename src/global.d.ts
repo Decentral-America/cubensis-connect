@@ -1,14 +1,9 @@
-// from webpack.DefinePlugin
+// from build tool DefinePlugin / Vite define
 declare const __SENTRY_DSN__: string | undefined;
 declare const __SENTRY_ENVIRONMENT__: string | undefined;
 declare const __SENTRY_RELEASE__: string | undefined;
 
 declare module '*.module.css' {
-  const styles: Record<string, string>;
-  export = styles;
-}
-
-declare module '*.styl' {
   const styles: Record<string, string>;
   export = styles;
 }

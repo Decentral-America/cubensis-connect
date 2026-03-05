@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Avatar } from './Avatar';
-import * as styles from './avatar.styl';
+import * as styles from './avatar.module.css';
 import cn from 'classnames';
 
 export function AvatarList({ className = '', items = [], selected, onSelect, ...props }) {

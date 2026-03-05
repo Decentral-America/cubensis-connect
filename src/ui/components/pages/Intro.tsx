@@ -1,4 +1,4 @@
-import * as styles from './styles/intro.styl';
+import * as styles from './styles/intro.module.css';
 import * as React from 'react';
 import { BigLogo } from '../head';
 

@@ -1,4 +1,4 @@
-import * as styles from './unknown.styl';
+import * as styles from './unknown.module.css';
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 

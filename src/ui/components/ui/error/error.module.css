@@ -1,0 +1,22 @@
+.error {
+  color: #e5494d;
+  display: block;
+  width: 100%;
+  font-size: 12px;
+  line-height: 12px;
+  margin-top: 3px;
+}
+.error.modalError {
+  background: #e5494d;
+  color: #fff;
+  display: block;
+  height: 32px;
+  padding: 0 24px;
+  line-height: 32px;
+  position: absolute;
+  bottom: 14px;
+  border-radius: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+}

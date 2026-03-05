@@ -1,6 +1,6 @@
-const fs = require('fs');
-const { execSync } = require('child_process');
-const path = require('path');
+import fs from 'node:fs';
+import { execSync } from 'node:child_process';
+import path from 'node:path';
 const DIST = './dist/edge';
 const EXT_DIST = './dist';
 const DIST_PATH = path.resolve(DIST);

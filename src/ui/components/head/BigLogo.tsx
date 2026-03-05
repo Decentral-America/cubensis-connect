@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './head.styl';
+import * as styles from './head.module.css';
 import { Trans } from 'react-i18next';
 import cn from 'classnames';
 

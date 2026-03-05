@@ -1,4 +1,4 @@
-import * as styles from '../../styles/assets.styl';
+import * as styles from '../../styles/assets.module.css';
 import { icontains } from '../helpers';
 import { Trans } from 'react-i18next';
 import { NftItem } from '../nftItem';
@@ -8,13 +8,24 @@ import { SearchInput } from '../../Assets';
 import { useAppSelector } from '../../../../store';
 import { CARD_FULL_HEIGHT, FULL_GROUP_HEIGHT, useNftFilter } from './helpers';
 import { Tooltip } from '../../../ui/tooltip';
-import { VariableSizeList } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import { List } from 'react-window';
+import { AutoSizer } from 'react-virtualized-auto-sizer';
 import cn from 'classnames';
 import { type AssetDetail } from '../../../../services/Background';
 
-const Row = ({ data, index, style }) => {
-  const { nftWithGroups, onInfoClick, onSendClick } = data;
+interface NftRowProps {
+  nftWithGroups: (AssetDetail | { groupName: string })[];
+  onInfoClick: (assetId: string) => void;
+  onSendClick: (assetId: string) => void;
+}
+
+const Row = ({
+  index,
+  style,
+  nftWithGroups,
+  onInfoClick,
+  onSendClick,
+}: { index: number; style: React.CSSProperties } & NftRowProps) => {
   const nftOrGroup = nftWithGroups[index];
 
   return (
@@ -47,14 +58,6 @@ export function TabNfts({ onInfoClick, onSendClick }) {
     clearFilters,
   } = useNftFilter();
 
-  const listRef = React.useRef<VariableSizeList>();
-
-  React.useEffect(() => {
-    if (listRef.current) {
-      listRef.current.resetAfterIndex(0);
-    }
-  }, [myNfts]);
-
   const nftWithGroups = myNfts
     ? myNfts
         .filter(
@@ -84,11 +87,9 @@ export function TabNfts({ onInfoClick, onSendClick }) {
         <SearchInput
           value={term ?? ''}
           onInput={(e) => {
-            listRef.current && listRef.current.resetAfterIndex(0);
             setTerm(e.target.value);
           }}
           onClear={() => {
-            listRef.current && listRef.current.resetAfterIndex(0);
             setTerm('');
           }}
         />
@@ -97,7 +98,6 @@ export function TabNfts({ onInfoClick, onSendClick }) {
             <div
               className={styles.filterBtn}
               onClick={() => {
-                listRef.current && listRef.current.resetAfterIndex(0);
                 setOnlyMy(!onlyMy);
               }}
               {...props}
@@ -142,29 +142,19 @@ export function TabNfts({ onInfoClick, onSendClick }) {
         </div>
       ) : (
         <div className={styles.nftList}>
-          <AutoSizer>
-            {({ height, width }) => {
-              return (
-                <VariableSizeList
-                  ref={listRef}
-                  height={height}
-                  width={width}
-                  itemCount={nftWithGroups.length}
-                  itemSize={(index) =>
-                    'groupName' in nftWithGroups[index] ? FULL_GROUP_HEIGHT : CARD_FULL_HEIGHT
-                  }
-                  itemData={{ nftWithGroups, onInfoClick, onSendClick }}
-                  itemKey={(index, { nftWithGroups }) =>
-                    'groupName' in nftWithGroups[index]
-                      ? `g:${nftWithGroups[index].groupName}`
-                      : `a:${nftWithGroups[index].id}`
-                  }
-                >
-                  {Row}
-                </VariableSizeList>
-              );
-            }}
-          </AutoSizer>
+          <AutoSizer
+            renderProp={({ height, width }) => (
+              <List<NftRowProps>
+                style={{ height, width }}
+                rowCount={nftWithGroups.length}
+                rowHeight={(index) =>
+                  'groupName' in nftWithGroups[index] ? FULL_GROUP_HEIGHT : CARD_FULL_HEIGHT
+                }
+                rowProps={{ nftWithGroups, onInfoClick, onSendClick }}
+                rowComponent={Row}
+              />
+            )}
+          />
         </div>
       )}
     </TabPanel>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { setCustomCode, setCustomMatcher, setCustomNode } from '../../actions';
 import { Trans } from 'react-i18next';
 import { Button, BUTTON_TYPE, Copy, Error, Input, Modal } from '../ui';
-import * as styles from './styles/settings.styl';
+import * as styles from './styles/settings.module.css';
 import { getMatcherPublicKey, getNetworkByte } from 'ui/utils/decentralchain';
 
 class NetworksSettingsComponent extends React.PureComponent {
@@ -64,7 +64,9 @@ class NetworksSettingsComponent extends React.PureComponent {
       this.saveMatcher();
       this.saveCode();
       this.onSave();
-    } catch (e) {}
+    } catch (e) {
+      console.error('CubensisConnect: Network settings validation failed', e);
+    }
     this.setState({ validateData: false });
   };
 

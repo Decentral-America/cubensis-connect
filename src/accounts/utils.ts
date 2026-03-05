@@ -1,4 +1,4 @@
-import { Account } from './types';
+import { type Account } from './types';
 
 export function compareAccountsByLastUsed(accA: Account, accB: Account) {
   const a = accA.lastUsed;

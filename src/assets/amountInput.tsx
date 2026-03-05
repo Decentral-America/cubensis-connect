@@ -1,4 +1,4 @@
-import BigNumber from '@decentralchain/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 import { type Money } from '@decentralchain/data-entities';
 import ColorHash from 'color-hash';
 import * as React from 'react';
@@ -49,7 +49,7 @@ export function AssetAmountInput({
   }, [value, onChange]);
 
   React.useEffect(() => {
-    const input = mask.ref.current;
+    const input = mask.ref.current as HTMLInputElement | null;
     const maskInstance = mask.maskRef.current;
 
     if (!input || !maskInstance) {
@@ -70,7 +70,7 @@ export function AssetAmountInput({
   }, []);
 
   React.useEffect(() => {
-    const input = mask.ref.current;
+    const input = mask.ref.current as HTMLInputElement | null;
     const maskInstance = mask.maskRef.current;
 
     if (input && maskInstance && maskInstance.unmaskedValue !== value) {

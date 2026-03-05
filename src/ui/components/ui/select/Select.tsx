@@ -1,12 +1,17 @@
 import * as React from 'react';
 import cn from 'classnames';
-import * as styles from './index.styl';
+import * as styles from './index.module.css';
 
 export class Select<T> extends React.PureComponent<IProps<T>, IState<T>> {
   private element: HTMLDivElement;
 
-  getRef = (element) => {
-    this.props.forwardRef && (this.props.forwardRef.current = element);
+  getRef = (element: HTMLDivElement) => {
+    const { forwardRef } = this.props;
+    if (typeof forwardRef === 'function') {
+      forwardRef(element);
+    } else if (forwardRef) {
+      (forwardRef as React.MutableRefObject<HTMLDivElement>).current = element;
+    }
     this.element = element;
   };
 
@@ -147,7 +152,7 @@ type ListPlacement = 'top' | 'bottom';
 
 interface IProps<T> {
   className?: string;
-  forwardRef?: React.MutableRefObject<HTMLDivElement>;
+  forwardRef?: React.Ref<HTMLDivElement>;
   selectList: Array<TSelectItem<T>>;
   description?: TText;
   listPlacement?: ListPlacement;

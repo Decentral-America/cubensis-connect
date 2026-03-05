@@ -17,6 +17,7 @@ function useFilter<T, F extends keyof T>(name: string, fields: F[]) {
   const manageFilters = fields.reduce<{
     [K in keyof T]?: [Pick<T, K>[K], Dispatch<SetStateAction<Pick<T, K>[K]>>];
   }>((manage, field) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks -- fields is a constant array per call-site; hook count is stable across renders
     manage[field] = React.useState<Pick<T, F>[F]>(stateFilters[field]);
     return manage;
   }, {});
@@ -30,7 +31,7 @@ function useFilter<T, F extends keyof T>(name: string, fields: F[]) {
     if (
       fields.reduce(
         (isEqualEachFilter, field) =>
-          isEqualEachFilter && valueFilters[field] == stateFilters[field],
+          isEqualEachFilter && valueFilters[field] === stateFilters[field],
         true,
       )
     ) {

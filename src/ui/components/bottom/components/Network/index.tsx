@@ -5,7 +5,7 @@ import { Trans } from 'react-i18next';
 import { loading, setCustomCode, setCustomMatcher, setCustomNode, setNetwork } from 'ui/actions';
 import { Modal } from 'ui/components/ui';
 import { NetworkSettings } from '../NetworkSettings';
-import * as styles from './network.styl';
+import * as styles from './network.module.css';
 
 const key = (key) => `bottom.${key}`;
 

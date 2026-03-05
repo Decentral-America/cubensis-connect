@@ -1,4 +1,4 @@
-import * as styles from './issue.styl';
+import * as styles from './issue.module.css';
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { TxIcon } from '../BaseTransaction';
@@ -25,7 +25,7 @@ export class IssueCard extends React.PureComponent<IProps> {
     const tx = { type: data.type, ...data.data };
     const amount = getMoney(getAmount(tx), assets);
     const decimals = tx.precision || tx.decimals || 0;
-    const isNFT = !tx.reissuable && !decimals && tx.quantity == 1;
+    const isNFT = !tx.reissuable && !decimals && tx.quantity === 1;
 
     return (
       <div className={className}>

@@ -1,0 +1,668 @@
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Thin'),
+    local('Roboto-Thin'),
+    url('../assets/fonts/Robotothin.woff2') format('woff2'),
+    url('../assets/fonts/Robotothin.woff') format('woff'),
+    url('../assets/fonts/Robotothin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Thin Italic'),
+    local('Roboto-ThinItalic'),
+    url('../assets/fonts/Robotothinitalic.woff2') format('woff2'),
+    url('../assets/fonts/Robotothinitalic.woff') format('woff'),
+    url('../assets/fonts/Robotothinitalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Light'),
+    local('Roboto-Light'),
+    url('../assets/fonts/Robotolight.woff2') format('woff2'),
+    url('../assets/fonts/Robotolight.woff') format('woff'),
+    url('../assets/fonts/Robotolight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto-Light';
+  src:
+    local('Roboto Light'),
+    local('Roboto-Light'),
+    url('../assets/fonts/Robotolight.woff2') format('woff2'),
+    url('../assets/fonts/Robotolight.woff') format('woff'),
+    url('../assets/fonts/Robotolight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Light Italic'),
+    local('Roboto-LightItalic'),
+    url('../assets/fonts/Robotolightitalic.woff2') format('woff2'),
+    url('../assets/fonts/Robotolightitalic.woff') format('woff'),
+    url('../assets/fonts/Robotolightitalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto'),
+    local('Roboto-Regular'),
+    url('../assets/fonts/Roboto.woff2') format('woff2'),
+    url('../assets/fonts/Roboto.woff') format('woff'),
+    url('../assets/fonts/Roboto.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Italic'),
+    local('Roboto-Italic'),
+    url('../assets/fonts/Robotoitalic.woff2') format('woff2'),
+    url('../assets/fonts/Robotoitalic.woff') format('woff'),
+    url('../assets/fonts/Robotoitalic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto-Medium';
+  src:
+    local('Roboto Medium'),
+    local('Roboto-Medium'),
+    url('../assets/fonts/Robotomedium.woff2') format('woff2'),
+    url('../assets/fonts/Robotomedium.woff') format('woff'),
+    url('../assets/fonts/Robotomedium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Medium Italic'),
+    local('Roboto-MediumItalic'),
+    url('../assets/fonts/Robotomediumitalic.woff2') format('woff2'),
+    url('../assets/fonts/Robotomediumitalic.woff') format('woff'),
+    url('../assets/fonts/Robotomediumitalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto-Bold';
+  src:
+    local('Roboto Bold'),
+    local('Roboto-Bold'),
+    url('../assets/fonts/Robotobold.woff2') format('woff2'),
+    url('../assets/fonts/Robotobold.woff') format('woff'),
+    url('../assets/fonts/Robotobold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Bold Italic'),
+    local('Roboto-BoldItalic'),
+    url('../assets/fonts/Robotobolditalic.woff2') format('woff2'),
+    url('../assets/fonts/Robotobolditalic.woff') format('woff'),
+    url('../assets/fonts/Robotobolditalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Black'),
+    local('Roboto-Black'),
+    url('../assets/fonts/Robotoblack.woff2') format('woff2'),
+    url('../assets/fonts/Robotoblack.woff') format('woff'),
+    url('../assets/fonts/Robotoblack.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src:
+    local('Roboto Black Italic'),
+    local('Roboto-BlackItalic'),
+    url('../assets/fonts/Robotoblackitalic.woff2') format('woff2'),
+    url('../assets/fonts/Robotoblackitalic.woff') format('woff'),
+    url('../assets/fonts/Robotoblackitalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+:root {
+  --color-white: #fff;
+  --color-basic100: #edf0f4;
+  --color-basic200: #dae1e9;
+  --color-basic500: #fff;
+  --color-submit200: #009688;
+  --color-submit400: #097b1d;
+}
+:global .black {
+  color: #0e0e1c;
+}
+:global .white {
+  color: #fff;
+}
+:global .basic50 {
+  color: #0e0e1d;
+}
+:global .basic100 {
+  color: #004649;
+}
+:global .basic200 {
+  color: #dae1e9;
+}
+:global .basic500 {
+  color: #fff;
+}
+:global .accent50 {
+  color: #e9e9eb;
+}
+:global .disabled400 {
+  color: #bcbcbc;
+}
+:global .disabled500 {
+  color: #999;
+}
+:global .info400 {
+  color: #8dabc4;
+}
+:global .submit200 {
+  color: #009688;
+}
+:global .submit400 {
+  color: #177488;
+}
+:global .success400 {
+  color: #097b1d;
+}
+:global .error400 {
+  color: #e5494d;
+}
+:global .error500 {
+  color: #ef4829;
+}
+:global html {
+  background: #e9e9eb;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 600px;
+}
+:global * {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Roboto;
+}
+:global *::-webkit-scrollbar {
+  z-index: 4;
+  position: relative;
+  width: 4px;
+  height: 8px;
+  background-color: rgba(3, 35, 43, 0.82);
+}
+:global *::-webkit-scrollbar-thumb {
+  background: #0e0e1c;
+  border-radius: 2px;
+}
+:global a {
+  color: #009688;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+:global a:hover {
+  color: #8dabc4;
+}
+:global body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  line-height: normal;
+  font-family: Roboto;
+  font-weight: 300;
+  color: #fff;
+  font-size: 12px;
+  overflow: hidden;
+  margin: 0 auto;
+  min-width: 357px;
+  min-height: 600px;
+  align-items: center;
+  justify-content: center;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+:global #app-content {
+  position: absolute;
+  width: 357px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #0e0e1c;
+}
+:global #app-content,
+:global .app {
+  height: 100%;
+  min-height: 600px;
+  max-height: 600px;
+  overflow: hidden;
+  min-width: 357px;
+}
+:global .left {
+  text-align: left;
+}
+:global .right {
+  text-align: right;
+}
+:global .center {
+  text-align: center;
+}
+:global .relative {
+  position: relative;
+}
+:global .absolute {
+  position: absolute;
+}
+:global .flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+:global .block {
+  display: block;
+}
+:global .title1 {
+  font-size: 24px;
+  font-weight: normal;
+  color: #fff;
+}
+:global .headline1 {
+  font-size: 18px;
+}
+:global .headline2 {
+  font-size: 18px;
+  font-family: Roboto-Medium, Arial, Tahoma;
+}
+:global .headline2Bold {
+  font-size: 18px;
+  font-family: Roboto-Bold, Arial, Tahoma;
+}
+:global .headline3 {
+  font-size: 16px;
+}
+:global .headline4 {
+  font-size: 16px;
+  font-family: Roboto;
+}
+:global .body1 {
+  font-size: 14px;
+  color: #fff;
+}
+:global .body2 {
+  font-size: 16px;
+  font-family: Roboto-Medium, Arial, Tahoma;
+}
+:global .body3 {
+  font-size: 12px;
+}
+:global .tag1 {
+  font-size: 13px;
+}
+:global .link {
+  text-decoration: underline;
+  font-weight: 400;
+  cursor: pointer;
+  color: #009688;
+}
+:global .link.blue {
+  color: #177488;
+}
+:global .link:hover {
+  text-decoration: none;
+}
+:global .capitalize {
+  text-transform: capitalize;
+}
+:global .fullwidth {
+  width: 100%;
+}
+:global .centered {
+  margin: 0 auto;
+}
+:global .margin-min {
+  margin-bottom: 4px;
+}
+:global .margin-main {
+  margin-bottom: 14px;
+}
+:global .margin-main-big {
+  margin-bottom: 24px;
+}
+:global .margin-main-large {
+  margin-bottom: 44px;
+}
+:global .margin-min-top {
+  margin-top: 4px;
+}
+:global .margin-main-top {
+  margin-top: 14px;
+}
+:global .margin-main-big-top {
+  margin-top: 24px;
+}
+:global .margin-main-large-top {
+  margin-top: 44px;
+}
+:global .margin1 {
+  margin-bottom: 10px;
+}
+:global .margin2 {
+  margin-bottom: 20px;
+}
+:global .margin3 {
+  margin-bottom: 30px;
+}
+:global .margin4 {
+  margin-bottom: 40px;
+}
+:global .marginTop1 {
+  margin-top: 10px;
+}
+:global .marginTop2 {
+  margin-top: 20px;
+}
+:global .marginTop3 {
+  margin-top: 30px;
+}
+:global .marginTop4 {
+  margin-top: 40px;
+}
+:global .height {
+  height: 100%;
+  display: block;
+}
+:global .font300 {
+  font-weight: 300;
+}
+:global .font400 {
+  font-weight: 400;
+}
+:global .font500 {
+  font-weight: 500;
+}
+:global .font600 {
+  font-weight: 600;
+}
+:global .break-all {
+  word-break: break-all;
+}
+:global .underline {
+  text-decoration: underline;
+}
+:global .separator {
+  height: 1px;
+  border-bottom: 1px dashed #dae1e9;
+}
+:global .cant-select {
+  user-select: none;
+}
+:global .input-title {
+  display: inline-block;
+  margin-bottom: 7px;
+}
+:global .tx-title {
+  display: inline-block;
+  margin-bottom: 4px;
+}
+:global .tx-title-black {
+  color: #fff;
+  margin-bottom: 4px;
+}
+:global .border-bottom {
+  border-bottom: 1px solid #e9e9eb;
+}
+:global .border-dashed {
+  border: 1px dashed #dae1e9;
+}
+:global .grey-line {
+  background: #0e0e1d;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #fff;
+}
+:global .origin-ellipsis {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:global checkbox-row {
+  display: flex;
+  align-items: center;
+}
+:global checkbox-row label {
+  flex-grow: 1;
+}
+:global .plate {
+  background: rgba(9, 54, 50, 0.459);
+  padding: 14px;
+  border-radius: 2px;
+  color: #fff;
+}
+:global .plate-with-controls {
+  max-height: 114px;
+  display: flex;
+  flex-direction: column;
+}
+:global .plate-with-controls-short {
+  max-height: 76px;
+}
+:global .plate-with-controls > div:first-child {
+  max-height: 110px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 14px;
+  margin-right: -14px;
+}
+:global .plate-with-controls .buttons-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 27px;
+  margin-bottom: -13px;
+}
+:global .plate-with-controls .buttons-wrapper button {
+  padding: 0;
+  margin: 0 20px 0 10px;
+  color: #fff;
+  font-size: 12px;
+  height: auto;
+  background: none transparent;
+  border: 0 none;
+  border-radius: 0;
+  position: relative;
+  width: auto !important;
+  flex-basis: auto;
+}
+:global .plate-with-controls .buttons-wrapper button:not(:last-child):after {
+  content: '';
+  position: absolute;
+  height: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  display: block;
+  right: -15px;
+  width: 1px;
+}
+:global .plate-with-controls .buttons-wrapper button:hover {
+  border: 0 none;
+}
+:global .plate-with-controls .buttons-wrapper button:last-child {
+  margin-right: 0;
+}
+:global .transactionContent {
+  height: calc(100% - 204px);
+  padding-bottom: 14px;
+}
+:global .info-block {
+  display: flex;
+  align-items: flex-start;
+}
+:global .info-block > div:first-child {
+  flex-grow: 0;
+  margin-right: 14px;
+}
+:global .info-block > div:first-child i {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+:global .info-block > div:last-child {
+  flex-grow: 1;
+}
+:global .grow {
+  flex-grow: 1;
+}
+:global #app-modal {
+  position: absolute;
+  width: 100%;
+  display: block;
+  top: 0;
+  z-index: 1000;
+}
+:global .cover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+:global .modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+:global .modal-form {
+  display: block;
+  width: 280px;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  background: #fff;
+  height: auto;
+  padding: 24px;
+  z-index: 100;
+  border-radius: 4px;
+}
+:global .modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+:global .modal-close::after {
+  content: '\2715';
+  line-height: 1rem;
+  font-size: 1rem;
+  color: #fff;
+}
+:global .notification {
+  display: block;
+  width: auto;
+  height: 32px;
+  padding: 0 24px;
+  line-height: 32px;
+  position: fixed;
+  border-radius: 2px;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  z-index: 1;
+  white-space: nowrap;
+  margin: auto;
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(50% + 255px);
+}
+:global .notification div {
+  max-width: 276px;
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:global .notification.error {
+  background-color: #e5494d;
+  z-index: 2;
+}
+:global .skeleton-glow {
+  animation: skeleton-glow 1s linear infinite alternate;
+  background: rgba(206, 217, 224, 0.2);
+  background-clip: padding-box !important;
+  border-color: rgba(206, 217, 224, 0.2) !important;
+  border-radius: 4px;
+  box-shadow: none !important;
+  color: transparent !important;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+}
+@-moz-keyframes :global(skeleton-glow) {
+  0% {
+    background: rgba(206, 217, 224, 0.2);
+    border-color: rgba(206, 217, 224, 0.2);
+  }
+  100% {
+    background: rgba(92, 112, 128, 0.2);
+    border-color: rgba(92, 112, 128, 0.2);
+  }
+}
+@-webkit-keyframes :global(skeleton-glow) {
+  0% {
+    background: rgba(206, 217, 224, 0.2);
+    border-color: rgba(206, 217, 224, 0.2);
+  }
+  100% {
+    background: rgba(92, 112, 128, 0.2);
+    border-color: rgba(92, 112, 128, 0.2);
+  }
+}
+@-o-keyframes :global(skeleton-glow) {
+  0% {
+    background: rgba(206, 217, 224, 0.2);
+    border-color: rgba(206, 217, 224, 0.2);
+  }
+  100% {
+    background: rgba(92, 112, 128, 0.2);
+    border-color: rgba(92, 112, 128, 0.2);
+  }
+}
+@keyframes :global(skeleton-glow) {
+  0% {
+    background: rgba(206, 217, 224, 0.2);
+    border-color: rgba(206, 217, 224, 0.2);
+  }
+  100% {
+    background: rgba(92, 112, 128, 0.2);
+    border-color: rgba(92, 112, 128, 0.2);
+  }
+}

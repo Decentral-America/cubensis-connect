@@ -1,4 +1,4 @@
-import * as styles from './styles/confirmBackup.styl';
+import * as styles from './styles/confirmBackup.module.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
@@ -23,7 +23,8 @@ class ConfirmBackupComponent extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { seed } = props.account;
 
-    if (seed == state.seed) {
+    // SECURITY: Use strict equality for seed phrase comparison
+    if (seed === state.seed) {
       return null;
     }
 

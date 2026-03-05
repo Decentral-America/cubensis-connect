@@ -1,0 +1,6 @@
+.expanded {
+  max-height: none;
+}
+.expanded div:first-child {
+  max-height: none;
+}

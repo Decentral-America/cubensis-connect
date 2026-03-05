@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react';
-import BigNumber from '@decentralchain/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 import { Money, Asset } from '@decentralchain/data-entities';
-import { TTransactionType } from '@decentralchain/transactions/dist/transactions';
+import { type TTransactionType } from '@decentralchain/transactions';
 import { swappableAssetIds } from 'assets/constants';
 import { convertToSponsoredAssetFee, getAssetIdByName } from 'assets/utils';
 import * as React from 'react';
@@ -48,7 +48,6 @@ export function Swap({ setTab }: Props) {
 
   React.useEffect(() => {
     let cancelled = false;
-    let timeout: number;
 
     Promise.all([
       background.getMinimumFee(TRANSACTION_TYPE.INVOKE_SCRIPT),
@@ -61,10 +60,6 @@ export function Swap({ setTab }: Props) {
 
     return () => {
       cancelled = true;
-
-      if (timeout) {
-        window.clearTimeout(timeout);
-      }
     };
   }, [currentNetwork, selectedAccount.address]);
 

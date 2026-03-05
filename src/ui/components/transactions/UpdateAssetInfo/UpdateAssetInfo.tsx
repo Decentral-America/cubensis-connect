@@ -1,4 +1,4 @@
-import * as styles from './index.styl';
+import * as styles from './index.module.css';
 import * as React from 'react';
 
 import { UpdateAssetInfoCard } from './UpdateAssetInfoCard';

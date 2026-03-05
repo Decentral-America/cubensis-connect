@@ -1,4 +1,4 @@
-import * as styles from './styles/assets.styl';
+import * as styles from './styles/assets.module.css';
 import cn from 'classnames';
 import * as React from 'react';
 import { useState } from 'react';

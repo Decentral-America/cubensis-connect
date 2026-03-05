@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './copy.styl';
+import * as styles from './copy.module.css';
 import * as copy from 'copy-to-clipboard';
 import cn from 'classnames';
 

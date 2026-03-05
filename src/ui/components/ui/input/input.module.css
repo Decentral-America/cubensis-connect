@@ -1,0 +1,100 @@
+textarea {
+  resize: none;
+}
+.input {
+  position: relative;
+  width: 100%;
+  border-radius: 4px;
+  border: solid 1px #098;
+  background-color: rgba(5, 96, 86, 0.2);
+  color: #fff;
+  padding: 11px 14px;
+  font-size: 14px;
+  transition: 0.3s;
+  outline: 0 none;
+}
+.input:hover {
+  border: 1px solid #fff;
+}
+.input:focus {
+  outline: none;
+  border: 1px solid #177488;
+}
+.input.error,
+.input.error:hover {
+  border: 1px solid #e5494d;
+}
+.input[disabled] {
+  background: #0e0e1d;
+  color: #fff;
+}
+.input[disabled]::-webkit-input-placeholder {
+  color: #fff;
+}
+.input[disabled]::-moz-placeholder {
+  color: #fff;
+}
+.input[disabled]:-moz-placeholder {
+  color: #fff;
+}
+.input[disabled]:-ms-input-placeholder {
+  color: #fff;
+}
+.input[disabled]:hover {
+  border: 1px solid #004649;
+}
+.textarea {
+  padding: 14px;
+  transition: 0.3s;
+}
+:global .input-like {
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px 0 rgba(0, 153, 135, 0.204);
+  width: 100%;
+  height: 42px;
+  line-height: 24px;
+  padding: 0 14px;
+  border-radius: 4px;
+  position: relative;
+  background-color: rgba(0, 145, 127, 0.329);
+  color: #fff;
+  transition: 0.3s;
+}
+:global .input-like:hover {
+  box-shadow: 0 4px 6px 0 rgba(0, 153, 135, 0.204);
+}
+:global .input-like.password-input {
+  padding-left: 42px;
+}
+input[type='checkbox'] {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  content: '';
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  margin-right: 14px;
+  padding: 0;
+  background: url('../../../assets/img/check-12-basic-200.svg') center no-repeat;
+  border: 1px solid #004649;
+  flex-shrink: 0;
+}
+input[type='checkbox']:focus {
+  border: 1px solid #004649;
+}
+input[type='checkbox']:checked {
+  background: url('../../../assets/img/check-12-white.svg') center no-repeat #177488;
+  border: 1px solid #177488;
+}
+input[type='checkbox']:hover {
+  cursor: pointer;
+  border: 1px solid #177488;
+}
+input[type='checkbox'] + label {
+  flex-grow: 1;
+  cursor: pointer;
+  color: #fff;
+}

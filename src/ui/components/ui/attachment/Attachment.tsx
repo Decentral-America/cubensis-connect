@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { libs } from '@decentralchain/transactions';
 import cn from 'classnames';
-import * as styles from './attachment.styl';
+import * as styles from './attachment.module.css';
 
 const { base58Encode } = libs.crypto;
 
@@ -11,14 +11,10 @@ export const Attachment: React.FunctionComponent<IAttachment> = ({
   ...otherProps
 }) => {
   const myClassName = cn(styles.attachment, className);
-  let text = '';
-
-  if (typeof attachment !== 'string') {
-    const bs58text = base58Encode(new Uint8Array(Object.values(attachment)));
-    text = `base58:${bs58text}`;
-  } else {
-    text = attachment;
-  }
+  const text =
+    typeof attachment !== 'string'
+      ? `base58:${base58Encode(new Uint8Array(Object.values(attachment)))}`
+      : attachment;
 
   return (
     <div className={myClassName} {...otherProps}>

@@ -1,0 +1,172 @@
+.accountIcon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.wallet {
+  width: 100%;
+  background: #fff;
+  display: flex;
+  box-shadow: 0 2px 4px 0 rgba(155, 166, 178, 0.4);
+  border-radius: 4px;
+  padding: 14px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 8px;
+  cursor: pointer;
+  height: 64px;
+}
+.walletClean {
+  background: none;
+  border: none;
+}
+.wallet .balanceWrapper {
+  justify-content: flex-start;
+}
+.wallet .controls {
+  margin-top: 0;
+  position: absolute;
+  bottom: 19px;
+  right: 14px;
+  display: block;
+  font-size: 12px;
+  width: 26px;
+  height: 26px;
+  border: 1px dashed #dae1e9;
+  border-radius: 2px;
+  z-index: 1;
+}
+.wallet .controls:hover {
+  border: 1px solid #dae1e9;
+}
+.wallet .controls .accountIcon:hover {
+  background-color: #0e0e1d;
+}
+.activeWallet {
+  width: 100%;
+}
+.activeWallet .wallet {
+  height: 112px;
+  margin-bottom: 0;
+  z-index: 3;
+}
+.activeWallet .wallet .accountData .accountName {
+  max-width: 245px;
+}
+.activeWallet .wallet .controls {
+  width: 100%;
+  margin-top: 18px;
+  position: relative;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  border-color: transparent;
+  background-color: transparent;
+}
+.activeWallet .wallet .controls:hover {
+  border-color: transparent;
+  background-color: transparent;
+}
+.activeWallet .wallet .controls .account-icon {
+  top: 18px;
+  left: 14px;
+}
+.activeWallet .wallet .controls:hover {
+  background-color: transparent;
+  border-color: transparent;
+}
+.activeWallet .wallet .controls .accountIcon {
+  position: absolute;
+  padding: 0;
+  right: -2px;
+  top: -54px;
+  width: 30px;
+  height: 26px;
+  background-color: transparent;
+  border-color: transparent;
+  margin-right: 0;
+}
+.activeWallet .wallet .controls .accountIcon:hover {
+  border-color: transparent;
+  background-color: transparent;
+}
+.activeWalletSelected.activeAccountHeader {
+  width: auto;
+}
+.title {
+  color: #c4d0ef;
+}
+.activeWAlletBtnSeparator {
+  flex-grow: 1;
+  cursor: default;
+  background: none transparent;
+}
+.activeAccountHeader {
+  color: #fff;
+  margin: 0 0 8px 0;
+  position: relative;
+  z-index: 1;
+}
+.inner {
+  flex-wrap: wrap;
+}
+.avatar {
+  margin-right: 14px;
+  display: flex;
+}
+.avatar > div {
+  border: 0 none;
+}
+.avatar img {
+  margin: 0;
+}
+.accountData {
+  flex-grow: 1;
+  text-align: left;
+}
+.accountData .accountName {
+  height: 24px;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.txWallet {
+  border-radius: 0;
+  width: calc(100% + 24px);
+  flex-wrap: nowrap;
+  box-shadow: none;
+  height: 58px;
+  margin: -14px 0 0 -14px;
+  cursor: default;
+}
+.txWallet .avatar {
+  margin-right: 8px;
+}
+.txWallet .accountName {
+  font-size: 14px;
+  line-height: 24px;
+  cursor: pointer;
+}
+.txWallet .controls {
+  bottom: 50%;
+  width: 18px;
+  height: 18px;
+  border: 0 none;
+  transform: translateY(50%);
+}
+.txWallet .controls:hover {
+  border: 0 none;
+  background-color: transparent;
+}
+.txWallet .controls button {
+  background: url('../../assets/img/changeaccount-18-basic-500.svg') center no-repeat transparent;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.txWallet .controls button:hover {
+  background-color: transparent !important;
+}

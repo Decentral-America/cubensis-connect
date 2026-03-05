@@ -1,0 +1,36 @@
+.root {
+  margin: 14px auto 0;
+  width: 240px;
+}
+.importIcon {
+  display: block;
+  margin: auto;
+}
+.separator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+.separator:before,
+.separator:after {
+  content: '';
+  flex: 1 1 0;
+  border-bottom: 1px solid #e9e9eb;
+}
+.importButtonsItem {
+  padding: 14px 0;
+}
+.importButtonsItem:first-child {
+  padding-top: 0;
+}
+.importButtonsItem:not(:last-child) {
+  border-bottom: 1px solid #e9e9eb;
+}
+.importButtonsItem button {
+  background: url('../../../assets/img/arrow-right-14-basic-200.svg') right center no-repeat;
+  text-align: left;
+}
+.importButtonsItem button:hover {
+  color: #0a7e72;
+}

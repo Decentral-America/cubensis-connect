@@ -1,4 +1,4 @@
-import * as styles from './styles/importSeed.styl';
+import * as styles from './styles/importSeed.module.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans, type WithTranslation, withTranslation } from 'react-i18next';

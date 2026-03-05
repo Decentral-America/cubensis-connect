@@ -1,7 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { Button, BUTTON_TYPE } from 'ui/components/ui/buttons';
-import * as styles from './list.styl';
+import * as styles from './list.module.css';
 
 export const ListItem: React.FunctionComponent<IParams> = ({
   className,

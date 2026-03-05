@@ -1,4 +1,4 @@
-import * as styles from './styles/newwallet.styl';
+import * as styles from './styles/newwallet.module.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';

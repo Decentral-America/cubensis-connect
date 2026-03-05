@@ -1,4 +1,4 @@
-import * as styles from './scriptInvocation.styl';
+import * as styles from './scriptInvocation.module.css';
 import * as React from 'react';
 
 import { ScriptInvocationCard } from './ScriptInvocationCard';

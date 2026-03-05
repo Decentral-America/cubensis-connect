@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './buttons.styl';
+import * as styles from './buttons.module.css';
 import cn from 'classnames';
 
 export const BUTTON_TYPE = {

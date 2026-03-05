@@ -1,4 +1,4 @@
-import * as styles from './plate.styl';
+import * as styles from './plate.module.css';
 import * as React from 'react';
 import cn from 'classnames';
 import { Trans } from 'react-i18next';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './approveButtons.styl';
+import * as styles from './approveButtons.module.css';
 import { CircularProgressbar } from '../loader';
 import { Button } from './Button';
 import { CONFIG } from '../../../appConfig';

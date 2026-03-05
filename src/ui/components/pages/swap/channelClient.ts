@@ -1,4 +1,4 @@
-import BigNumber from '@decentralchain/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 import { type Asset } from '@decentralchain/data-entities';
 import Long from 'long';
 import { proto } from './channel.proto.compiled';

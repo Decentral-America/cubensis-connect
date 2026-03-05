@@ -1,4 +1,4 @@
-import * as styles from '../../styles/assets.styl';
+import * as styles from '../../styles/assets.module.css';
 import { icontains } from '../helpers';
 import { Trans } from 'react-i18next';
 import { AssetItem } from '../assetItem';
@@ -9,20 +9,37 @@ import { SearchInput } from '../../Assets';
 import { useAppSelector } from '../../../../store';
 import { TabPanel } from '../../../ui';
 import { CARD_FULL_HEIGHT, sortAssetEntries, useAssetFilter } from './helpers';
-import { FixedSizeList as List } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { type BalanceAssets } from '../../../../reducers/updateState';
+import { List } from 'react-window';
+import { AutoSizer } from 'react-virtualized-auto-sizer';
+import { type BalanceAssets, type AssetBalance } from '../../../../reducers/updateState';
 import { Tooltip } from '../../../ui/tooltip';
 import cn from 'classnames';
+import { type AssetDetail } from '../../../../services/Background';
 
-const Row = ({ data, index, style }) => {
-  const { assetEntries, assets, onInfoClick, onSendClick, onSwapClick } = data;
+interface AssetRowProps {
+  assetEntries: [string | number, AssetBalance][];
+  assets: Record<string, AssetDetail>;
+  onInfoClick: (assetId: string) => void;
+  onSendClick: (assetId: string) => void;
+  onSwapClick: (assetId: string) => void;
+}
+
+const Row = ({
+  index,
+  style,
+  assetEntries,
+  assets,
+  onInfoClick,
+  onSendClick,
+  onSwapClick,
+}: { index: number; style: React.CSSProperties } & AssetRowProps) => {
   const [assetId, { balance }] = assetEntries[index];
+  const id = String(assetId);
   return (
     <div style={style}>
       <AssetItem
-        balance={assets[assetId] && new Money(new BigNumber(balance), new Asset(assets[assetId]))}
-        assetId={assetId}
+        balance={assets[id] && new Money(new BigNumber(balance), new Asset(assets[id]))}
+        assetId={id}
         onInfoClick={onInfoClick}
         onSendClick={onSendClick}
         onSwapClick={onSwapClick}
@@ -142,32 +159,23 @@ export function TabAssets({ onInfoClick, onSendClick, onSwapClick }: Props) {
         </div>
       ) : (
         <div className={styles.assetList}>
-          <AutoSizer>
-            {({ height, width }) => {
-              return (
-                <List
-                  height={height}
-                  width={width}
-                  itemCount={assetEntries.length}
-                  itemSize={CARD_FULL_HEIGHT}
-                  itemData={{
-                    assetEntries,
-                    assets,
-                    onInfoClick,
-                    onSendClick,
-                    onSwapClick,
-                  }}
-                  itemKey={(index, itemData) =>
-                    `${itemData.assetEntries[index][0]}:${
-                      assets[itemData.assetEntries[index][0]]?.isFavorite
-                    }`
-                  }
-                >
-                  {Row}
-                </List>
-              );
-            }}
-          </AutoSizer>
+          <AutoSizer
+            renderProp={({ height, width }) => (
+              <List<AssetRowProps>
+                style={{ height, width }}
+                rowCount={assetEntries.length}
+                rowHeight={CARD_FULL_HEIGHT}
+                rowProps={{
+                  assetEntries,
+                  assets,
+                  onInfoClick,
+                  onSendClick,
+                  onSwapClick,
+                }}
+                rowComponent={Row}
+              />
+            )}
+          />
         </div>
       )}
     </TabPanel>

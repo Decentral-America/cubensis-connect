@@ -1,4 +1,4 @@
-import * as styles from './data.styl';
+import * as styles from './data.module.css';
 import * as React from 'react';
 
 import { DataCard } from './DataCard';

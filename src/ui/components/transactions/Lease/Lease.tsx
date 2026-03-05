@@ -1,4 +1,4 @@
-import * as styles from './lease.styl';
+import * as styles from './lease.module.css';
 import * as React from 'react';
 
 import { LeaseCard } from './LeaseCard';

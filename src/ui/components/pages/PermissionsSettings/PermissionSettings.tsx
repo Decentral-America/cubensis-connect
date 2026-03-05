@@ -1,4 +1,4 @@
-import * as styles from './permissionsSettings.styl';
+import * as styles from './permissionsSettings.module.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';

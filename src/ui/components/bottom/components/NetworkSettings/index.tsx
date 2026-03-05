@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
-import * as styles from './networkSettings.styl';
+import * as styles from './networkSettings.module.css';
 import { getMatcherPublicKey, getNetworkByte } from 'ui/utils/decentralchain';
 import { Button, BUTTON_TYPE, Error, Input } from 'ui/components/ui';
 

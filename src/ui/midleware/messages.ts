@@ -133,7 +133,7 @@ export const reject = (store) => (next) => (action) => {
 };
 
 export const rejectForever = (store) => (next) => (action) => {
-  if (action.type != ACTION.REJECT_FOREVER) {
+  if (action.type !== ACTION.REJECT_FOREVER) {
     return next(action);
   }
   const { messageId, forever } = action.payload;

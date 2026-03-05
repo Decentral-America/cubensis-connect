@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'node:fs';
 
-module.exports = (path, options = {}, to) => {
+export default (path, options = {}, to) => {
   const data = JSON.parse(fs.readFileSync(path));
   const remove = options.remove || [];
   const add = options.add || [];

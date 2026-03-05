@@ -1,11 +1,10 @@
-import * as styles from '../../styles/assets.styl';
+import * as styles from '../../styles/assets.module.css';
 import { Select, TabPanel } from '../../../ui';
 import { Trans, useTranslation } from 'react-i18next';
 import { icontains } from '../helpers';
 import { HistoryItem } from '../historyItem';
 import * as React from 'react';
 import { SearchInput } from '../../Assets';
-import { type TTransaction, type WithId } from '@decentralchain/transactions/dist/transactions';
 import { useAppSelector } from '../../../../store';
 import {
   buildTxTypeOptions,
@@ -14,16 +13,30 @@ import {
   MONTH,
   useTxHistoryFilter,
 } from './helpers';
-import { TRANSACTION_TYPE } from '@decentralchain/ts-types';
+import { type TStateChanges, TRANSACTION_TYPE } from '@decentralchain/ts-types';
 import { MAX_TX_HISTORY_ITEMS } from '../../../../../controllers/CurrentAccountController';
 import { Tooltip } from '../../../ui/tooltip';
-import { VariableSizeList } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import { List } from 'react-window';
+import { AutoSizer } from 'react-virtualized-auto-sizer';
 import cn from 'classnames';
 import { getTxHistoryLink } from '../../../../urls';
+import { type StateChangeEntry, type TxHistoryEntry } from '../../../../types/txHistory';
 
-const Row = ({ data, index, style }) => {
-  const { historyWithGroups, hasMore, hasFilters, historyLink } = data;
+interface TxHistoryRowProps {
+  historyWithGroups: (TxHistoryEntry | { groupName: string })[];
+  hasMore: boolean;
+  hasFilters: string | number | boolean;
+  historyLink: string;
+}
+
+const Row = ({
+  index,
+  style,
+  historyWithGroups,
+  hasMore,
+  hasFilters,
+  historyLink,
+}: { index: number; style: React.CSSProperties } & TxHistoryRowProps) => {
   const historyOrGroup = historyWithGroups[index];
 
   return (
@@ -57,11 +70,11 @@ const Row = ({ data, index, style }) => {
   );
 };
 
-const PLACEHOLDERS = [...Array(4).keys()].map<TTransaction & WithId>(
+const PLACEHOLDERS = [...Array(4).keys()].map<TxHistoryEntry>(
   (key) =>
     ({
       id: `${key}`,
-    }) as TTransaction & WithId,
+    }) as TxHistoryEntry,
 );
 
 export function TabTxHistory() {
@@ -85,14 +98,9 @@ export function TabTxHistory() {
     onlyOutgoing: [onlyOut, setOnlyOut],
     clearFilters,
   } = useTxHistoryFilter();
-  const listRef = React.useRef<VariableSizeList>();
 
-  React.useEffect(() => {
-    listRef.current && listRef.current.resetAfterIndex(0);
-  }, [txHistory]);
-
-  const flat = (stateChanges: any): any[] =>
-    (stateChanges?.transfers ?? [])
+  const flat = (stateChanges: TStateChanges | null | undefined): StateChangeEntry[] =>
+    ((stateChanges?.transfers ?? []) as StateChangeEntry[])
       .concat(stateChanges?.issues ?? [])
       .concat(stateChanges?.reissues ?? [])
       .concat(stateChanges?.burns ?? [])
@@ -101,15 +109,15 @@ export function TabTxHistory() {
       .concat(stateChanges?.leaseCancels ?? [])
       .concat(stateChanges?.invokes ?? [])
       .concat(
-        (stateChanges?.invokes ?? []).reduce(
+        (stateChanges?.invokes ?? []).reduce<StateChangeEntry[]>(
           (result, el) => result.concat(flat(el.stateChanges)),
           [],
         ),
       );
 
-  const hasInvokeStateChanges = (stateChanges: any): boolean =>
-    flat(stateChanges || {}).reduce(
-      (hasItems, el) =>
+  const hasInvokeStateChanges = (stateChanges: TStateChanges | null | undefined): boolean =>
+    flat(stateChanges).reduce(
+      (hasItems: boolean, el: StateChangeEntry) =>
         hasItems ||
         [el.asset, el.address, el.assetId, el.leaseId, el.dApp].includes(term) ||
         [
@@ -117,20 +125,21 @@ export function TabTxHistory() {
           el.name,
           assets[el.assetId]?.displayName,
           el.call?.function || 'default',
-        ].reduce((result, name) => result || icontains(name, term), false),
+        ].reduce((result: boolean, name) => result || icontains(name, term), false),
       false,
     );
 
-  const hasInvokeTransfers = (stateChanges: any): boolean =>
+  const hasInvokeTransfers = (stateChanges: TStateChanges | null | undefined): boolean =>
     flat(stateChanges).reduce(
-      (hasTransfers, el) => hasTransfers || addressOrAlias.includes(el.address),
+      (hasTransfers: boolean, el: StateChangeEntry) =>
+        hasTransfers || addressOrAlias.includes(el.address),
       false,
     );
 
   const historyWithGroups = txHistory
     ? txHistory
         .slice(0, MAX_TX_HISTORY_ITEMS - 1)
-        .filter((tx: any) => {
+        .filter((tx) => {
           const hasMassTransfers = (tx.transfers ?? []).reduce(
             (result: boolean, transfer: { amount: number; recipient: string }) =>
               result || addressOrAlias.includes(transfer.recipient),
@@ -169,27 +178,24 @@ export function TabTxHistory() {
               (tx.type === TRANSACTION_TYPE.INVOKE_SCRIPT && hasInvokePayments))
           );
         })
-        .reduce<Array<(TTransaction & WithId) | { groupName: string }>>(
-          (result, tx, index, prevItems) => {
-            const d = new Date(tx.timestamp);
-            const [Y, M, D] = [d.getFullYear(), d.getMonth(), d.getDate()];
+        .reduce<Array<TxHistoryEntry | { groupName: string }>>((result, tx, index, prevItems) => {
+          const d = new Date(tx.timestamp);
+          const [Y, M, D] = [d.getFullYear(), d.getMonth(), d.getDate()];
 
-            if (
-              tx.timestamp &&
-              (!prevItems[index - 1] ||
-                new Date(prevItems[index - 1].timestamp).toDateString() !== d.toDateString())
-            ) {
-              result.push({
-                groupName: `${t(`date.${MONTH[M]}`)} ${D}${
-                  Y !== thisYear ? ', ' + Y : M === thisMonth && D === thisDate ? ', Today' : ''
-                } `.trim(),
-              });
-            }
-            result.push(tx);
-            return result;
-          },
-          [],
-        )
+          if (
+            tx.timestamp &&
+            (!prevItems[index - 1] ||
+              new Date(prevItems[index - 1].timestamp).toDateString() !== d.toDateString())
+          ) {
+            result.push({
+              groupName: `${t(`date.${MONTH[M]}`)} ${D}${
+                Y !== thisYear ? ', ' + Y : M === thisMonth && D === thisDate ? ', Today' : ''
+              } `.trim(),
+            });
+          }
+          result.push(tx);
+          return result;
+        }, [])
     : PLACEHOLDERS;
 
   return (
@@ -198,11 +204,9 @@ export function TabTxHistory() {
         <SearchInput
           value={term ?? ''}
           onInput={(e) => {
-            listRef.current && listRef.current.resetAfterIndex(0);
             setTerm(e.target.value);
           }}
           onClear={() => {
-            listRef.current && listRef.current.resetAfterIndex(0);
             setTerm('');
           }}
         />
@@ -213,7 +217,6 @@ export function TabTxHistory() {
               className={styles.filterTxSelect}
               selected={type}
               onSelectItem={(id, value) => {
-                listRef.current && listRef.current.resetAfterIndex(0);
                 setType(value);
               }}
               selectList={buildTxTypeOptions(t)}
@@ -228,7 +231,6 @@ export function TabTxHistory() {
             <div
               className={styles.filterBtn}
               onClick={() => {
-                listRef.current && listRef.current.resetAfterIndex(0);
                 setOnlyIn(!onlyIn);
               }}
               {...props}
@@ -248,7 +250,6 @@ export function TabTxHistory() {
             <div
               className={styles.filterBtn}
               onClick={() => {
-                listRef.current && listRef.current.resetAfterIndex(0);
                 setOnlyOut(!onlyOut);
               }}
               {...props}
@@ -284,40 +285,30 @@ export function TabTxHistory() {
         </div>
       ) : (
         <div className={styles.historyList}>
-          <AutoSizer>
-            {({ height, width }) => {
+          <AutoSizer
+            renderProp={({ height, width }) => {
               const hasMore = txHistory && txHistory.length === MAX_TX_HISTORY_ITEMS;
               return (
-                <>
-                  <VariableSizeList
-                    ref={listRef}
-                    height={height}
-                    width={width}
-                    itemCount={historyWithGroups.length}
-                    itemSize={(index) =>
-                      'groupName' in historyWithGroups[index]
-                        ? FULL_GROUP_HEIGHT
-                        : CARD_FULL_HEIGHT *
-                          (1 + Number(index === historyWithGroups.length - 1 && hasMore))
-                    }
-                    itemData={{
-                      historyWithGroups,
-                      hasMore,
-                      hasFilters: term || type || onlyIn || onlyOut,
-                      historyLink: getTxHistoryLink(networkCode, address),
-                    }}
-                    itemKey={(index, { historyWithGroups }) =>
-                      'groupName' in historyWithGroups[index]
-                        ? `g:${historyWithGroups[index].groupName}`
-                        : `a:${historyWithGroups[index].id}`
-                    }
-                  >
-                    {Row}
-                  </VariableSizeList>
-                </>
+                <List<TxHistoryRowProps>
+                  style={{ height, width }}
+                  rowCount={historyWithGroups.length}
+                  rowHeight={(index) =>
+                    'groupName' in historyWithGroups[index]
+                      ? FULL_GROUP_HEIGHT
+                      : CARD_FULL_HEIGHT *
+                        (1 + Number(index === historyWithGroups.length - 1 && hasMore))
+                  }
+                  rowProps={{
+                    historyWithGroups,
+                    hasMore,
+                    hasFilters: term || type || onlyIn || onlyOut,
+                    historyLink: getTxHistoryLink(networkCode, address),
+                  }}
+                  rowComponent={Row}
+                />
               );
             }}
-          </AutoSizer>
+          />
         </div>
       )}
     </TabPanel>

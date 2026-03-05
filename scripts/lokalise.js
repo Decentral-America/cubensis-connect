@@ -1,13 +1,15 @@
-const request = require('request');
-const https = require('https');
-const fs = require('fs');
-const unZipper = require('unzipper');
+import https from 'node:https';
+import fs from 'node:fs';
+import { readFileSync } from 'node:fs';
+
 let lokaliseApiKey;
 
 try {
-  const private_config = require('../config.json');
+  const private_config = JSON.parse(
+    readFileSync(new URL('../config.json', import.meta.url), 'utf8'),
+  );
   lokaliseApiKey = private_config.lokaliseApiKey;
-} catch (e) {
+} catch {
   lokaliseApiKey = null;
 }
 
@@ -39,31 +41,53 @@ function getLocales(locales = [], path = './') {
       resolve();
     }
 
-    request(options, function (error, response, body) {
-      if (error) {
-        return onError(error);
-      }
+    const url = new URL(options.url);
+    const reqOptions = {
+      method: options.method,
+      hostname: url.hostname,
+      path: url.pathname,
+      headers: {
+        ...options.headers,
+      },
+    };
+    const postData = JSON.stringify(options.body);
+    reqOptions.headers['content-length'] = Buffer.byteLength(postData);
 
-      const { bundle_url } = body;
-
-      getFile(bundle_url, locales, path).then(onDone).catch(onError);
+    const req = https.request(reqOptions, (res) => {
+      let data = '';
+      res.on('data', (chunk) => (data += chunk));
+      res.on('end', () => {
+        try {
+          const body = JSON.parse(data);
+          const { bundle_url } = body;
+          getFile(bundle_url, locales, path).then(onDone).catch(onError);
+        } catch (e) {
+          onError(e);
+        }
+      });
     });
+    req.on('error', onError);
+    req.write(postData);
+    req.end();
   });
 }
 
 function getFile(url, locales, path) {
-  const parse = (res) => {
-    return unzipFile(res, locales, path);
-  };
-
   return new Promise((resolve, reject) => {
-    const request = https.get(url, parse);
-    request.on('close', resolve);
+    const request = https.get(url, async (res) => {
+      try {
+        await unzipFile(res, locales, path);
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
     request.on('error', reject);
   });
 }
 
-function unzipFile(response, locales, path) {
+async function unzipFile(response, locales, path) {
+  const unZipper = (await import('unzipper')).default;
   return (
     response &&
     response.pipe(unZipper.Parse()).on('entry', function (entry) {
@@ -93,4 +117,4 @@ function unzipFile(response, locales, path) {
   );
 }
 
-module.exports = getLocales;
+export default getLocales;

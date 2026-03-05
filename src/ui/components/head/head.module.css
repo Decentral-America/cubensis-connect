@@ -1,0 +1,30 @@
+:global .logo {
+  width: 100%;
+  height: 50px;
+  border-bottom: #098 1px solid;
+  box-shadow: 1px 1px 9px 4px rgba(0, 153, 136, 0.6);
+  text-align: center;
+  background-image: url('../../assets/img/CubensisConnect-16.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 160px 20px;
+}
+.bigLogo {
+  width: 100%;
+  position: relative;
+}
+.bigLogoImg {
+  text-align: center;
+  background-image: url('../../assets/img/CubensisConnect-16.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 178px 28px;
+  width: 100%;
+  height: 28px;
+}
+.bigLogoTitle {
+  margin-top: 10px;
+  font-weight: 400;
+  font-size: 12px;
+  color: #fff;
+}

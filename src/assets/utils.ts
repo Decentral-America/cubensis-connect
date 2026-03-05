@@ -1,4 +1,4 @@
-import BigNumber from '@decentralchain/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 import { type Asset, Money } from '@decentralchain/data-entities';
 import { type AssetBalance } from 'ui/reducers/updateState';
 import { DEFAULT_FEE_CONFIG } from '../constants';

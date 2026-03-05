@@ -1,4 +1,4 @@
-import * as styles from './styles/import.styl';
+import * as styles from './styles/import.module.css';
 import cn from 'classnames';
 import * as React from 'react';
 import { Trans } from 'react-i18next';

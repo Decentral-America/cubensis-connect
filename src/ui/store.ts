@@ -6,8 +6,14 @@ import * as extension from 'extensionizer';
 import { CubensisConnect_DEBUG } from './appConfig';
 
 if (CubensisConnect_DEBUG) {
-  middleware['logMW'] = (store) => (next) => (action) => {
-    console.log('-->', action.type, action.payload, action.meta);
+  // SECURITY: Redact sensitive action payloads to prevent credential leaks in console
+  const SENSITIVE_ACTIONS = ['SET_PASSWORD', 'CHANGE_PASSWORD', 'SET_SEED', 'BACKUP_SEED'];
+  middleware['logMW'] = (_store) => (next) => (action) => {
+    if (SENSITIVE_ACTIONS.some((s) => action.type?.includes?.(s))) {
+      console.log('-->', action.type, '[REDACTED]');
+    } else {
+      console.log('-->', action.type, action.payload, action.meta);
+    }
     return next(action);
   };
 }

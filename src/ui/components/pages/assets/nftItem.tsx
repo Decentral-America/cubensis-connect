@@ -3,13 +3,13 @@ import * as styles from './nftItem.module.css';
 import { AssetLogo } from './assetLogo';
 import { Loader } from '../../ui';
 import * as React from 'react';
-import { type Asset } from '@decentralchain/data-entities';
+import { type AssetDetail } from '../../../services/Background';
 import { Trans } from 'react-i18next';
 import { Tooltip } from '../../ui/tooltip';
 import { MoreActions } from './moreActions';
 
 interface Props {
-  asset: Asset;
+  asset: AssetDetail;
   className?: string;
   onInfoClick: (assetId: string) => void;
   onSendClick: (assetId: string) => void;

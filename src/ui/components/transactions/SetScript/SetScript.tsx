@@ -1,4 +1,4 @@
-import * as styles from './setScript.styl';
+import * as styles from './setScript.module.css';
 import * as React from 'react';
 
 import { SetScriptCard } from './SetScriptCard';

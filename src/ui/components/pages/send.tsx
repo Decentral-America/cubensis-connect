@@ -22,7 +22,7 @@ export function Send() {
   const isNft =
     currentAsset &&
     currentAsset.precision === 0 &&
-    currentAsset.quantity == 1 &&
+    currentAsset.quantity === 1 &&
     !currentAsset.reissuable;
 
   React.useEffect(() => {
@@ -47,21 +47,21 @@ export function Send() {
         )
       ? t('send.recipientInvalidError')
       : null;
-  const showRecipientError = isTriedToSubmit && recipientError != null;
+  const showRecipientError = isTriedToSubmit && recipientError !== null;
 
   const [amountValue, setAmountValue] = React.useState(isNft ? '1' : '');
   const amountError =
-    !amountValue || Number(amountValue) == 0
+    !amountValue || Number(amountValue) === 0
       ? t('send.amountRequiredError')
       : !currentBalance.getTokens().gte(amountValue)
         ? t('send.insufficientFundsError')
         : null;
-  const showAmountError = isTriedToSubmit && amountError != null;
+  const showAmountError = isTriedToSubmit && amountError !== null;
 
   const [attachmentValue, setAttachmentValue] = React.useState('');
   const attachmentByteCount = new TextEncoder().encode(attachmentValue).length;
   const attachmentError = attachmentByteCount > 140 ? t('send.attachmentMaxLengthError') : null;
-  const showAttachmentError = isTriedToSubmit && attachmentError != null;
+  const showAttachmentError = isTriedToSubmit && attachmentError !== null;
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 

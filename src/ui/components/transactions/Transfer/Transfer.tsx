@@ -1,4 +1,4 @@
-import * as styles from './transfer.styl';
+import * as styles from './transfer.module.css';
 import * as React from 'react';
 
 import { TransferCard } from './TransferCard';

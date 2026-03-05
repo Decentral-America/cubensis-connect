@@ -11,13 +11,14 @@ import { TRANSACTION_TYPE } from '@decentralchain/ts-types';
 import { Tooltip } from '../../ui/tooltip';
 import { getTxDetailLink } from '../../../urls';
 import { SWAP_DAPP_ADDRESS } from '../../../../constants';
+import { type TxHistoryEntry } from '../../../types/txHistory';
 
 function Address({ base58 }) {
   return <Ellipsis text={base58} size={12} className="basic500" />;
 }
 
 interface Props {
-  tx: any;
+  tx: TxHistoryEntry;
   className?: string;
 }
 
@@ -46,7 +47,7 @@ export function HistoryItem({ tx, className }: Props) {
       break;
     case TRANSACTION_TYPE.ISSUE:
       const decimals = tx.decimals || 0;
-      const isNFT = !tx.reissuable && !decimals && tx.quantity == 1;
+      const isNFT = !tx.reissuable && !decimals && tx.quantity === 1;
       tooltip = t('historyCard.issue');
 
       label = isNFT

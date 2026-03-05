@@ -1,24 +1,26 @@
 import './initProtobuf';
-import './ui/styles/app.styl';
-import './ui/styles/icons.styl';
+import './ui/styles/app.module.css';
+import './ui/styles/icons.module.css';
 import './ui/i18n';
 
 import * as Sentry from '@sentry/react';
 import * as extension from 'extensionizer';
 import log from 'loglevel';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 import { CubensisConnect_DEBUG } from './constants';
 import { cbToPromise, setupDnode, transformMethods } from './lib/dnode-util';
-import * as PortStream from './lib/port-stream.js';
+import PortStream from './lib/port-stream';
 import { setLangs } from './ui/actions';
 import { createUpdateState } from './ui/actions/updateState';
 import { Root } from './ui/components/Root';
 import { LANGS } from './ui/i18n';
+import { type BackgroundApi } from './ui/services/Background';
 import backgroundService from './ui/services/Background';
 import { createUiStore } from './ui/store';
+import { type UpdateStateInput } from './ui/actions/updateState';
 
 const isNotificationWindow = window.location.pathname === '/notification.html';
 
@@ -27,13 +29,12 @@ Sentry.init({
   environment: __SENTRY_ENVIRONMENT__,
   release: __SENTRY_RELEASE__,
   debug: CubensisConnect_DEBUG,
-  autoSessionTracking: false,
   initialScope: {
     tags: {
       source: 'popup',
     },
   },
-  integrations: [new Sentry.Integrations.Breadcrumbs({ dom: false })],
+  integrations: [Sentry.breadcrumbsIntegration({ dom: false })],
   beforeSend: async (event, hint) => {
     const message =
       hint.originalException &&
@@ -63,13 +64,15 @@ async function startUi() {
 
   store.dispatch(setLangs(LANGS));
 
-  ReactDOM.render(
+  const container = document.getElementById('app-content');
+  if (!container) throw new Error('Root element #app-content not found');
+
+  createRoot(container).render(
     <Provider store={store}>
       <div className="app">
         <Root />
       </div>
     </Provider>,
-    document.getElementById('app-content'),
   );
 
   const updateState = createUpdateState(store);
@@ -87,16 +90,16 @@ async function startUi() {
     },
   };
 
-  const dnode = setupDnode(connectionStream, emitterApi, 'api');
-  const background = await new Promise<any>((resolve) => {
+  const dnode = setupDnode(connectionStream as any, emitterApi, 'api');
+  const background = await new Promise<BackgroundApi>((resolve) => {
     dnode.once('remote', (background) => {
-      resolve(transformMethods(cbToPromise, background));
+      resolve(transformMethods(cbToPromise, background) as any);
     });
   });
 
   // global access to service on debug
   if (CubensisConnect_DEBUG) {
-    (global as any).background = background;
+    Object.assign(globalThis, { background });
   }
 
   // If popup is opened close notification window
@@ -113,7 +116,8 @@ async function startUi() {
 
   const [state, networks] = await Promise.all([background.getState(), background.getNetworks()]);
 
-  updateState({ ...state, networks });
+  state.networks = networks;
+  updateState(state as UpdateStateInput);
 
   Sentry.setUser({ id: state.userId });
   Sentry.setTag('network', state.currentNetwork);

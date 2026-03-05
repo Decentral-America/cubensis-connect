@@ -3,19 +3,24 @@
   "exclude": ["test/*.ui.ts", "test/utils/**"],
   "compilerOptions": {
     "strict": true,
-    /* ── Migration overrides (re-enable as codebase is fixed) ── */
+    /* ── Migration overrides (re-enable as JS→TS codebase is fully typed) ── */
     "noImplicitAny": false,
     "noImplicitOverride": false,
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
 
+    "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "baseUrl": "./src",
+    "paths": {
+      "@decentralchain/transactions": ["../node_modules/@decentralchain/transactions/dist"],
+      "@decentralchain/transactions/*": ["../node_modules/@decentralchain/transactions/dist/*"]
+    },
     "jsx": "react",
     "lib": ["esnext", "dom"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noErrorTruncation": true,
     "pretty": true,
     "sourceMap": true,
@@ -24,6 +29,6 @@
     "skipLibCheck": true,
     "noEmit": true,
     "resolveJsonModule": true,
-    "types": ["long", "resize-observer-browser", "@decentralchain/cubensisconnect-types"]
+    "types": ["long", "node", "resize-observer-browser", "@decentralchain/cubensis-connect-types"]
   }
 }

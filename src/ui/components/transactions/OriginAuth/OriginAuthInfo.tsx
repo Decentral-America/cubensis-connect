@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
-import * as styles from './originAuth.styl';
+import * as styles from './originAuth.module.css';
 
 interface IProps {
   message: any;

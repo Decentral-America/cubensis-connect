@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from '../ui';
 import { Trans } from 'react-i18next';
 import cn from 'classnames';
-import * as styles from './featureUpdateInfo.styl';
+import * as styles from './featureUpdateInfo.module.css';
 import background from '../../../ui/services/Background';
 
 export function FeatureUpdateInfo({ onClose, onSubmit }) {

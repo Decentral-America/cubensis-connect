@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
-import * as styles from './styles/pairingAccountQr.styl';
+import * as styles from './styles/pairingAccountQr.module.css';
 import { QRCode } from '../ui';
 import { pairingGetData, pairingSetData } from '../../actions';
 import { TransactionWallet } from '../wallets/TransactionWallet';

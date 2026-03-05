@@ -1,3 +1,8 @@
+import logoBTC from './logos/BTC.svg';
+import logoCRC from './logos/CRC.svg';
+import logoDCC from './logos/DCC.svg';
+import logoDGFTHR from './logos/DGFTHR.svg';
+
 export const assetIds: {
   custom: Record<string, string>;
   mainnet: Record<string, string>;
@@ -58,11 +63,11 @@ export const swappableAssetIds = {
   ].map((assetName) => assetIds.mainnet[assetName]),
 };
 
-const logosByName = {
-  BTC: require('./logos/BTC.svg'),
-  CRC: require('./logos/CRC.svg'),
-  DCC: require('./logos/DCC.svg'),
-  DGFTHR: require('./logos/DGFTHR.svg'),
+const logosByName: Record<string, string> = {
+  BTC: logoBTC,
+  CRC: logoCRC,
+  DCC: logoDCC,
+  DGFTHR: logoDGFTHR,
 };
 
 export const assetLogosByNetwork: Partial<{

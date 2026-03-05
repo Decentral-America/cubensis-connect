@@ -2,7 +2,7 @@ import { Highlight, PlateCollapsable, Tab, TabList, TabPanel, TabPanels, Tabs } 
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Trans } from 'react-i18next';
-import * as styles from './txdetailtabs.styl';
+import * as styles from './txdetailtabs.module.css';
 import cn from 'classnames';
 
 interface Props {

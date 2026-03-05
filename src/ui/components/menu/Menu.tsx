@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './menu.styl';
+import * as styles from './menu.module.css';
 import { HeadLogo } from '../head';
 import { PAGES } from '../../pageConfig';
 

@@ -1,0 +1,24 @@
+.content {
+  margin: 0;
+}
+.wrapper {
+  margin: 124px auto 0 auto;
+  width: calc(100% - 120px);
+}
+.closeIcon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 4px;
+  position: absolute;
+  top: -4px;
+  background: url('../../../assets/img/close-18-black.svg') center no-repeat;
+}
+.closeIcon:hover {
+  background-color: #004649;
+}
+.userWallet {
+  margin: 0;
+  width: 100%;
+}

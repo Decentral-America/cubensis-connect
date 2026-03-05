@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function Highlight({ data, className }: Props) {
-  const preRef = React.useRef<HTMLPreElement>();
+  const preRef = React.useRef<HTMLPreElement>(null);
 
   React.useLayoutEffect(() => hljs.highlightElement(preRef.current), []);
 

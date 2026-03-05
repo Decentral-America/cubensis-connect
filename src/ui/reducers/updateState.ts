@@ -1,7 +1,7 @@
 import { type Account } from 'accounts/types';
 import { ACTION } from '../actions';
 import { type AssetDetail } from '../services/Background';
-import { type TTransaction, type WithId } from '@decentralchain/transactions/dist/transactions';
+import { type TxHistoryEntry } from '../types/txHistory';
 
 export * from './localState';
 export * from './remoteConfig';
@@ -111,7 +111,7 @@ export interface AccountBalance {
   assets?: BalanceAssets;
   aliases: string[];
   nfts: AssetDetail[];
-  txHistory: Array<TTransaction & WithId>;
+  txHistory: TxHistoryEntry[];
 }
 
 export const balances = createSimpleReducer<{

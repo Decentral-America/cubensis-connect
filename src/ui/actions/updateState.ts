@@ -8,7 +8,7 @@ interface Account {
   network: string;
 }
 
-interface UpdateStateInput {
+export interface UpdateStateInput {
   assets: Record<string, Record<string, AssetDetail>>;
   accounts?: Account[];
   balances?: Record<

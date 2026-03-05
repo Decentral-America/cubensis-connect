@@ -1,4 +1,4 @@
-import BigNumber from '@decentralchain/bignumber';
+import { BigNumber } from '@decentralchain/bignumber';
 import { type Asset, Money } from '@decentralchain/data-entities';
 import { getAssetIdByName } from 'assets/utils';
 // @ts-expect-error legacy import

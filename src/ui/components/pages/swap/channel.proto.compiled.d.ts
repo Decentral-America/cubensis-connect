@@ -1,4 +1,4 @@
-import * as $protobuf from "protobufjs";
+import type * as $protobuf from "protobufjs";
 /** Namespace proto. */
 export namespace proto {
 

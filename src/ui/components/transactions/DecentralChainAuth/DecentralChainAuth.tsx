@@ -1,4 +1,4 @@
-import * as styles from './decentralChainAuth.styl';
+import * as styles from './decentralChainAuth.module.css';
 import * as React from 'react';
 
 import { DecentralChainAuthCard } from './DecentralChainAuthCard';

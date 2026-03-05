@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Popper from 'react-popper';
-import * as modal from '../modal/modal.styl';
+import * as modal from '../modal/modal.module.css';
 import * as ReactDOM from 'react-dom';
 import * as styles from './tooltip.module.css';
 import { type Placement } from '@popperjs/core';
@@ -9,11 +9,11 @@ import cn from 'classnames';
 interface Props {
   className?: string;
   children: (renderProps: {
-    ref: React.MutableRefObject<any>;
+    ref: React.RefCallback<Element>;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
-  }) => React.ReactChild;
-  content: any;
+  }) => React.ReactNode;
+  content: React.ReactNode;
   placement?: Placement;
 }
 
@@ -25,11 +25,11 @@ export function Tooltip({
   ...props
 }: Props) {
   const [el, setEl] = React.useState<HTMLDivElement>(null);
-  const elRef = React.useRef(null);
+  const [referenceEl, setReferenceEl] = React.useState<Element | null>(null);
   const popperRef = React.useRef(null);
   const [arrowRef, setArrowRef] = React.useState(null);
   const { styles: stylesP, attributes: attributesP } = Popper.usePopper(
-    elRef.current,
+    referenceEl,
     popperRef.current,
     {
       placement,
@@ -51,7 +51,6 @@ export function Tooltip({
   );
   const [showPopper, setShowPopper] = React.useState(false);
 
-  // @ts-expect-error effect callback type mismatch
   React.useEffect(() => {
     const root = document.getElementById('app-modal');
 
@@ -60,13 +59,15 @@ export function Tooltip({
     root.appendChild(child);
     setEl(child);
 
-    return () => root.removeChild(child);
+    return () => {
+      root.removeChild(child);
+    };
   }, []);
 
   return (
     <>
       {children({
-        ref: elRef,
+        ref: setReferenceEl,
         onMouseEnter: () => setShowPopper(true),
         onMouseLeave: () => setShowPopper(false),
       })}

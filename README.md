@@ -33,7 +33,7 @@ On browser pages that operate under the http/https (not worked local pages with 
 
 All methods, except for "on" operate asynchronously and return [promises](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-In code, you can use [TypeScript types](https://github.com/decentralchain/CubensisConnect-types)
+In code, you can use [TypeScript types](https://github.com/Decentral-America/cubensis-connect-types)
 
 On initialize `window.CubensisConnect` has not api methods.
 You can use `CubensisConnect.initialPromise` for waiting end initializing api.
@@ -1184,7 +1184,7 @@ Method Cubensis Connect for sign custom data for different services, it accepts 
 - `version` 1
 - `binary` string 'base64:....'
 
-Note: This method adds the `[255, 255, 255, 1]` prefix to the signed bytes. This was done to make it impossible to sign transaction data in this method, which can lead to unauthenticated transactions and phishing. For the details check `serializeCustomData` method in [decentralchain-transactions](https://github.com/decentralchain/decentralchain-transactions/blob/master/src/requests/custom-data.ts#L63) library.
+Note: This method adds the `[255, 255, 255, 1]` prefix to the signed bytes. This was done to make it impossible to sign transaction data in this method, which can lead to unauthenticated transactions and phishing. For the details check `serializeCustomData` method in [transactions](https://github.com/Decentral-America/transactions/blob/master/src/requests/custom-data.ts#L63) library.
 
 Example:
 
@@ -1221,7 +1221,7 @@ ERRORS:
   - `value` /string/string/number/boolean
 
 Bytes to sign: [255, 255, 255, 2, ...(from data Array to bin)]
-[decentralchain-transaction library](https://github.com/decentralchain/decentralchain-transactions/blob/master/src/requests/custom-data.ts)
+[transactions library](https://github.com/Decentral-America/transactions/blob/master/src/requests/custom-data.ts)
 
 Example:
 

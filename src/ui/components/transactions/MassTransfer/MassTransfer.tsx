@@ -1,4 +1,4 @@
-import * as styles from './massTransfer.styl';
+import * as styles from './massTransfer.module.css';
 import * as React from 'react';
 
 import { MassTransferCard } from './MassTransferCard';

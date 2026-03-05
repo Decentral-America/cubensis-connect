@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as styles from './fromDate.styl';
+import * as styles from './fromDate.module.css';
 
 const AddZero = ({ value = 0 }) => {
   const res = +value < 10 ? `0${value}` : `${value}`;

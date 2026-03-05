@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
-import * as styles from './decentralChainAuth.styl';
+import * as styles from './decentralChainAuth.module.css';
 import { DateFormat } from '../../ui';
 
 interface IProps {

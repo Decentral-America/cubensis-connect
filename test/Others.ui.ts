@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { readFileSync } from 'node:fs';
 import { By, until } from 'selenium-webdriver';
 import { App, CreateNewAccount, Network } from './utils/actions';
 
@@ -14,7 +15,8 @@ describe('Others', function () {
   });
 
   it('The current version of the extension is displayed', async function () {
-    const { version } = require('../package');
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+    const { version } = pkg;
 
     expect(
       await this.driver

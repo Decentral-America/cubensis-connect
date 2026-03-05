@@ -80,7 +80,7 @@ export function AssetInfo({ asset, onCopy, onClose }: Props) {
             <div className="input-title basic500 tag1">
               <Trans i18nKey="assetInfo.minSponsoredFee" />
             </div>
-            <div className="tag1">{asset.minSponsoredFee}</div>
+            <div className="tag1">{String(asset.minSponsoredFee)}</div>
           </div>
         )}
 
